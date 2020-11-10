@@ -1,2 +1,6 @@
 ﻿  Main.c
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(47,6): warning C4142: 'velx': redefinição benigna de tipo
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(46): message : consulte a declaração de 'velx'
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(48,6): warning C4142: 'vely': redefinição benigna de tipo
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(46): message : consulte a declaração de 'vely'
   JogoPi2.vcxproj -> C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Debug\JogoPi2.exe
