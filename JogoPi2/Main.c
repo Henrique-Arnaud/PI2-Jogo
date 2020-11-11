@@ -9,7 +9,8 @@
 #define LARGURA 640
 #define ALTURA 480
 #define FPS 60.0
-#define FrameFps 20.0
+#define FrameFps 18.0
+#define InimigoFps 10.0
 #define Chao 411
 
 
@@ -32,6 +33,7 @@ ALLEGRO_BITMAP* frame = NULL;
 ALLEGRO_BITMAP* frame2 = NULL;
 ALLEGRO_TIMER* timer = NULL;
 ALLEGRO_TIMER* frametimer = NULL;
+ALLEGRO_TIMER* inimigotimer = NULL;
 ALLEGRO_EVENT_QUEUE* fila_eventos = NULL;
 ALLEGRO_DISPLAY* janela = NULL;
 ALLEGRO_BITMAP* background = NULL;
@@ -75,8 +77,14 @@ void inicialização() {
 	al_install_keyboard();
 	al_install_mouse();
 
+	//audio
+	al_install_audio();
+	al_init_acodec_addon();
+	al_reserve_samples(5);
+
 	timer = al_create_timer(1.0 / FPS);
 	frametimer = al_create_timer(1.0 / FrameFps);
+	inimigotimer = al_create_timer(1.0 / InimigoFps);
 
 	janela = al_create_display(LARGURA, ALTURA);
 
@@ -90,6 +98,7 @@ void inicialização() {
 	al_register_event_source(fila_eventos, al_get_display_event_source(janela));
 	al_register_event_source(fila_eventos, al_get_timer_event_source(timer));
 	al_register_event_source(fila_eventos, al_get_timer_event_source(frametimer));
+	al_register_event_source(fila_eventos, al_get_timer_event_source(inimigotimer));
 
 }
 
@@ -133,13 +142,30 @@ void movimentacao(ALLEGRO_EVENT evento) {
 			else {
 				vely = 0;
 			}
-			personagem->x += velx;
+			if (personagem->x >= -1 && personagem->x + personagem->largura/10 <= 639) {
+				personagem->x += velx;
+			}
+			if (personagem->x <= -1) {
+				personagem->x = 0;
+			}
+			else if (personagem->x + personagem->largura/10 >= 639) {
+				personagem->x = 638 - personagem->largura/10;
+			}
 			personagem->y += vely;
 
-			pulando = (personagem->y + 49 >= 480);
+			pulando = (personagem->y + 49 >= Chao);
 
 			if (pulando) {
-				personagem->y = 480 - 49;
+				personagem->y = Chao - 49;
+			}
+
+			if (personagem->x - goblin->x < 0) {
+				goblin->x -= velocidade_inimigo;
+				k = 0;
+			}
+			else if (personagem->x - goblin->x > 0) {
+				goblin->x += velocidade_inimigo;
+				k = 1;
 			}
 
 		}
@@ -150,10 +176,10 @@ void movimentacao(ALLEGRO_EVENT evento) {
 				sourceX += al_get_bitmap_width(personagem->imagem) / 10;
 			}
 			else {
-				sourceX = 0;
+				sourceX = 1;
 			}
 			if (sourceX >= al_get_bitmap_width(personagem->imagem)) {
-				sourceX = 0;
+				sourceX = 1;
 			}
 
 			if (pressionando == 1) {
@@ -170,20 +196,23 @@ void movimentacao(ALLEGRO_EVENT evento) {
 
 				draw2 = true;
 			}
+		}
 
+		if (evento.timer.source == inimigotimer) {
 			if (inimigo1) {
 				sourceX_inimigo += al_get_bitmap_width(goblin->imagem) / 4;
 			}
 			else {
-				sourceX_inimigo = 0;
+				sourceX_inimigo = 1;
 			}
 			if (sourceX_inimigo >= al_get_bitmap_width(goblin->imagem)) {
-				sourceX_inimigo = 0;
+				sourceX_inimigo = 1;
 			}
 		}
 
 	}
 }
+
 
 // Funcao colisao com Goblin
 int colisaoGoblin() {
@@ -207,18 +236,11 @@ int main(void) {
 	al_clear_to_color(al_map_rgb(255, 255, 255));
 	al_flip_display();
 
-	//audio
-	al_install_audio();
-	al_init_acodec_addon();
-	al_reserve_samples(5);
-
 	// Carrega imagem
 	background = al_load_bitmap("imagens/menu1.jpg");
 	infoss = al_load_bitmap("imagens/infos.jpg");
 	creditoss = al_load_bitmap("imagens/creditos.jpg");
 	musica = al_load_sample("musica.ogg");
-
-
 
 	songInstance = al_create_sample_instance(musica);
 	al_set_sample_instance_playmode(songInstance, ALLEGRO_PLAYMODE_LOOP);
@@ -227,7 +249,7 @@ int main(void) {
 
 	personagem = (Objeto*)malloc(sizeof(Objeto));
 	personagem->imagem = al_load_bitmap("Sprites/MC_Sprite_walk.png");
-	personagem->largura = 485;
+	personagem->largura = 500;
 	personagem->altura = 49;
 	personagem->y = Chao - personagem->altura;
 	personagem->x = 0;
@@ -242,9 +264,9 @@ int main(void) {
 	goblin = (Objeto*)malloc(sizeof(Objeto));
 	goblin->imagem = al_load_bitmap("Sprites/goblins.png");
 	goblin->x = 250;
+	goblin->altura = 49;
 	goblin->y = Chao - goblin->altura;
 	goblin->largura = 256;
-	goblin->altura = 49;
 
 	//Criando objeto do item
 	processador = (Objeto*)malloc(sizeof(Objeto));
@@ -252,12 +274,6 @@ int main(void) {
 	processador->x = 300;
 	processador -> largura = 150;
 	processador-> altura = 100;
-
-	//audio
-	al_install_audio();
-	al_init_acodec_addon();
-	al_reserve_samples(5);
-
 	
 
 	// Variaveis de controle de menu
@@ -267,6 +283,7 @@ int main(void) {
 
 	al_start_timer(timer);
 	al_start_timer(frametimer);
+	al_start_timer(inimigotimer);
 
 	
 	//Looping principal
@@ -339,7 +356,12 @@ int main(void) {
 					evento.mouse.x <= 582 && evento.mouse.y <= 44 &&
 					evento.mouse.y >= 7)) {
 
-					tocando = 0;
+
+					//mutar e desmutar funcionando
+					if (tocando == 1)
+						tocando = 0;
+					else
+						tocando = 1;
 				}
 				
 				
@@ -347,11 +369,13 @@ int main(void) {
 			}
 
 		}
-		
+		//(personagem->x <= goblin->x + goblin->largura / 4) && (personagem->x + personagem->largura/10 >= goblin->x)
 		else if(jogar == 1) {
 
-			jogar = colisaoGoblin();
-			jogo = jogar;
+			if ((personagem->x <= goblin->x + goblin->largura / 4) && (personagem->x + personagem->largura / 10 >= goblin->x) && (personagem->y - personagem->altura >= goblin->y - goblin->altura)) {
+				jogar = 0;
+				jogo = 0;
+			}
 
 			movimentacao(evento);
 			
@@ -360,7 +384,7 @@ int main(void) {
 
 				//frame = al_create_sub_bitmap(personagem->imagem, (personagem->largura / 10) * i, 0, personagem->largura / 10 - 5, personagem->altura);
 
-				//al_clear_to_color(al_map_rgb(0, 0, 0));
+				al_clear_to_color(al_map_rgb(0, 0, 0));
 				al_draw_bitmap_region(personagem->imagem, sourceX, 0, personagem->largura / 10, personagem->altura, personagem->x, personagem->y, j);
 				al_flip_display();
 
@@ -374,7 +398,8 @@ int main(void) {
 				al_flip_display();
 			}
 			if (inimigo1) {
-				al_draw_bitmap_region(goblin->imagem, sourceX, 0, goblin->largura / 4, goblin->altura, goblin->x, goblin->y, k);
+
+				al_draw_bitmap_region(goblin->imagem, sourceX_inimigo, 0, goblin->largura / 4, goblin->altura, goblin->x, goblin->y, k);
 				al_flip_display();
 			}
 
