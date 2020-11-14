@@ -24,6 +24,7 @@ struct objeto
 	int altura;
 };
 
+//                       |
 typedef struct objeto Objeto;
 
 Objeto* personagem, * sprite_parado, * goblin, * item, * processador;
@@ -456,3 +457,4 @@ int main(void) {
 
 	return 0;
 }
+
