@@ -5,14 +5,15 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 
 #define LARGURA 640
 #define ALTURA 480
 #define FPS 60.0
 #define FrameFps 18.0
-#define InimigoFps 10.0
+#define InimigoFps 11.0
 #define Chao 411
-
 
 
 struct objeto
@@ -24,12 +25,13 @@ struct objeto
 	int altura;
 };
 
-//                       |
+//                       
 typedef struct objeto Objeto;
 
-Objeto* personagem, * sprite_parado, * goblin, * item, * processador;
+Objeto* personagem, * sprite_parado, * goblin, * item, * processador, *sprite_atacando;
 
 
+ALLEGRO_FONT* fonte = NULL;
 ALLEGRO_BITMAP* frame = NULL;
 ALLEGRO_BITMAP* frame2 = NULL;
 ALLEGRO_TIMER* timer = NULL;
@@ -49,6 +51,7 @@ int i = 0;
 int aux = 0;
 int j = 0;
 int k = 0;
+int l = 0;
 
 bool draw = false, draw2 = true, ativo = false;
 int pressionando = 0;
@@ -57,12 +60,12 @@ float velx, vely;
 velx = 0;
 vely = 0;
 
-bool pulando = false;
+bool pulando = false, atacando = false;
 float velocidade_pulo = 15;
 
 const float gravidade = 0.80;
 
-int sourceX = 0, sourceX_inimigo = 0;
+int sourceX = 0, sourceX_inimigo = 0, sourceX_atacando;
 
 bool inimigo1 = true, inimigo2 = true;
 int velocidade_inimigo = 1.5;
@@ -77,6 +80,7 @@ void inicialização() {
 	al_init_image_addon();
 	al_install_keyboard();
 	al_install_mouse();
+	al_init_font_addon();
 
 	//audio
 	al_install_audio();
@@ -117,6 +121,10 @@ void movimentacao(ALLEGRO_EVENT evento) {
 			if (al_key_down(&key_state, ALLEGRO_KEY_UP) && pulando) {
 				vely = -velocidade_pulo;
 				pulando = false;
+			}
+			if (al_key_down(&key_state, ALLEGRO_KEY_Z) && !atacando) {
+				atacando = true;
+
 			}
 			if (al_key_down(&key_state, ALLEGRO_KEY_RIGHT)) {
 				velx = velocidade_movimento;
@@ -197,6 +205,17 @@ void movimentacao(ALLEGRO_EVENT evento) {
 
 				draw2 = true;
 			}
+
+			if (atacando) {
+				sourceX_atacando += al_get_bitmap_width(sprite_atacando->imagem) / 10;
+			}
+			else {
+				sourceX_atacando = 0;
+			}
+			if (sourceX_atacando >= al_get_bitmap_width(sprite_atacando->imagem)) {
+				sourceX_atacando = 0;
+				atacando = false;
+			}
 		}
 
 		if (evento.timer.source == inimigotimer) {
@@ -204,27 +223,13 @@ void movimentacao(ALLEGRO_EVENT evento) {
 				sourceX_inimigo += al_get_bitmap_width(goblin->imagem) / 4;
 			}
 			else {
-				sourceX_inimigo = 1;
+				sourceX_inimigo = 0;
 			}
 			if (sourceX_inimigo >= al_get_bitmap_width(goblin->imagem)) {
-				sourceX_inimigo = 1;
+				sourceX_inimigo = 0;
 			}
 		}
 
-	}
-}
-
-
-// Funcao colisao com Goblin
-int colisaoGoblin() {
-	if ((personagem->x + personagem->largura >= goblin->x &&
-		personagem->x + personagem->largura <= goblin->x && personagem->y + personagem->altura <= goblin->y &&
-		personagem->y + personagem->altura >= goblin->y)) {
-
-		return 0;
-	}
-	else {
-		return 1;
 	}
 }
 
@@ -242,6 +247,7 @@ int main(void) {
 	infoss = al_load_bitmap("imagens/infos.jpg");
 	creditoss = al_load_bitmap("imagens/creditos.jpg");
 	musica = al_load_sample("musica.ogg");
+	fonte = al_load_font("Fontes/arial.ttf", 48, 0);
 
 	songInstance = al_create_sample_instance(musica);
 	al_set_sample_instance_playmode(songInstance, ALLEGRO_PLAYMODE_LOOP);
@@ -264,10 +270,17 @@ int main(void) {
 
 	goblin = (Objeto*)malloc(sizeof(Objeto));
 	goblin->imagem = al_load_bitmap("Sprites/goblins.png");
-	goblin->x = 250;
+	goblin->x = 300;
 	goblin->altura = 49;
 	goblin->y = Chao - goblin->altura;
-	goblin->largura = 256;
+	goblin->largura = 246;
+
+	sprite_atacando = (Objeto*)malloc(sizeof(Objeto));
+	sprite_atacando->imagem = al_load_bitmap("Sprites/MC_Sprite_attack.png");
+	sprite_atacando->largura = 630;
+	sprite_atacando->altura = 60;
+	sprite_atacando->y = personagem->y;
+	sprite_atacando->x = personagem->x;
 
 	//Criando objeto do item
 	processador = (Objeto*)malloc(sizeof(Objeto));
@@ -275,10 +288,10 @@ int main(void) {
 	processador->x = 300;
 	processador -> largura = 150;
 	processador-> altura = 100;
-	
+
 
 	// Variaveis de controle de menu
-	int menu = 1, jogar = 0, creditos = 0, infos = 0, jogo = 1, tocando = 1;
+	int menu = 1, jogar = 0, creditos = 0, infos = 0, jogo = 1, tocando = 1, morreu = 0, venceu = 0;
 	
 
 
@@ -373,10 +386,28 @@ int main(void) {
 		//(personagem->x <= goblin->x + goblin->largura / 4) && (personagem->x + personagem->largura/10 >= goblin->x)
 		else if(jogar == 1) {
 
-			if ((personagem->x <= goblin->x + goblin->largura / 4) && (personagem->x + personagem->largura / 10 >= goblin->x) && (personagem->y - personagem->altura >= goblin->y - goblin->altura)) {
+			if ((personagem->x <= goblin->x + 20) && (personagem->x + 20 >= goblin->x) && (personagem->y - personagem->altura >= goblin->y - goblin->altura)) {
 				jogar = 0;
-				jogo = 0;
+				
+				morreu = 1;
 			}
+			if (atacando) {
+				if (j == 1) {
+					if ((personagem->x + 50 >= goblin->x+10) && (personagem->y - personagem->altura >= goblin->y - goblin->altura)) {
+						inimigo1 = false;
+						jogar = 0;
+						venceu = 1;
+					}
+				}
+				if (j == 0) {
+					if ((personagem->x - 50 <= goblin->x + 10) && (personagem->y - personagem->altura >= goblin->y - goblin->altura)) {
+						inimigo1 = false;
+						jogar = 0;
+						venceu = 1;
+					}
+				}
+			}
+
 
 			movimentacao(evento);
 			
@@ -401,6 +432,11 @@ int main(void) {
 			if (inimigo1) {
 
 				al_draw_bitmap_region(goblin->imagem, sourceX_inimigo, 0, goblin->largura / 4, goblin->altura, goblin->x, goblin->y, k);
+				al_flip_display();
+			}
+			if (atacando) {
+				al_clear_to_color(al_map_rgb(0, 0, 0));
+				al_draw_bitmap_region(sprite_atacando->imagem, sourceX_atacando, 0, sprite_atacando->largura / 10, sprite_atacando->altura, personagem->x-3, personagem->y-11, j);
 				al_flip_display();
 			}
 
@@ -443,7 +479,17 @@ int main(void) {
 			}
 		}
 		
-		
+		else if (morreu == 1) {
+			al_clear_to_color(al_map_rgb(255, 255, 255));
+			al_draw_text(fonte, al_map_rgb(0, 0, 0), 320, 240, ALLEGRO_ALIGN_CENTRE, "Voce Perdeu!");
+			al_flip_display();
+		}
+
+		else if (venceu == 1) {
+		al_clear_to_color(al_map_rgb(255, 255, 255));
+		al_draw_text(fonte, al_map_rgb(0, 0, 0), 320, 240, ALLEGRO_ALIGN_CENTRE, "Voce Venceu!");
+		al_flip_display();
+		}
 
 		// Se for no x da janela
 		if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
@@ -454,6 +500,25 @@ int main(void) {
 
 	al_destroy_display(janela);
 	al_destroy_bitmap(background);
+	al_destroy_bitmap(creditoss);
+	al_destroy_bitmap(infoss);
+	al_destroy_bitmap(frame);
+	al_destroy_bitmap(frame2);
+	al_destroy_bitmap(goblin->imagem);
+	al_destroy_bitmap(personagem->imagem);
+	al_destroy_bitmap(sprite_atacando->imagem);
+	al_destroy_bitmap(sprite_parado->imagem);
+	al_destroy_event_queue(fila_eventos);
+	al_destroy_timer(frametimer);
+	al_destroy_timer(inimigotimer);
+	al_destroy_font(fonte);
+
+	free(personagem);
+	free(sprite_atacando);
+	free(sprite_parado);
+	free(goblin);
+	free(item);
+	free(processador);
 
 	return 0;
 }
