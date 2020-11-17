@@ -28,7 +28,7 @@ struct objeto
 //                       
 typedef struct objeto Objeto;
 
-Objeto* personagem, * sprite_parado, * goblin, * item, * processador,* processador_mini, *sprite_atacando;
+Objeto* personagem, * sprite_parado, * goblin, * espada, * processador,* processador_mini, *sprite_atacando;
 
 
 ALLEGRO_FONT* fonte = NULL;
@@ -40,6 +40,7 @@ ALLEGRO_TIMER* inimigotimer = NULL;
 ALLEGRO_EVENT_QUEUE* fila_eventos = NULL;
 ALLEGRO_DISPLAY* janela = NULL;
 ALLEGRO_BITMAP* background = NULL;
+ALLEGRO_BITMAP* background_jogo1 = NULL;
 ALLEGRO_BITMAP* infoss = NULL;
 ALLEGRO_BITMAP* creditoss = NULL;
 ALLEGRO_SAMPLE* musica = NULL;
@@ -60,7 +61,7 @@ float velx, vely;
 velx = 0;
 vely = 0;
 
-bool pulando = false, atacando = false;
+bool pulando = false, atacando = false, espada_ativa = false;
 float velocidade_pulo = 15;
 
 const float gravidade = 0.80;
@@ -68,7 +69,10 @@ const float gravidade = 0.80;
 int sourceX = 0, sourceX_inimigo = 0, sourceX_atacando;
 
 bool inimigo1 = true, inimigo2 = true;
-int velocidade_inimigo = 1.5;
+float velocidade_inimigo = 1.5;
+
+float velocidade_projetil = 10.0;
+int posicao_projetil = 0;
 
 ALLEGRO_KEYBOARD_STATE key_state;
 
@@ -124,7 +128,8 @@ void movimentacao(ALLEGRO_EVENT evento) {
 			}
 			if (al_key_down(&key_state, ALLEGRO_KEY_Z) && !atacando) {
 				atacando = true;
-
+				espada_ativa = true;
+				espada->y = personagem->y;
 			}
 			if (al_key_down(&key_state, ALLEGRO_KEY_RIGHT)) {
 				velx = velocidade_movimento;
@@ -168,13 +173,20 @@ void movimentacao(ALLEGRO_EVENT evento) {
 				personagem->y = Chao - 49;
 			}
 
-			if (personagem->x - goblin->x < 0) {
+			if (inimigo1 && personagem->x - goblin->x < 0) {
 				goblin->x -= velocidade_inimigo;
 				k = 0;
 			}
-			else if (personagem->x - goblin->x > 0) {
+			else if (inimigo1 && personagem->x - goblin->x > 0) {
 				goblin->x += velocidade_inimigo;
 				k = 1;
+			}
+
+			if (espada_ativa) {
+				espada->x += velocidade_projetil;
+			}
+			else {
+				espada->x = personagem->x;
 			}
 
 		}
@@ -259,6 +271,9 @@ void desenha() {
 			al_draw_bitmap_region(sprite_atacando->imagem, sourceX_atacando, 0, sprite_atacando->largura / 10, sprite_atacando->altura, personagem->x - 3, personagem->y - 11, j);
 
 		}
+		if (espada_ativa) {
+			al_draw_bitmap(espada->imagem, espada->x, espada->y, NULL);
+		}
 		if (item_processador) {
 			al_draw_bitmap(processador->imagem, processador->x, processador->y, 0);
 		}
@@ -278,6 +293,7 @@ int main(void) {
 
 	// Carrega imagem
 	background = al_load_bitmap("imagens/menu1.jpg");
+	background_jogo1 = al_load_bitmap("imagens/background.jpg");
 	infoss = al_load_bitmap("imagens/infos.jpg");
 	creditoss = al_load_bitmap("imagens/creditos.jpg");
 	musica = al_load_sample("musica.ogg");
@@ -315,6 +331,13 @@ int main(void) {
 	sprite_atacando->altura = 60;
 	sprite_atacando->y = personagem->y;
 	sprite_atacando->x = personagem->x;
+
+	espada = (Objeto*)malloc(sizeof(Objeto));
+	espada->imagem = al_load_bitmap("Sprites/sword.png");
+	espada->largura = 57;
+	espada->altura = 22;
+	espada->y = personagem->y + 20;
+	espada->x = personagem->x + 10;
 
 	//Criando objeto do item
 	processador = (Objeto*)malloc(sizeof(Objeto));
@@ -387,7 +410,7 @@ int main(void) {
 					menu = 0;
 					// Inicia a função jogar
 					jogar = 1;
-					al_clear_to_color(al_map_rgb(0, 0, 0));
+					al_draw_bitmap(background_jogo1, 0, 0, NULL);
 					al_flip_display();
 				}
 				// Se for em infos
@@ -426,7 +449,7 @@ int main(void) {
 		//(personagem->x <= goblin->x + goblin->largura / 4) && (personagem->x + personagem->largura/10 >= goblin->x)
 		else if(jogar == 1) {
 
-			if ((personagem->x <= goblin->x + 20) && (personagem->x + 20 >= goblin->x) && (personagem->y - personagem->altura >= goblin->y - goblin->altura)) {
+			if (inimigo1 && (personagem->x <= goblin->x + 20) && (personagem->x + 20 >= goblin->x) && (personagem->y + personagem->altura >= goblin->y) && (personagem->y <= goblin->y + goblin->altura)) {
 				jogar = 0;
 				
 				morreu = 1;
@@ -434,8 +457,17 @@ int main(void) {
 
 			if ((personagem->x <= processador->x + processador->largura) && (personagem->x + personagem->largura / 10 >= processador->x) && (personagem->y - personagem->altura >= processador->y - processador->altura)) {
 				item_processador = false;
-				al_destroy_bitmap(processador->imagem);
-				free(processador);
+			}
+
+			if (inimigo1 && (espada->x + 50 >= goblin->x) && (espada->x <= goblin->x + 20) && (espada->y >= goblin->y) && (espada->y <= goblin->y + goblin->altura)) {
+				inimigo1 = false;
+				espada_ativa = false;
+				//jogar = 0; 
+				//venceu = 1;
+			}
+
+			if ((espada->x >= 620) || (espada->x <= 0)) {
+				espada_ativa = false;
 			}
 
 			/*if (atacando) {
@@ -458,7 +490,7 @@ int main(void) {
 
 			movimentacao(evento);
 
-			al_clear_to_color(al_map_rgb(0, 0, 0));
+			al_draw_bitmap(background_jogo1, 0, 0, NULL);
 			
 			desenha();
 
@@ -533,6 +565,7 @@ int main(void) {
 	al_destroy_bitmap(sprite_atacando->imagem);
 	al_destroy_bitmap(sprite_parado->imagem);
 	al_destroy_bitmap(processador_mini->imagem);
+	al_destroy_bitmap(processador->imagem);
 	al_destroy_event_queue(fila_eventos);
 	al_destroy_timer(frametimer);
 	al_destroy_timer(inimigotimer);
@@ -542,7 +575,7 @@ int main(void) {
 	free(sprite_atacando);
 	free(sprite_parado);
 	free(goblin);
-	free(item);
+	free(espada);
 	free(processador_mini);
 
 	return 0;
