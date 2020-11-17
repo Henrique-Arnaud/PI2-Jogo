@@ -55,7 +55,7 @@ int j = 0;
 int k = 0;
 int l = 0;
 
-bool draw = false, draw2 = true, ativo = false, item_processador = true;
+bool draw = false, draw2 = true, ativo = false, item_processador = false, item_processador_mini = false;
 int pressionando = 0;
 float velocidade_movimento = 4.5;
 float velx, vely;
@@ -278,7 +278,7 @@ void desenha() {
 		if (item_processador) {
 			al_draw_bitmap(processador->imagem, processador->x, processador->y, 0);
 		}
-		else if (!item_processador) {
+		if (item_processador_mini) {
 			al_draw_bitmap(processador_mini->imagem, processador_mini->x, processador_mini->y, 0);
 		}
 }
@@ -347,7 +347,7 @@ int main(void) {
 	processador->imagem = al_load_bitmap("imagens/processador.jpg");
 	processador->largura = 63;
 	processador->altura = 57;
-	processador->x = 500;
+	processador->x = 700;
 	processador->y = Chao - processador->altura;
 	
 	processador_mini = (Objeto*)malloc(sizeof(Objeto));
@@ -458,6 +458,7 @@ int main(void) {
 
 			if ((personagem->x <= processador->x + processador->largura) && (personagem->x + personagem->largura / 10 >= processador->x) && (personagem->y - personagem->altura >= processador->y - processador->altura)) {
 				item_processador = false;
+				item_processador_mini = true;
 			}
 
 			if (inimigo1 && espada_ativa &&(espada->x + 50 >= goblin->x) && (espada->x <= goblin->x + 20) && (espada->y >= goblin->y) && (espada->y <= goblin->y + goblin->altura)) {
@@ -467,8 +468,13 @@ int main(void) {
 				//venceu = 1;
 			}
 
-			if (goblin->vida <= 0) {
-				inimigo1 = false;
+			if (inimigo1) {
+				if (goblin->vida <= 0) {
+					inimigo1 = false;
+					espada_ativa = false;
+					item_processador = true;
+					processador->x = goblin->x;
+				}
 			}
 
 			if ((espada->x >= 620) || (espada->x <= 0)) {
