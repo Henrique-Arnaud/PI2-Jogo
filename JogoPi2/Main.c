@@ -29,7 +29,11 @@ struct objeto
 //                       
 typedef struct objeto Objeto;
 
+<<<<<<< HEAD
 Objeto* personagem, * sprite_parado, * goblin, * espada, * processador, * processador_mini, * sprite_atacando;
+=======
+Objeto* personagem, * sprite_parado, * goblin, * espada, * processador,* processador_mini, *sprite_atacando;
+>>>>>>> 30dc3538ad254e391fea5ef16976fc005254818d
 
 
 ALLEGRO_FONT* fonte = NULL;
@@ -185,6 +189,21 @@ void movimentacao(ALLEGRO_EVENT evento) {
 
 			if (espada_ativa) {
 				espada->x += velocidade_projetil;
+<<<<<<< HEAD
+=======
+			}
+			else {
+				espada->x = personagem->x;
+			}
+
+		}
+
+
+	//	if (evento.timer.source == frametimer) {
+
+			if (ativo) {
+				sourceX += al_get_bitmap_width(personagem->imagem) / 10;
+>>>>>>> 30dc3538ad254e391fea5ef16976fc005254818d
 			}
 			else {
 				espada->x = personagem->x;
@@ -271,6 +290,7 @@ void desenha() {
 	if (atacando) {
 		al_draw_bitmap_region(sprite_atacando->imagem, sourceX_atacando, 0, sprite_atacando->largura / 10, sprite_atacando->altura, personagem->x - 3, personagem->y - 11, j);
 
+<<<<<<< HEAD
 	}
 	if (espada_ativa) {
 		al_draw_bitmap(espada->imagem, espada->x, espada->y, NULL);
@@ -281,6 +301,18 @@ void desenha() {
 	else if (!item_processador) {
 		al_draw_bitmap(processador_mini->imagem, processador_mini->x, processador_mini->y, 0);
 	}
+=======
+		}
+		if (espada_ativa) {
+			al_draw_bitmap(espada->imagem, espada->x, espada->y, NULL);
+		}
+		if (item_processador) {
+			al_draw_bitmap(processador->imagem, processador->x, processador->y, 0);
+		}
+		else if (!item_processador) {
+			al_draw_bitmap(processador_mini->imagem, processador_mini->x, processador_mini->y, 0);
+		}
+>>>>>>> 30dc3538ad254e391fea5ef16976fc005254818d
 }
 
 
@@ -360,7 +392,6 @@ int main(void) {
 	// Variaveis de controle de menu
 	int menu = 1, jogar = 0, creditos = 0, infos = 0, jogo = 1, tocando = 1, morreu = 0, venceu = 0;
 
-
 	al_start_timer(timer);
 	al_start_timer(frametimer);
 	al_start_timer(inimigotimer);
@@ -377,9 +408,15 @@ int main(void) {
 		// Funcao do menu do jogo
 		// Ja começa com 1 pois ela irá controlar os demais whiles, as outras opções
 
+<<<<<<< HEAD
 
 		if (menu == 1) {
 
+=======
+		
+		if(menu==1) {
+			
+>>>>>>> 30dc3538ad254e391fea5ef16976fc005254818d
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			al_draw_bitmap(background, 0, 0, 0);
 			al_flip_display();
@@ -460,7 +497,11 @@ int main(void) {
 				item_processador = false;
 			}
 
+<<<<<<< HEAD
 			if (inimigo1 && espada_ativa && (espada->x + 50 >= goblin->x) && (espada->x <= goblin->x + 20) && (espada->y >= goblin->y) && (espada->y <= goblin->y + goblin->altura)) {
+=======
+			if (inimigo1 && espada_ativa &&(espada->x + 50 >= goblin->x) && (espada->x <= goblin->x + 20) && (espada->y >= goblin->y) && (espada->y <= goblin->y + goblin->altura)) {
+>>>>>>> 30dc3538ad254e391fea5ef16976fc005254818d
 				espada_ativa = false;
 				goblin->vida--;
 				//jogar = 0; 
@@ -496,7 +537,11 @@ int main(void) {
 			movimentacao(evento);
 
 			al_draw_bitmap(background_jogo1, 0, 0, NULL);
+<<<<<<< HEAD
 
+=======
+			
+>>>>>>> 30dc3538ad254e391fea5ef16976fc005254818d
 			desenha();
 
 			al_flip_display();
