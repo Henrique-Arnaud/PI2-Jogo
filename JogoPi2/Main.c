@@ -180,7 +180,8 @@ void movimentacao(ALLEGRO_EVENT evento) {
 		}
 
 
-		//if (evento.timer.source == frametimer) {
+	//	if (evento.timer.source == frametimer) {
+
 			if (ativo) {
 				sourceX += al_get_bitmap_width(personagem->imagem) / 10;
 			}
@@ -216,6 +217,7 @@ void movimentacao(ALLEGRO_EVENT evento) {
 				sourceX_atacando = 0;
 				atacando = false;
 			}
+	//	}
 
 			//if (evento.timer.source == inimigotimer) {
 				if (inimigo1) {
@@ -228,40 +230,41 @@ void movimentacao(ALLEGRO_EVENT evento) {
 					sourceX_inimigo = 0;
 				}
 			//}
-		//}
+		
 	}
 }
 
 void desenha() {
-	if (draw) {
-		draw = false;
 
-		//frame = al_create_sub_bitmap(personagem->imagem, (personagem->largura / 10) * i, 0, personagem->largura / 10 - 5, personagem->altura);
-		al_draw_bitmap_region(personagem->imagem, sourceX, 0, personagem->largura / 10, personagem->altura, personagem->x, personagem->y, j);
-		
-	}
-	else if (draw2) {
-		draw2 = false;
+		if (draw) {
+			draw = false;
 
-		frame2 = al_create_sub_bitmap(sprite_parado->imagem, (sprite_parado->largura / 11) * i, 0, sprite_parado->largura / 11, sprite_parado->altura);
-		al_draw_bitmap(frame2, personagem->x, personagem->y, j);
+			//frame = al_create_sub_bitmap(personagem->imagem, (personagem->largura / 10) * i, 0, personagem->largura / 10 - 5, personagem->altura);
+			al_draw_bitmap_region(personagem->imagem, sourceX, 0, personagem->largura / 10, personagem->altura, personagem->x, personagem->y, j);
 
-	}
-	if (inimigo1) {
-		al_draw_bitmap_region(goblin->imagem, sourceX_inimigo, 0, goblin->largura / 4, goblin->altura, goblin->x, goblin->y, k);
-		
+		}
+		else if (draw2) {
+			draw2 = false;
 
-	}
-	if (atacando) {
-		al_draw_bitmap_region(sprite_atacando->imagem, sourceX_atacando, 0, sprite_atacando->largura / 10, sprite_atacando->altura, personagem->x - 3, personagem->y - 11, j);
+			frame2 = al_create_sub_bitmap(sprite_parado->imagem, (sprite_parado->largura / 11) * i, 0, sprite_parado->largura / 11, sprite_parado->altura);
+			al_draw_bitmap(frame2, personagem->x, personagem->y, j);
 
-	}
-	if (item_processador) {
-		al_draw_bitmap(processador->imagem, processador->x, processador->y, 0);
-	}
-	else if (!item_processador) {
-		al_draw_bitmap(processador_mini->imagem, processador_mini->x, processador_mini->y, 0);
-	}
+		}
+		if (inimigo1) {
+			al_draw_bitmap_region(goblin->imagem, sourceX_inimigo, 0, goblin->largura / 4, goblin->altura, goblin->x, goblin->y, k);
+
+
+		}
+		if (atacando) {
+			al_draw_bitmap_region(sprite_atacando->imagem, sourceX_atacando, 0, sprite_atacando->largura / 10, sprite_atacando->altura, personagem->x - 3, personagem->y - 11, j);
+
+		}
+		if (item_processador) {
+			al_draw_bitmap(processador->imagem, processador->x, processador->y, 0);
+		}
+		else if (!item_processador) {
+			al_draw_bitmap(processador_mini->imagem, processador_mini->x, processador_mini->y, 0);
+		}
 }
 
 
@@ -431,6 +434,8 @@ int main(void) {
 
 			if ((personagem->x <= processador->x + processador->largura) && (personagem->x + personagem->largura / 10 >= processador->x) && (personagem->y - personagem->altura >= processador->y - processador->altura)) {
 				item_processador = false;
+				al_destroy_bitmap(processador->imagem);
+				free(processador);
 			}
 
 			/*if (atacando) {
@@ -527,6 +532,7 @@ int main(void) {
 	al_destroy_bitmap(personagem->imagem);
 	al_destroy_bitmap(sprite_atacando->imagem);
 	al_destroy_bitmap(sprite_parado->imagem);
+	al_destroy_bitmap(processador_mini->imagem);
 	al_destroy_event_queue(fila_eventos);
 	al_destroy_timer(frametimer);
 	al_destroy_timer(inimigotimer);
@@ -537,7 +543,7 @@ int main(void) {
 	free(sprite_parado);
 	free(goblin);
 	free(item);
-	free(processador);
+	free(processador_mini);
 
 	return 0;
 }
