@@ -23,6 +23,7 @@ struct objeto
 	float y;
 	int largura;
 	int altura;
+	int vida;
 };
 
 //                       
@@ -310,6 +311,7 @@ int main(void) {
 	personagem->altura = 49;
 	personagem->y = Chao - personagem->altura;
 	personagem->x = 0;
+	personagem->vida = 3;
 
 	sprite_parado = (Objeto*)malloc(sizeof(Objeto));
 	sprite_parado->imagem = al_load_bitmap("Sprites/MC_Sprite_idle.png");
@@ -324,6 +326,7 @@ int main(void) {
 	goblin->altura = 49;
 	goblin->y = Chao - goblin->altura;
 	goblin->largura = 246;
+	goblin->vida = 3;
 
 	sprite_atacando = (Objeto*)malloc(sizeof(Objeto));
 	sprite_atacando->imagem = al_load_bitmap("Sprites/MC_Sprite_attack.png");
@@ -358,7 +361,6 @@ int main(void) {
 	int menu = 1, jogar = 0, creditos = 0, infos = 0, jogo = 1, tocando = 1, morreu = 0, venceu = 0;
 	
 
-
 	al_start_timer(timer);
 	al_start_timer(frametimer);
 	al_start_timer(inimigotimer);
@@ -378,7 +380,6 @@ int main(void) {
 		
 		if(menu==1) {
 			
-
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			al_draw_bitmap(background, 0, 0, 0);
 			al_flip_display();
@@ -459,11 +460,15 @@ int main(void) {
 				item_processador = false;
 			}
 
-			if (inimigo1 && (espada->x + 50 >= goblin->x) && (espada->x <= goblin->x + 20) && (espada->y >= goblin->y) && (espada->y <= goblin->y + goblin->altura)) {
-				inimigo1 = false;
+			if (inimigo1 && espada_ativa &&(espada->x + 50 >= goblin->x) && (espada->x <= goblin->x + 20) && (espada->y >= goblin->y) && (espada->y <= goblin->y + goblin->altura)) {
 				espada_ativa = false;
+				goblin->vida--;
 				//jogar = 0; 
 				//venceu = 1;
+			}
+
+			if (goblin->vida <= 0) {
+				inimigo1 = false;
 			}
 
 			if ((espada->x >= 620) || (espada->x <= 0)) {
