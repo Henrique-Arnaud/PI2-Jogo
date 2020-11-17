@@ -180,7 +180,7 @@ void movimentacao(ALLEGRO_EVENT evento) {
 		}
 
 
-		if (evento.timer.source == frametimer) {
+		// (evento.timer.source == frametimer) {
 			if (ativo) {
 				sourceX += al_get_bitmap_width(personagem->imagem) / 10;
 			}
@@ -216,9 +216,9 @@ void movimentacao(ALLEGRO_EVENT evento) {
 				sourceX_atacando = 0;
 				atacando = false;
 			}
-		}
+		//
 
-		if (evento.timer.source == inimigotimer) {
+		//if (evento.timer.source == inimigotimer) {
 			if (inimigo1) {
 				sourceX_inimigo += al_get_bitmap_width(goblin->imagem) / 4;
 			}
@@ -228,7 +228,37 @@ void movimentacao(ALLEGRO_EVENT evento) {
 			if (sourceX_inimigo >= al_get_bitmap_width(goblin->imagem)) {
 				sourceX_inimigo = 0;
 			}
-		}
+		//}
+
+	}
+}
+
+void desenha() {
+	if (draw) {
+		draw = false;
+
+		//frame = al_create_sub_bitmap(personagem->imagem, (personagem->largura / 10) * i, 0, personagem->largura / 10 - 5, personagem->altura);
+		al_flip_display();
+		al_draw_bitmap_region(personagem->imagem, sourceX, 0, personagem->largura / 10, personagem->altura, personagem->x, personagem->y, j);
+		
+	}
+	else if (draw2) {
+		draw2 = false;
+		al_flip_display();
+
+		frame2 = al_create_sub_bitmap(sprite_parado->imagem, (sprite_parado->largura / 11) * i, 0, sprite_parado->largura / 11, sprite_parado->altura);
+		al_draw_bitmap(frame2, personagem->x, personagem->y, j);
+
+	}
+	if (inimigo1) {
+		al_flip_display();
+		al_draw_bitmap_region(goblin->imagem, sourceX_inimigo, 0, goblin->largura / 4, goblin->altura, goblin->x, goblin->y, k);
+		
+
+	}
+	if (atacando) {
+		al_flip_display();
+		al_draw_bitmap_region(sprite_atacando->imagem, sourceX_atacando, 0, sprite_atacando->largura / 10, sprite_atacando->altura, personagem->x - 3, personagem->y - 11, j);
 
 	}
 }
@@ -312,7 +342,6 @@ int main(void) {
 		// Ja começa com 1 pois ela irá controlar os demais whiles, as outras opções
 
 		
-
 		if(menu==1) {
 			
 
@@ -377,9 +406,7 @@ int main(void) {
 					else
 						tocando = 1;
 				}
-				
-				
-				
+
 			}
 
 		}
@@ -391,7 +418,7 @@ int main(void) {
 				
 				morreu = 1;
 			}
-			if (atacando) {
+			/*if (atacando) {
 				if (j == 1) {
 					if ((personagem->x + 50 >= goblin->x+10) && (personagem->y - personagem->altura >= goblin->y - goblin->altura)) {
 						inimigo1 = false;
@@ -406,39 +433,15 @@ int main(void) {
 						venceu = 1;
 					}
 				}
-			}
+			}*/
 
 
 			movimentacao(evento);
 			
-			if (draw) {
-				draw = false;
+			desenha();
 
-				//frame = al_create_sub_bitmap(personagem->imagem, (personagem->largura / 10) * i, 0, personagem->largura / 10 - 5, personagem->altura);
-
-				al_clear_to_color(al_map_rgb(0, 0, 0));
-				al_draw_bitmap_region(personagem->imagem, sourceX, 0, personagem->largura / 10, personagem->altura, personagem->x, personagem->y, j);
-				al_flip_display();
-
-			}
-			else if (draw2) {
-				draw2 = false;
-
-				frame2 = al_create_sub_bitmap(sprite_parado->imagem, (sprite_parado->largura / 11) * i, 0, sprite_parado->largura / 11, sprite_parado->altura);
-				al_clear_to_color(al_map_rgb(0, 0, 0));
-				al_draw_bitmap(frame2, personagem->x, personagem->y, j);
-				al_flip_display();
-			}
-			if (inimigo1) {
-
-				al_draw_bitmap_region(goblin->imagem, sourceX_inimigo, 0, goblin->largura / 4, goblin->altura, goblin->x, goblin->y, k);
-				al_flip_display();
-			}
-			if (atacando) {
-				al_clear_to_color(al_map_rgb(0, 0, 0));
-				al_draw_bitmap_region(sprite_atacando->imagem, sourceX_atacando, 0, sprite_atacando->largura / 10, sprite_atacando->altura, personagem->x-3, personagem->y-11, j);
-				al_flip_display();
-			}
+			al_flip_display();
+			al_clear_to_color(al_map_rgb(0, 0, 0));
 
 		}
 		// Se clicar em creditos
