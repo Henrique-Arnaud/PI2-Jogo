@@ -29,11 +29,7 @@ struct objeto
 //                       
 typedef struct objeto Objeto;
 
-<<<<<<< HEAD
-Objeto* personagem, * sprite_parado, * goblin, * espada, * processador, * processador_mini, * sprite_atacando;
-=======
-Objeto* personagem, * sprite_parado, * goblin, * espada, * processador,* processador_mini, *sprite_atacando;
->>>>>>> 30dc3538ad254e391fea5ef16976fc005254818d
+Objeto* personagem, * sprite_parado, * goblin, * espada, * processador, * processador_mini,* placa_mae, *placa_mae_mini, * sprite_atacando;
 
 
 ALLEGRO_FONT* fonte = NULL;
@@ -59,7 +55,7 @@ int j = 0;
 int k = 0;
 int l = 0;
 
-bool draw = false, draw2 = true, ativo = false, item_processador = true;
+bool draw = false, draw2 = true, ativo = false, item_processador = false, item_processador_mini = false, item_placa = false, item_placa_mini = false;
 int pressionando = 0;
 float velocidade_movimento = 4.5;
 float velx, vely;
@@ -189,21 +185,6 @@ void movimentacao(ALLEGRO_EVENT evento) {
 
 			if (espada_ativa) {
 				espada->x += velocidade_projetil;
-<<<<<<< HEAD
-=======
-			}
-			else {
-				espada->x = personagem->x;
-			}
-
-		}
-
-
-	//	if (evento.timer.source == frametimer) {
-
-			if (ativo) {
-				sourceX += al_get_bitmap_width(personagem->imagem) / 10;
->>>>>>> 30dc3538ad254e391fea5ef16976fc005254818d
 			}
 			else {
 				espada->x = personagem->x;
@@ -290,7 +271,6 @@ void desenha() {
 	if (atacando) {
 		al_draw_bitmap_region(sprite_atacando->imagem, sourceX_atacando, 0, sprite_atacando->largura / 10, sprite_atacando->altura, personagem->x - 3, personagem->y - 11, j);
 
-<<<<<<< HEAD
 	}
 	if (espada_ativa) {
 		al_draw_bitmap(espada->imagem, espada->x, espada->y, NULL);
@@ -298,21 +278,15 @@ void desenha() {
 	if (item_processador) {
 		al_draw_bitmap(processador->imagem, processador->x, processador->y, 0);
 	}
-	else if (!item_processador) {
+	if (item_processador_mini) {
 		al_draw_bitmap(processador_mini->imagem, processador_mini->x, processador_mini->y, 0);
 	}
-=======
-		}
-		if (espada_ativa) {
-			al_draw_bitmap(espada->imagem, espada->x, espada->y, NULL);
-		}
-		if (item_processador) {
-			al_draw_bitmap(processador->imagem, processador->x, processador->y, 0);
-		}
-		else if (!item_processador) {
-			al_draw_bitmap(processador_mini->imagem, processador_mini->x, processador_mini->y, 0);
-		}
->>>>>>> 30dc3538ad254e391fea5ef16976fc005254818d
+	if (item_placa) {
+		al_draw_bitmap(placa_mae->imagem, placa_mae->x, placa_mae->y, 0);
+	}
+	if(item_placa_mini)
+		al_draw_bitmap(placa_mae_mini->imagem, placa_mae_mini->x, placa_mae_mini->y, 0);
+	
 }
 
 
@@ -379,7 +353,7 @@ int main(void) {
 	processador->imagem = al_load_bitmap("imagens/processador.jpg");
 	processador->largura = 63;
 	processador->altura = 57;
-	processador->x = 500;
+	processador->x = 700;
 	processador->y = Chao - processador->altura;
 
 	processador_mini = (Objeto*)malloc(sizeof(Objeto));
@@ -389,8 +363,26 @@ int main(void) {
 	processador_mini->x = 50;
 	processador_mini->y = 100;
 
+	// Placa Mae
+	placa_mae = (Objeto*)malloc(sizeof(Objeto));
+	placa_mae->imagem = al_load_bitmap("imagens/placamae.jpg");
+	placa_mae->largura = 63;
+	placa_mae->altura = 57;
+	placa_mae->x = 500;
+	placa_mae->y = Chao - placa_mae->altura;
+
+	// Placa Mae Mini
+	placa_mae_mini = (Objeto*)malloc(sizeof(Objeto));
+	placa_mae_mini->imagem = al_load_bitmap("imagens/placamaemini.jpg");
+	placa_mae_mini->largura = 36;
+	placa_mae_mini->altura = 33;
+	placa_mae_mini->x = 10;
+	placa_mae_mini->y = 100;
+
+
 	// Variaveis de controle de menu
 	int menu = 1, jogar = 0, creditos = 0, infos = 0, jogo = 1, tocando = 1, morreu = 0, venceu = 0;
+
 
 	al_start_timer(timer);
 	al_start_timer(frametimer);
@@ -408,15 +400,9 @@ int main(void) {
 		// Funcao do menu do jogo
 		// Ja começa com 1 pois ela irá controlar os demais whiles, as outras opções
 
-<<<<<<< HEAD
 
 		if (menu == 1) {
 
-=======
-		
-		if(menu==1) {
-			
->>>>>>> 30dc3538ad254e391fea5ef16976fc005254818d
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			al_draw_bitmap(background, 0, 0, 0);
 			al_flip_display();
@@ -495,25 +481,38 @@ int main(void) {
 
 			if ((personagem->x <= processador->x + processador->largura) && (personagem->x + personagem->largura / 10 >= processador->x) && (personagem->y - personagem->altura >= processador->y - processador->altura)) {
 				item_processador = false;
+				item_processador_mini = true;
+				
 			}
 
-<<<<<<< HEAD
 			if (inimigo1 && espada_ativa && (espada->x + 50 >= goblin->x) && (espada->x <= goblin->x + 20) && (espada->y >= goblin->y) && (espada->y <= goblin->y + goblin->altura)) {
-=======
-			if (inimigo1 && espada_ativa &&(espada->x + 50 >= goblin->x) && (espada->x <= goblin->x + 20) && (espada->y >= goblin->y) && (espada->y <= goblin->y + goblin->altura)) {
->>>>>>> 30dc3538ad254e391fea5ef16976fc005254818d
 				espada_ativa = false;
 				goblin->vida--;
+				
 				//jogar = 0; 
 				//venceu = 1;
 			}
 
-			if (goblin->vida <= 0) {
-				inimigo1 = false;
+			if (inimigo1) {
+				if (goblin->vida <= 0) {
+
+					inimigo1 = false;
+					espada_ativa = false;
+					item_processador = true;
+					processador->x = goblin->x;
+					item_placa = true;
+				}
+
 			}
 
 			if ((espada->x >= 620) || (espada->x <= 0)) {
 				espada_ativa = false;
+			}
+
+			if (!inimigo1 && (personagem->x <= placa_mae->x + placa_mae->largura) && (personagem->x + personagem->largura / 10 >= placa_mae->x) && (personagem->y - personagem->altura >= placa_mae->y - placa_mae->altura)) {
+				
+				item_placa = false;
+				item_placa_mini = true;
 			}
 
 			/*if (atacando) {
@@ -537,11 +536,7 @@ int main(void) {
 			movimentacao(evento);
 
 			al_draw_bitmap(background_jogo1, 0, 0, NULL);
-<<<<<<< HEAD
 
-=======
-			
->>>>>>> 30dc3538ad254e391fea5ef16976fc005254818d
 			desenha();
 
 			al_flip_display();
