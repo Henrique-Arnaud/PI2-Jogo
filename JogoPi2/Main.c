@@ -28,7 +28,7 @@ struct objeto
 //                       
 typedef struct objeto Objeto;
 
-Objeto* personagem, * sprite_parado, * goblin, * item, * processador, *sprite_atacando;
+Objeto* personagem, * sprite_parado, * goblin, * item, * processador,* processador_mini, *sprite_atacando;
 
 
 ALLEGRO_FONT* fonte = NULL;
@@ -53,7 +53,7 @@ int j = 0;
 int k = 0;
 int l = 0;
 
-bool draw = false, draw2 = true, ativo = false;
+bool draw = false, draw2 = true, ativo = false, item_processador = true;
 int pressionando = 0;
 float velocidade_movimento = 4.5;
 float velx, vely;
@@ -151,14 +151,14 @@ void movimentacao(ALLEGRO_EVENT evento) {
 			else {
 				vely = 0;
 			}
-			if (personagem->x >= -1 && personagem->x + personagem->largura/10 <= 639) {
+			if (personagem->x >= -1 && personagem->x + personagem->largura / 10 <= 639) {
 				personagem->x += velx;
 			}
 			if (personagem->x <= -1) {
 				personagem->x = 0;
 			}
-			else if (personagem->x + personagem->largura/10 >= 639) {
-				personagem->x = 638 - personagem->largura/10;
+			else if (personagem->x + personagem->largura / 10 >= 639) {
+				personagem->x = 638 - personagem->largura / 10;
 			}
 			personagem->y += vely;
 
@@ -180,7 +180,7 @@ void movimentacao(ALLEGRO_EVENT evento) {
 		}
 
 
-		// (evento.timer.source == frametimer) {
+		//if (evento.timer.source == frametimer) {
 			if (ativo) {
 				sourceX += al_get_bitmap_width(personagem->imagem) / 10;
 			}
@@ -216,20 +216,19 @@ void movimentacao(ALLEGRO_EVENT evento) {
 				sourceX_atacando = 0;
 				atacando = false;
 			}
-		//
 
-		//if (evento.timer.source == inimigotimer) {
-			if (inimigo1) {
-				sourceX_inimigo += al_get_bitmap_width(goblin->imagem) / 4;
-			}
-			else {
-				sourceX_inimigo = 0;
-			}
-			if (sourceX_inimigo >= al_get_bitmap_width(goblin->imagem)) {
-				sourceX_inimigo = 0;
-			}
+			//if (evento.timer.source == inimigotimer) {
+				if (inimigo1) {
+					sourceX_inimigo += al_get_bitmap_width(goblin->imagem) / 4;
+				}
+				else {
+					sourceX_inimigo = 0;
+				}
+				if (sourceX_inimigo >= al_get_bitmap_width(goblin->imagem)) {
+					sourceX_inimigo = 0;
+				}
+			//}
 		//}
-
 	}
 }
 
@@ -238,28 +237,30 @@ void desenha() {
 		draw = false;
 
 		//frame = al_create_sub_bitmap(personagem->imagem, (personagem->largura / 10) * i, 0, personagem->largura / 10 - 5, personagem->altura);
-		al_flip_display();
 		al_draw_bitmap_region(personagem->imagem, sourceX, 0, personagem->largura / 10, personagem->altura, personagem->x, personagem->y, j);
 		
 	}
 	else if (draw2) {
 		draw2 = false;
-		al_flip_display();
 
 		frame2 = al_create_sub_bitmap(sprite_parado->imagem, (sprite_parado->largura / 11) * i, 0, sprite_parado->largura / 11, sprite_parado->altura);
 		al_draw_bitmap(frame2, personagem->x, personagem->y, j);
 
 	}
 	if (inimigo1) {
-		al_flip_display();
 		al_draw_bitmap_region(goblin->imagem, sourceX_inimigo, 0, goblin->largura / 4, goblin->altura, goblin->x, goblin->y, k);
 		
 
 	}
 	if (atacando) {
-		al_flip_display();
 		al_draw_bitmap_region(sprite_atacando->imagem, sourceX_atacando, 0, sprite_atacando->largura / 10, sprite_atacando->altura, personagem->x - 3, personagem->y - 11, j);
 
+	}
+	if (item_processador) {
+		al_draw_bitmap(processador->imagem, processador->x, processador->y, 0);
+	}
+	else if (!item_processador) {
+		al_draw_bitmap(processador_mini->imagem, processador_mini->x, processador_mini->y, 0);
 	}
 }
 
@@ -315,10 +316,17 @@ int main(void) {
 	//Criando objeto do item
 	processador = (Objeto*)malloc(sizeof(Objeto));
 	processador->imagem = al_load_bitmap("imagens/processador.jpg");
-	processador->x = 300;
-	processador -> largura = 150;
-	processador-> altura = 100;
-
+	processador->largura = 63;
+	processador->altura = 57;
+	processador->x = 500;
+	processador->y = Chao - processador->altura;
+	
+	processador_mini = (Objeto*)malloc(sizeof(Objeto));
+	processador_mini->imagem = al_load_bitmap("imagens/processador_mini.jpg");
+	processador_mini->largura = 36;
+	processador_mini->altura = 33;
+	processador_mini->x = 50;
+	processador_mini->y = 100;
 
 	// Variaveis de controle de menu
 	int menu = 1, jogar = 0, creditos = 0, infos = 0, jogo = 1, tocando = 1, morreu = 0, venceu = 0;
@@ -376,6 +384,8 @@ int main(void) {
 					menu = 0;
 					// Inicia a função jogar
 					jogar = 1;
+					al_clear_to_color(al_map_rgb(0, 0, 0));
+					al_flip_display();
 				}
 				// Se for em infos
 				else if ((evento.mouse.x >= 213 &&
@@ -418,6 +428,11 @@ int main(void) {
 				
 				morreu = 1;
 			}
+
+			if ((personagem->x <= processador->x + processador->largura) && (personagem->x + personagem->largura / 10 >= processador->x) && (personagem->y - personagem->altura >= processador->y - processador->altura)) {
+				item_processador = false;
+			}
+
 			/*if (atacando) {
 				if (j == 1) {
 					if ((personagem->x + 50 >= goblin->x+10) && (personagem->y - personagem->altura >= goblin->y - goblin->altura)) {
@@ -437,11 +452,12 @@ int main(void) {
 
 
 			movimentacao(evento);
+
+			al_clear_to_color(al_map_rgb(0, 0, 0));
 			
 			desenha();
 
 			al_flip_display();
-			al_clear_to_color(al_map_rgb(0, 0, 0));
 
 		}
 		// Se clicar em creditos
