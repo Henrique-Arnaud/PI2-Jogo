@@ -55,7 +55,11 @@ int j = 0;
 int k = 0;
 int l = 0;
 
+<<<<<<< HEAD
 bool draw = false, draw2 = true, ativo = false, item_processador = false, item_processador_mini = false, item_placa = false, item_placa_mini = false;
+=======
+bool draw = false, draw2 = true, ativo = false, item_processador = false, item_processador_mini = false;
+>>>>>>> d6ba7bd697a7a0f99a343e131f6fb24ad19acde8
 int pressionando = 0;
 float velocidade_movimento = 4.5;
 float velx, vely;
@@ -271,6 +275,7 @@ void desenha() {
 	if (atacando) {
 		al_draw_bitmap_region(sprite_atacando->imagem, sourceX_atacando, 0, sprite_atacando->largura / 10, sprite_atacando->altura, personagem->x - 3, personagem->y - 11, j);
 
+<<<<<<< HEAD
 	}
 	if (espada_ativa) {
 		al_draw_bitmap(espada->imagem, espada->x, espada->y, NULL);
@@ -287,6 +292,18 @@ void desenha() {
 	if(item_placa_mini)
 		al_draw_bitmap(placa_mae_mini->imagem, placa_mae_mini->x, placa_mae_mini->y, 0);
 	
+=======
+		}
+		if (espada_ativa) {
+			al_draw_bitmap(espada->imagem, espada->x, espada->y, NULL);
+		}
+		if (item_processador) {
+			al_draw_bitmap(processador->imagem, processador->x, processador->y, 0);
+		}
+		if (item_processador_mini) {
+			al_draw_bitmap(processador_mini->imagem, processador_mini->x, processador_mini->y, 0);
+		}
+>>>>>>> d6ba7bd697a7a0f99a343e131f6fb24ad19acde8
 }
 
 
@@ -482,7 +499,10 @@ int main(void) {
 			if ((personagem->x <= processador->x + processador->largura) && (personagem->x + personagem->largura / 10 >= processador->x) && (personagem->y - personagem->altura >= processador->y - processador->altura)) {
 				item_processador = false;
 				item_processador_mini = true;
+<<<<<<< HEAD
 				
+=======
+>>>>>>> d6ba7bd697a7a0f99a343e131f6fb24ad19acde8
 			}
 
 			if (inimigo1 && espada_ativa && (espada->x + 50 >= goblin->x) && (espada->x <= goblin->x + 20) && (espada->y >= goblin->y) && (espada->y <= goblin->y + goblin->altura)) {
@@ -495,14 +515,21 @@ int main(void) {
 
 			if (inimigo1) {
 				if (goblin->vida <= 0) {
+<<<<<<< HEAD
 
+=======
+>>>>>>> d6ba7bd697a7a0f99a343e131f6fb24ad19acde8
 					inimigo1 = false;
 					espada_ativa = false;
 					item_processador = true;
 					processador->x = goblin->x;
+<<<<<<< HEAD
 					item_placa = true;
 				}
 
+=======
+				}
+>>>>>>> d6ba7bd697a7a0f99a343e131f6fb24ad19acde8
 			}
 
 			if ((espada->x >= 620) || (espada->x <= 0)) {
