@@ -295,7 +295,11 @@ void desenha() {
 	}
 	if (item_placa_mini)
 		al_draw_bitmap(placa_mae_mini->imagem, placa_mae_mini->x, placa_mae_mini->y, 0);
+<<<<<<< HEAD
 }
+=======
+	}
+>>>>>>> aeab4e6e6a325e945f11c35fda01fd37516e31d1
 
 
 // Main
@@ -509,7 +513,7 @@ int main(void) {
 					item_placa = true;
 				}
 			}
-
+			
 			if ((espada->x >= 620) || (espada->x <= 0)) {
 				espada_ativa = false;
 			}
