@@ -45,6 +45,9 @@ ALLEGRO_BITMAP* creditoss = NULL;
 ALLEGRO_SAMPLE* musica = NULL;
 ALLEGRO_SAMPLE_INSTANCE* songInstance = NULL;
 
+//teste
+ALLEGRO_BITMAP* placa_mae_inv = NULL;
+ALLEGRO_BITMAP* processador_inv = NULL;
 
 int pressionadox = 0;
 int i = 0;
@@ -54,6 +57,10 @@ int k = 0;
 int l = 0;
 
 bool draw = false, draw2 = true, ativo = false, item_processador = false, item_processador_mini = false, item_placa = false, item_placa_mini = false;
+
+//teste
+bool inv_placa = false;
+bool inv_processador = false;
 
 int pressionando = 0;
 float velocidade_movimento = 4.5;
@@ -75,7 +82,6 @@ float velocidade_projetil = 10.0;
 int posicao_projetil = 0;
 
 ALLEGRO_KEYBOARD_STATE key_state;
-
 
 // Funcao que inicializa as coisas
 void inicialização() {
@@ -149,7 +155,7 @@ void movimentacao(ALLEGRO_EVENT evento) {
 			ativo = false;
 			velx = 0;
 		}
-
+		
 		if (!pulando) {
 			vely += gravidade;
 		}
@@ -191,7 +197,7 @@ void movimentacao(ALLEGRO_EVENT evento) {
 		else {
 			espada->x = personagem->x;
 		}
-
+		
 	}
 
 
@@ -294,6 +300,11 @@ void desenha() {
 	}
 	if (item_placa_mini)
 		al_draw_bitmap(placa_mae_mini->imagem, placa_mae_mini->x, placa_mae_mini->y, 0);
+	if (inv_placa)
+		al_draw_bitmap(placa_mae_inv, 0, 0, 0);
+	//aqui!!
+	if (inv_processador)
+		al_draw_bitmap(processador_inv, 0, 0, 0);
 }
 
 
@@ -310,6 +321,11 @@ int main(void) {
 	background_jogo1 = al_load_bitmap("imagens/background.jpg");
 	infoss = al_load_bitmap("imagens/infos.jpg");
 	creditoss = al_load_bitmap("imagens/creditos.jpg");
+
+	// teste
+	processador_inv = al_load_bitmap("imagens/pc.png");
+	placa_mae_inv = al_load_bitmap("imagens/pcmae.png");
+
 	musica = al_load_sample("musica.ogg");
 	fonte = al_load_font("Fontes/arial.ttf", 48, 0);
 
@@ -489,6 +505,8 @@ int main(void) {
 			if ((personagem->x <= processador->x + processador->largura) && (personagem->x + personagem->largura / 10 >= processador->x) && (personagem->y - personagem->altura >= processador->y - processador->altura)) {
 				item_processador = false;
 				item_processador_mini = true;
+				inv_processador = true;
+
 			}
 
 			if (inimigo1 && espada_ativa && (espada->x + 50 >= goblin->x) && (espada->x <= goblin->x + 20) && (espada->y >= goblin->y) && (espada->y <= goblin->y + goblin->altura)) {
