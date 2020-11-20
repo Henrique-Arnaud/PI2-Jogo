@@ -1,7 +1,7 @@
 # PI2 - Em Busca Do Hardware Perdido
 
 
-  O jogo "Em busca do Hardware Perdido" é um projeto educacional na matéria de PI, do curso de Ciências da Computação do Centro Universitário Senac. A proposta dele é ser um jogo 2d de plataforma, com teor educacional em sua gameplay.
+  O jogo "Em busca do Hardware Perdido" é um projeto educacional, feito em C com o uso da biblioteca Allegro 5, na matéria de PI, do curso de Ciências da Computação do Centro Universitário Senac. A proposta dele é ser um jogo 2D de plataforma, com teor educativo em sua gameplay.
   
   Elaborado pelos alunos: 
   * *Gustavo Brandão*
