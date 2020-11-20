@@ -29,15 +29,13 @@ struct objeto
 //                       
 typedef struct objeto Objeto;
 
-Objeto* personagem, * sprite_parado, * goblin, * espada, * processador, * processador_mini,* placa_mae, *placa_mae_mini, * sprite_atacando;
+Objeto* personagem, * sprite_parado, * goblin, * espada, * processador, * processador_mini, * placa_mae, * placa_mae_mini, * sprite_atacando;
 
 
 ALLEGRO_FONT* fonte = NULL;
 ALLEGRO_BITMAP* frame = NULL;
 ALLEGRO_BITMAP* frame2 = NULL;
 ALLEGRO_TIMER* timer = NULL;
-ALLEGRO_TIMER* frametimer = NULL;
-ALLEGRO_TIMER* inimigotimer = NULL;
 ALLEGRO_EVENT_QUEUE* fila_eventos = NULL;
 ALLEGRO_DISPLAY* janela = NULL;
 ALLEGRO_BITMAP* background = NULL;
@@ -94,8 +92,6 @@ void inicialização() {
 	al_reserve_samples(5);
 
 	timer = al_create_timer(1.0 / FPS);
-	frametimer = al_create_timer(1.0 / FrameFps);
-	inimigotimer = al_create_timer(1.0 / InimigoFps);
 
 	janela = al_create_display(LARGURA, ALTURA);
 
@@ -108,177 +104,180 @@ void inicialização() {
 	al_register_event_source(fila_eventos, al_get_keyboard_event_source());
 	al_register_event_source(fila_eventos, al_get_display_event_source(janela));
 	al_register_event_source(fila_eventos, al_get_timer_event_source(timer));
-	al_register_event_source(fila_eventos, al_get_timer_event_source(frametimer));
-	al_register_event_source(fila_eventos, al_get_timer_event_source(inimigotimer));
 
 }
 
 // Função movimentação
 void movimentacao(ALLEGRO_EVENT evento) {
 
-	if (evento.type == ALLEGRO_EVENT_TIMER) {
 
-		if (evento.timer.source == timer) {
+	if (evento.timer.source == timer) {
 
-			ativo = true;
+		ativo = true;
 
-			pressionando = 0;
+		pressionando = 0;
 
-			if (al_key_down(&key_state, ALLEGRO_KEY_UP) && pulando) {
-				vely = -velocidade_pulo;
-				pulando = false;
-			}
-			if (al_key_down(&key_state, ALLEGRO_KEY_Z) && !atacando) {
-				atacando = true;
-
-				if (!espada_ativa) {
-					espada->y = personagem->y;
-					l = j;
-				}
-
-				espada_ativa = true;
-			}
-			if (al_key_down(&key_state, ALLEGRO_KEY_RIGHT)) {
-				velx = velocidade_movimento;
-
-				j = 1;
-
-				pressionando = 1;
-			}
-			else if (al_key_down(&key_state, ALLEGRO_KEY_LEFT)) {
-				velx = -velocidade_movimento;
-
-				j = 0;
-
-				pressionando = 1;
-			}
-			else {
-				ativo = false;
-				velx = 0;
-			}
-
-			if (!pulando) {
-				vely += gravidade;
-			}
-			else {
-				vely = 0;
-			}
-			if (personagem->x >= -1 && personagem->x + personagem->largura / 10 <= 639) {
-				personagem->x += velx;
-			}
-			if (personagem->x <= -1) {
-				personagem->x = 0;
-			}
-			else if (personagem->x + personagem->largura / 10 >= 639) {
-				personagem->x = 638 - personagem->largura / 10;
-			}
-			personagem->y += vely;
-
-			pulando = (personagem->y + 49 >= Chao);
-
-			if (pulando) {
-				personagem->y = Chao - 49;
-			}
-
-			if (inimigo1 && personagem->x - goblin->x < 0) {
-				goblin->x -= velocidade_inimigo;
-				k = 0;
-			}
-			else if (inimigo1 && personagem->x - goblin->x > 0) {
-				goblin->x += velocidade_inimigo;
-				k = 1;
-			}
-
-			if (espada_ativa && l == 1) {
-				espada->x += velocidade_projetil;
-			}
-			else if (espada_ativa && l == 0) {
-				espada->x -= velocidade_projetil;
-			}
-			else {
-				espada->x = personagem->x;
-			}
-
+		if (al_key_down(&key_state, ALLEGRO_KEY_UP) && pulando) {
+			vely = -velocidade_pulo;
+			pulando = false;
 		}
+		if (al_key_down(&key_state, ALLEGRO_KEY_Z) && !atacando && !espada_ativa) {
+			atacando = true;
 
+			if (!espada_ativa) {
+				espada->y = personagem->y;
+				l = j;
+			}
 
-		//	if (evento.timer.source == frametimer) {
+			espada_ativa = true;
+		}
+		if (al_key_down(&key_state, ALLEGRO_KEY_RIGHT)) {
+			velx = velocidade_movimento;
 
-		if (ativo) {
-			sourceX += al_get_bitmap_width(personagem->imagem) / 10;
+			j = 1;
+
+			pressionando = 1;
+		}
+		else if (al_key_down(&key_state, ALLEGRO_KEY_LEFT)) {
+			velx = -velocidade_movimento;
+
+			j = 0;
+
+			pressionando = 1;
 		}
 		else {
-			sourceX = 1;
-		}
-		if (sourceX >= al_get_bitmap_width(personagem->imagem)) {
-			sourceX = 1;
+			ativo = false;
+			velx = 0;
 		}
 
-		if (pressionando == 1) {
-			draw = true;
-		}
-
-		if (pressionando == 0) {
-
-			i++;
-
-			if (i > 10) {
-				i = 0;
-			}
-
-			draw2 = true;
-		}
-
-		if (atacando) {
-			sourceX_atacando += al_get_bitmap_width(sprite_atacando->imagem) / 10;
+		if (!pulando) {
+			vely += gravidade;
 		}
 		else {
-			sourceX_atacando = 0;
+			vely = 0;
 		}
-		if (sourceX_atacando >= al_get_bitmap_width(sprite_atacando->imagem)) {
-			sourceX_atacando = 0;
-			atacando = false;
+		if (personagem->x >= -1 && personagem->x + personagem->largura / 10 <= 639) {
+			personagem->x += velx;
 		}
-		//	}
+		if (personagem->x <= -1) {
+			personagem->x = 0;
+		}
+		else if (personagem->x + personagem->largura / 10 >= 639) {
+			personagem->x = 638 - personagem->largura / 10;
+		}
+		personagem->y += vely;
 
-				//if (evento.timer.source == inimigotimer) {
-		if (inimigo1) {
-			sourceX_inimigo += al_get_bitmap_width(goblin->imagem) / 4;
+		pulando = (personagem->y + 49 >= Chao);
+
+		if (pulando) {
+			personagem->y = Chao - 49;
+		}
+
+		if (inimigo1 && personagem->x - goblin->x < 0) {
+			goblin->x -= velocidade_inimigo;
+			k = 0;
+		}
+		else if (inimigo1 && personagem->x - goblin->x > 0) {
+			goblin->x += velocidade_inimigo;
+			k = 1;
+		}
+
+		if (espada_ativa && l == 1) {
+			espada->x += velocidade_projetil;
+		}
+		else if (espada_ativa && l == 0) {
+			espada->x -= velocidade_projetil;
 		}
 		else {
-			sourceX_inimigo = 0;
+			espada->x = personagem->x;
 		}
-		if (sourceX_inimigo >= al_get_bitmap_width(goblin->imagem)) {
-			sourceX_inimigo = 0;
-		}
-		//}
 
 	}
+
+
+		//if (evento.timer.source == frametimer) {
+
+	if (ativo) {
+		sourceX += al_get_bitmap_width(personagem->imagem) / 10;
+	}
+	else {
+		sourceX = 1;
+	}
+	if (sourceX >= al_get_bitmap_width(personagem->imagem)) {
+		sourceX = 1;
+	}
+
+	if (pressionando == 1) {
+		draw = true;
+	}
+
+	if (pressionando == 0) {
+
+		i++;
+
+		if (i > 10) {
+			i = 0;
+		}
+
+		draw2 = true;
+	}
+
+	if (atacando) {
+		sourceX_atacando += al_get_bitmap_width(sprite_atacando->imagem) / 10;
+	}
+	else {
+		sourceX_atacando = 0;
+	}
+	if (sourceX_atacando >= al_get_bitmap_width(sprite_atacando->imagem)) {
+		sourceX_atacando = 0;
+		atacando = false;
+	}
+		//}
+
+			//if (evento.timer.source == inimigotimer) {
+
+	if (inimigo1) {
+		sourceX_inimigo = al_get_bitmap_width(goblin->imagem) / 4;
+	}
+	else {
+		sourceX_inimigo = 0;
+	}
+	if (sourceX_inimigo >= al_get_bitmap_width(goblin->imagem)) {
+		sourceX_inimigo = 0;
+	}
+	//}
+
+
 }
 
 void desenha() {
 
-	if (draw) {
-		draw = false;
 
-		//frame = al_create_sub_bitmap(personagem->imagem, (personagem->largura / 10) * i, 0, personagem->largura / 10 - 5, personagem->altura);
-		al_draw_bitmap_region(personagem->imagem, sourceX, 0, personagem->largura / 10, personagem->altura, personagem->x, personagem->y, j);
+	if (atacando) {
+		al_draw_bitmap_region(sprite_atacando->imagem, sourceX_atacando, 0, sprite_atacando->largura / 10, sprite_atacando->altura, personagem->x - 3, personagem->y - 11, j);
 
 	}
-	else if (draw2) {
-		draw2 = false;
+	else {
+		if (draw) {
+			draw = false;
 
-		frame2 = al_create_sub_bitmap(sprite_parado->imagem, (sprite_parado->largura / 11) * i, 0, sprite_parado->largura / 11, sprite_parado->altura);
-		al_draw_bitmap(frame2, personagem->x, personagem->y, j);
+			//frame = al_create_sub_bitmap(personagem->imagem, (personagem->largura / 10) * i, 0, personagem->largura / 10 - 5, personagem->altura);
+			al_draw_bitmap_region(personagem->imagem, sourceX, 0, personagem->largura / 10, personagem->altura, personagem->x, personagem->y, j);
 
+		}
+		else if (draw2) {
+			draw2 = false;
+			frame2 = al_create_sub_bitmap(sprite_parado->imagem, (sprite_parado->largura / 11) * i, 0, sprite_parado->largura / 11, sprite_parado->altura);
+			al_draw_bitmap(frame2, personagem->x, personagem->y, j);
+			al_flip_display();
+
+		}
 	}
+
+
 	if (inimigo1) {
 		al_draw_bitmap_region(goblin->imagem, sourceX_inimigo, 0, goblin->largura / 4, goblin->altura, goblin->x, goblin->y, k);
 
-
-	}
-	if (atacando) {
-		al_draw_bitmap_region(sprite_atacando->imagem, sourceX_atacando, 0, sprite_atacando->largura / 10, sprite_atacando->altura, personagem->x - 3, personagem->y - 11, j);
 
 	}
 	if (espada_ativa) {
@@ -293,9 +292,9 @@ void desenha() {
 	if (item_placa) {
 		al_draw_bitmap(placa_mae->imagem, placa_mae->x, placa_mae->y, 0);
 	}
-	if(item_placa_mini)
+	if (item_placa_mini)
 		al_draw_bitmap(placa_mae_mini->imagem, placa_mae_mini->x, placa_mae_mini->y, 0);
-	}
+}
 
 
 // Main
@@ -388,14 +387,14 @@ int main(void) {
 	placa_mae_mini->y = 100;
 
 
+	frame2 = al_create_sub_bitmap(sprite_parado->imagem, (sprite_parado->largura / 11) * i, 0, sprite_parado->largura / 11, sprite_parado->altura);
+
+
 	// Variaveis de controle de menu
 	int menu = 1, jogar = 0, creditos = 0, infos = 0, jogo = 1, tocando = 1, morreu = 0, venceu = 0;
 
 
 	al_start_timer(timer);
-	al_start_timer(frametimer);
-	al_start_timer(inimigotimer);
-
 
 	//Looping principal
 	while (jogo == 1) {
@@ -495,7 +494,7 @@ int main(void) {
 			if (inimigo1 && espada_ativa && (espada->x + 50 >= goblin->x) && (espada->x <= goblin->x + 20) && (espada->y >= goblin->y) && (espada->y <= goblin->y + goblin->altura)) {
 				espada_ativa = false;
 				goblin->vida--;
-				
+
 				//jogar = 0; 
 				//venceu = 1;
 			}
@@ -509,13 +508,13 @@ int main(void) {
 					item_placa = true;
 				}
 			}
-			
+
 			if ((espada->x >= 620) || (espada->x <= 0)) {
 				espada_ativa = false;
 			}
 
 			if (!inimigo1 && (personagem->x <= placa_mae->x + placa_mae->largura) && (personagem->x + personagem->largura / 10 >= placa_mae->x) && (personagem->y - personagem->altura >= placa_mae->y - placa_mae->altura)) {
-				
+
 				item_placa = false;
 				item_placa_mini = true;
 			}
@@ -538,13 +537,16 @@ int main(void) {
 			}*/
 
 
-			movimentacao(evento);
 
-			al_draw_bitmap(background_jogo1, 0, 0, NULL);
+			if (evento.type == ALLEGRO_EVENT_TIMER) {
+				movimentacao(evento);
 
-			desenha();
+				al_draw_bitmap(background_jogo1, 0, 0, NULL);
 
-			al_flip_display();
+				desenha();
+
+				al_flip_display();
+			}
 
 		}
 		// Se clicar em creditos
@@ -617,8 +619,6 @@ int main(void) {
 	al_destroy_bitmap(processador_mini->imagem);
 	al_destroy_bitmap(processador->imagem);
 	al_destroy_event_queue(fila_eventos);
-	al_destroy_timer(frametimer);
-	al_destroy_timer(inimigotimer);
 	al_destroy_font(fonte);
 
 	free(personagem);

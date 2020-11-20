@@ -1,10 +1,10 @@
 ﻿  Main.c
-C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(63,6): warning C4142: 'velx': redefinição benigna de tipo
-C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(62): message : consulte a declaração de 'velx'
-C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(64,6): warning C4142: 'vely': redefinição benigna de tipo
-C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(62): message : consulte a declaração de 'vely'
-C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(445,49): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
-C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(445,45): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
-C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(543,47): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
-C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(543,43): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(62,6): warning C4142: 'velx': redefinição benigna de tipo
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(61): message : consulte a declaração de 'velx'
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(63,6): warning C4142: 'vely': redefinição benigna de tipo
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(61): message : consulte a declaração de 'vely'
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(449,49): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(449,45): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(549,48): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(549,44): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
   JogoPi2.vcxproj -> C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Debug\JogoPi2.exe
