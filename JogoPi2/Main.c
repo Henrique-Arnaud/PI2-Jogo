@@ -26,7 +26,7 @@ struct objeto
 	int vida;
 };
 
-//                       
+//                  
 typedef struct objeto Objeto;
 
 Objeto* personagem, * sprite_parado, * goblin, * espada, * processador, * processador_mini, * placa_mae, * placa_mae_mini, * sprite_atacando, * inventario;
@@ -51,6 +51,11 @@ ALLEGRO_BITMAP* processador_inv = NULL;
 ALLEGRO_BITMAP* inventario_processador = NULL;
 ALLEGRO_BITMAP* inventario_placa_mae = NULL;
 ALLEGRO_BITMAP* inventario_placa_de_video = NULL;
+
+
+ALLEGRO_SAMPLE* clique_menu = NULL;
+ALLEGRO_SAMPLE* som_espada = NULL;
+ALLEGRO_SAMPLE*  pegar_item = NULL;
 
 int pressionadox = 0;
 int i = 0;
@@ -118,6 +123,7 @@ void inicialização() {
 
 }
 
+
 // Função movimentação
 void movimentacao(ALLEGRO_EVENT evento) {
 
@@ -134,7 +140,7 @@ void movimentacao(ALLEGRO_EVENT evento) {
 		}
 		if (al_key_down(&key_state, ALLEGRO_KEY_Z) && !atacando && !espada_ativa) {
 			atacando = true;
-
+			al_play_sample(som_espada, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 			if (!espada_ativa) {
 				espada->y = personagem->y;
 				l = j;
@@ -362,10 +368,18 @@ int main(void) {
 	musica = al_load_sample("musica.ogg");
 	fonte = al_load_font("Fontes/arial.ttf", 48, 0);
 
+	pegar_item = al_load_sample("pegar_item.wav");
+	clique_menu = al_load_sample("clique_menu.wav");//Som de clique
+	som_espada = al_load_sample("som_espada.wav");
+
 	songInstance = al_create_sample_instance(musica);
 	al_set_sample_instance_playmode(songInstance, ALLEGRO_PLAYMODE_LOOP);
 	al_attach_sample_instance_to_mixer(songInstance, al_get_default_mixer());
 
+	//Carregando sons
+	al_install_audio();
+	al_init_acodec_addon();
+	al_reserve_samples(10);//Reservando canais de audio no mixer principal
 
 
 	personagem = (Objeto*)malloc(sizeof(Objeto));
@@ -526,6 +540,7 @@ int main(void) {
 					evento.mouse.y >= 144)) {
 
 					al_stop_sample_instance(songInstance);
+					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 					menu = 0;
 					// Inicia a função jogar
 					jogar = 1;
@@ -536,7 +551,7 @@ int main(void) {
 				else if ((evento.mouse.x >= 213 &&
 					evento.mouse.x <= 402 && evento.mouse.y <= 298 &&
 					evento.mouse.y >= 239)) {
-
+					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 					menu = 0;
 					infos = 1;
 				}
@@ -545,7 +560,7 @@ int main(void) {
 					evento.mouse.x <= 405 && evento.mouse.y <= 390 &&
 					evento.mouse.y >= 330)) {
 
-
+					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 					menu = 0;
 					creditos = 1;
 				}
@@ -556,10 +571,16 @@ int main(void) {
 
 
 					//mutar e desmutar funcionando
-					if (tocando == 1)
+					if (tocando == 1) {
+						al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 						tocando = 0;
-					else
+					}
+						
+					else {
+						al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 						tocando = 1;
+					}
+						
 				}
 
 			}
@@ -568,13 +589,15 @@ int main(void) {
 		//(personagem->x <= goblin->x + goblin->largura / 4) && (personagem->x + personagem->largura/10 >= goblin->x)
 		else if (jogar == 1) {
 
+			//se o GOBLIN encostar no PLAYER ou vice-versa
 			if (inimigo1 && (personagem->x <= goblin->x + 20) && (personagem->x + 20 >= goblin->x) && (personagem->y + personagem->altura >= goblin->y) && (personagem->y <= goblin->y + goblin->altura)) {
 				jogar = 0;
-
 				morreu = 1;
 			}
 
 			if ((personagem->x <= processador->x + processador->largura) && (personagem->x + personagem->largura / 10 >= processador->x) && (personagem->y - personagem->altura >= processador->y - processador->altura)) {
+				al_play_sample(pegar_item, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
+				processador->y = 1000, processador->x = 1000;
 				item_processador = false;
 				item_processador_mini = true;
 				
@@ -605,13 +628,18 @@ int main(void) {
 			}
 
 			if (!inimigo1 && (personagem->x <= placa_mae->x + placa_mae->largura) && (personagem->x + personagem->largura / 10 >= placa_mae->x) && (personagem->y - personagem->altura >= placa_mae->y - placa_mae->altura)) {
-
+				
+				al_play_sample(pegar_item, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
+				placa_mae->y = 1000, placa_mae->x = 1000;
 				item_placa = false;
+				
 				item_placa_mini = true;
 			}
 			if (!inimigo1 && (personagem->x <= placa_de_video->x + placa_mae->largura) && (personagem->x + personagem->largura / 10 >= placa_de_video->x) && (personagem->y - personagem->altura >= placa_de_video->y - placa_de_video->altura)) {
-
+				al_play_sample(pegar_item, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
+				placa_de_video->y = 1000, placa_de_video->x = 1000;
 				item_placa_de_video = false;
+				item_placa_de_video = NULL;
 				item_placa_de_video_mini = true;
 			}
 
@@ -658,6 +686,7 @@ int main(void) {
 					evento.mouse.x <= 630 && evento.mouse.y <= 42 &&
 					evento.mouse.y >= 6)) {
 
+					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 					creditos = 0;
 					menu = 1;
 				}
@@ -676,11 +705,13 @@ int main(void) {
 					evento.mouse.x <= 630 && evento.mouse.y <= 42 &&
 					evento.mouse.y >= 6)) {
 
+					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 					infos = 0;
 					menu = 1;
 				}
 
 			}
+			
 		}
 
 	
