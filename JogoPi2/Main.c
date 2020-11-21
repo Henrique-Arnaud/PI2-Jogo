@@ -29,7 +29,7 @@ struct objeto
 //                       
 typedef struct objeto Objeto;
 
-Objeto* personagem, * sprite_parado, * goblin, * espada, * processador, * processador_mini, * placa_mae, * placa_mae_mini, * sprite_atacando;
+Objeto* personagem, * sprite_parado, * goblin, * espada, * processador, * processador_mini, * placa_mae, * placa_mae_mini, * sprite_atacando, * inventario;
 
 
 ALLEGRO_FONT* fonte = NULL;
@@ -48,6 +48,9 @@ ALLEGRO_SAMPLE_INSTANCE* songInstance = NULL;
 //teste
 ALLEGRO_BITMAP* placa_mae_inv = NULL;
 ALLEGRO_BITMAP* processador_inv = NULL;
+ALLEGRO_BITMAP* inventario_processador = NULL;
+ALLEGRO_BITMAP* inventario_placa_mae = NULL;
+
 
 int pressionadox = 0;
 int i = 0;
@@ -61,6 +64,7 @@ bool draw = false, draw2 = true, ativo = false, item_processador = false, item_p
 //teste
 bool inv_placa = false;
 bool inv_processador = false;
+bool inventarioo = false;
 
 int pressionando = 0;
 float velocidade_movimento = 4.5;
@@ -136,6 +140,12 @@ void movimentacao(ALLEGRO_EVENT evento) {
 			}
 
 			espada_ativa = true;
+		}
+		else if (al_key_down(&key_state, ALLEGRO_KEY_E)) {
+			inventarioo = true;
+		}
+		else if (al_key_down(&key_state, ALLEGRO_KEY_ESCAPE)) {
+			inventarioo = false;
 		}
 		if (al_key_down(&key_state, ALLEGRO_KEY_RIGHT)) {
 			velx = velocidade_movimento;
@@ -294,17 +304,22 @@ void desenha() {
 	}
 	if (item_processador_mini) {
 		al_draw_bitmap(processador_mini->imagem, processador_mini->x, processador_mini->y, 0);
+		
 	}
 	if (item_placa) {
 		al_draw_bitmap(placa_mae->imagem, placa_mae->x, placa_mae->y, 0);
 	}
-	if (item_placa_mini)
+	if (item_placa_mini) {
 		al_draw_bitmap(placa_mae_mini->imagem, placa_mae_mini->x, placa_mae_mini->y, 0);
+		
+	}
+
 	if (inv_placa)
 		al_draw_bitmap(placa_mae_inv, 0, 0, 0);
 	//aqui!!
-	if (inv_processador)
-		al_draw_bitmap(processador_inv, 0, 0, 0);
+	if (inventarioo)
+		al_draw_bitmap(inventario->imagem, 0, 0, 0);
+	
 }
 
 
@@ -325,13 +340,16 @@ int main(void) {
 	// teste
 	processador_inv = al_load_bitmap("imagens/pc.png");
 	placa_mae_inv = al_load_bitmap("imagens/pcmae.png");
-
+	inventario = al_load_bitmap("imagens/inventario.png");
+	inventario_processador = al_load_bitmap("imagens/inventario_processador.png");
+	inventario_placa_mae = al_load_bitmap("imagens/inventario_placa_mae.png");;
 	musica = al_load_sample("musica.ogg");
 	fonte = al_load_font("Fontes/arial.ttf", 48, 0);
 
 	songInstance = al_create_sample_instance(musica);
 	al_set_sample_instance_playmode(songInstance, ALLEGRO_PLAYMODE_LOOP);
 	al_attach_sample_instance_to_mixer(songInstance, al_get_default_mixer());
+
 
 
 	personagem = (Objeto*)malloc(sizeof(Objeto));
@@ -402,6 +420,13 @@ int main(void) {
 	placa_mae_mini->x = 10;
 	placa_mae_mini->y = 100;
 
+	
+	inventario = (Objeto*)malloc(sizeof(Objeto));
+	inventario->imagem = al_load_bitmap("imagens/inventario.png");
+	inventario->largura = 640;
+	inventario->altura = 480;
+	
+	
 
 	frame2 = al_create_sub_bitmap(sprite_parado->imagem, (sprite_parado->largura / 11) * i, 0, sprite_parado->largura / 11, sprite_parado->altura);
 
@@ -505,7 +530,8 @@ int main(void) {
 			if ((personagem->x <= processador->x + processador->largura) && (personagem->x + personagem->largura / 10 >= processador->x) && (personagem->y - personagem->altura >= processador->y - processador->altura)) {
 				item_processador = false;
 				item_processador_mini = true;
-				inv_processador = true;
+
+				
 
 			}
 
