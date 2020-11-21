@@ -30,7 +30,7 @@ struct objeto
 typedef struct objeto Objeto;
 
 Objeto* personagem, * sprite_parado, * goblin, * espada, * processador, * processador_mini, * placa_mae, * placa_mae_mini, * sprite_atacando, * inventario;
-
+Objeto* placa_de_video, * placa_de_video_mini, * memoria_ram, * memoria_ram_mini;
 
 ALLEGRO_FONT* fonte = NULL;
 ALLEGRO_BITMAP* frame = NULL;
@@ -50,7 +50,7 @@ ALLEGRO_BITMAP* placa_mae_inv = NULL;
 ALLEGRO_BITMAP* processador_inv = NULL;
 ALLEGRO_BITMAP* inventario_processador = NULL;
 ALLEGRO_BITMAP* inventario_placa_mae = NULL;
-
+ALLEGRO_BITMAP* inventario_placa_de_video = NULL;
 
 int pressionadox = 0;
 int i = 0;
@@ -60,6 +60,7 @@ int k = 0;
 int l = 0;
 
 bool draw = false, draw2 = true, ativo = false, item_processador = false, item_processador_mini = false, item_placa = false, item_placa_mini = false;
+bool item_placa_de_video = false, item_placa_de_video_mini = false, item_memoria_ram = false, item_memoria_ram_mini = false;
 
 //teste
 bool inv_placa = false;
@@ -304,6 +305,7 @@ void desenha() {
 	}
 	if (item_processador_mini) {
 		al_draw_bitmap(processador_mini->imagem, processador_mini->x, processador_mini->y, 0);
+		inventario->imagem = inventario_processador;
 		
 	}
 	if (item_placa) {
@@ -311,9 +313,23 @@ void desenha() {
 	}
 	if (item_placa_mini) {
 		al_draw_bitmap(placa_mae_mini->imagem, placa_mae_mini->x, placa_mae_mini->y, 0);
+		inventario->imagem = inventario_placa_mae;
+	}
+	if (item_placa_de_video) {
+		al_draw_bitmap(placa_de_video->imagem, placa_de_video->x, placa_de_video->y, 0);
 		
 	}
-
+	if (item_placa_de_video_mini) {
+		al_draw_bitmap(placa_de_video_mini->imagem, placa_de_video_mini->x, placa_de_video_mini->y, 0);
+		inventario->imagem = inventario_placa_de_video;
+	}
+	if (item_memoria_ram) {
+		al_draw_bitmap(memoria_ram->imagem, memoria_ram->x, memoria_ram->y, 0);
+	}
+	if (item_memoria_ram_mini) {
+		al_draw_bitmap(memoria_ram_mini->imagem, memoria_ram_mini->x, memoria_ram_mini->y, 0);
+	}
+	
 	if (inv_placa)
 		al_draw_bitmap(placa_mae_inv, 0, 0, 0);
 	//aqui!!
@@ -336,7 +352,7 @@ int main(void) {
 	background_jogo1 = al_load_bitmap("imagens/background.jpg");
 	infoss = al_load_bitmap("imagens/infos.jpg");
 	creditoss = al_load_bitmap("imagens/creditos.jpg");
-
+	inventario_placa_de_video = al_load_bitmap("imagens/inventario_placa_de_video.png");
 	// teste
 	processador_inv = al_load_bitmap("imagens/pc.png");
 	placa_mae_inv = al_load_bitmap("imagens/pcmae.png");
@@ -420,13 +436,44 @@ int main(void) {
 	placa_mae_mini->x = 10;
 	placa_mae_mini->y = 100;
 
-	
+	// Inventario
 	inventario = (Objeto*)malloc(sizeof(Objeto));
 	inventario->imagem = al_load_bitmap("imagens/inventario.png");
 	inventario->largura = 640;
 	inventario->altura = 480;
 	
+	// Placa de video
+	placa_de_video = (Objeto*)malloc(sizeof(Objeto));
+	placa_de_video->imagem = al_load_bitmap("imagens/placa_de_video.png");
+	placa_de_video->largura = 63;
+	placa_de_video->altura = 57;
+	placa_de_video->x = 300;
+	placa_de_video->y = Chao - placa_de_video->altura;
+
+	// Placa de video mini
+	placa_de_video_mini = (Objeto*)malloc(sizeof(Objeto));
+	placa_de_video_mini->imagem = al_load_bitmap("imagens/placa_de_video_mini.png");
+	placa_de_video_mini->largura = 36;
+	placa_de_video_mini->altura = 33;
+	placa_de_video_mini->x = 90;
+	placa_de_video_mini->y = 100;
+
+	// Memoria ram
+	memoria_ram = (Objeto*)malloc(sizeof(Objeto));
+	memoria_ram->imagem = al_load_bitmap("imagens/memoria_ram.png");
+	memoria_ram->largura = 63;
+	memoria_ram->altura = 57;
+	memoria_ram->x = 300;
+	memoria_ram->y = 100;
+
+	// Memoria ram MINI
 	
+	memoria_ram_mini = (Objeto*)malloc(sizeof(Objeto));
+	memoria_ram_mini->imagem = al_load_bitmap("imagens/memoria_ram_mini.png");
+	memoria_ram_mini->largura = 36;
+	memoria_ram_mini->altura = 33;
+	memoria_ram_mini->x = 140;
+	memoria_ram_mini->y = 100;
 
 	frame2 = al_create_sub_bitmap(sprite_parado->imagem, (sprite_parado->largura / 11) * i, 0, sprite_parado->largura / 11, sprite_parado->altura);
 
@@ -530,11 +577,9 @@ int main(void) {
 			if ((personagem->x <= processador->x + processador->largura) && (personagem->x + personagem->largura / 10 >= processador->x) && (personagem->y - personagem->altura >= processador->y - processador->altura)) {
 				item_processador = false;
 				item_processador_mini = true;
-
 				
-
 			}
-
+			
 			if (inimigo1 && espada_ativa && (espada->x + 50 >= goblin->x) && (espada->x <= goblin->x + 20) && (espada->y >= goblin->y) && (espada->y <= goblin->y + goblin->altura)) {
 				espada_ativa = false;
 				goblin->vida--;
@@ -544,12 +589,14 @@ int main(void) {
 			}
 
 			if (inimigo1) {
+
 				if (goblin->vida <= 0) {
 					inimigo1 = false;
 					espada_ativa = false;
 					item_processador = true;
 					processador->x = goblin->x;
 					item_placa = true;
+					item_placa_de_video = true;
 				}
 			}
 
@@ -561,6 +608,11 @@ int main(void) {
 
 				item_placa = false;
 				item_placa_mini = true;
+			}
+			if (!inimigo1 && (personagem->x <= placa_de_video->x + placa_mae->largura) && (personagem->x + personagem->largura / 10 >= placa_de_video->x) && (personagem->y - personagem->altura >= placa_de_video->y - placa_de_video->altura)) {
+
+				item_placa_de_video = false;
+				item_placa_de_video_mini = true;
 			}
 
 			/*if (atacando) {
@@ -580,8 +632,6 @@ int main(void) {
 				}
 			}*/
 
-
-
 			if (evento.type == ALLEGRO_EVENT_TIMER) {
 				movimentacao(evento);
 
@@ -591,6 +641,8 @@ int main(void) {
 
 				al_flip_display();
 			}
+
+			
 
 		}
 		// Se clicar em creditos
@@ -631,17 +683,9 @@ int main(void) {
 			}
 		}
 
-		else if (morreu == 1) {
-			al_clear_to_color(al_map_rgb(255, 255, 255));
-			al_draw_text(fonte, al_map_rgb(0, 0, 0), 320, 240, ALLEGRO_ALIGN_CENTRE, "Voce Perdeu!");
-			al_flip_display();
-		}
+	
 
-		else if (venceu == 1) {
-			al_clear_to_color(al_map_rgb(255, 255, 255));
-			al_draw_text(fonte, al_map_rgb(0, 0, 0), 320, 240, ALLEGRO_ALIGN_CENTRE, "Voce Venceu!");
-			al_flip_display();
-		}
+		
 
 		// Se for no x da janela
 		if (evento.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
@@ -664,6 +708,7 @@ int main(void) {
 	al_destroy_bitmap(processador->imagem);
 	al_destroy_event_queue(fila_eventos);
 	al_destroy_font(fonte);
+	al_destroy_bitmap(inventario->imagem);
 
 	free(personagem);
 	free(sprite_atacando);
