@@ -46,8 +46,11 @@ ALLEGRO_SAMPLE* musica = NULL;
 ALLEGRO_SAMPLE_INSTANCE* songInstance = NULL;
 
 //teste
-ALLEGRO_BITMAP* placa_mae_inv = NULL;
-ALLEGRO_BITMAP* processador_inv = NULL;
+ALLEGRO_BITMAP* desc_placa_mae = NULL;
+ALLEGRO_BITMAP* desc_processador = NULL;
+ALLEGRO_BITMAP* desc_placa_de_video = NULL;
+ALLEGRO_BITMAP* desc_memoria_ram = NULL;
+
 ALLEGRO_BITMAP* inventario_processador = NULL;
 ALLEGRO_BITMAP* inventario_placa_mae = NULL;
 ALLEGRO_BITMAP* inventario_placa_de_video = NULL;
@@ -66,6 +69,11 @@ int l = 0;
 
 bool draw = false, draw2 = true, ativo = false, item_processador = false, item_processador_mini = false, item_placa = false, item_placa_mini = false;
 bool item_placa_de_video = false, item_placa_de_video_mini = false, item_memoria_ram = false, item_memoria_ram_mini = false;
+bool descricao_processador = false;
+bool descricao_placa_mae = false;
+bool descricao_memoria_ram = false;
+bool descricao_placa_de_video = false;
+
 
 //teste
 bool inv_placa = false;
@@ -312,7 +320,7 @@ void desenha() {
 	if (item_processador_mini) {
 		al_draw_bitmap(processador_mini->imagem, processador_mini->x, processador_mini->y, 0);
 		inventario->imagem = inventario_processador;
-		
+
 	}
 	if (item_placa) {
 		al_draw_bitmap(placa_mae->imagem, placa_mae->x, placa_mae->y, 0);
@@ -323,7 +331,7 @@ void desenha() {
 	}
 	if (item_placa_de_video) {
 		al_draw_bitmap(placa_de_video->imagem, placa_de_video->x, placa_de_video->y, 0);
-		
+
 	}
 	if (item_placa_de_video_mini) {
 		al_draw_bitmap(placa_de_video_mini->imagem, placa_de_video_mini->x, placa_de_video_mini->y, 0);
@@ -335,15 +343,27 @@ void desenha() {
 	if (item_memoria_ram_mini) {
 		al_draw_bitmap(memoria_ram_mini->imagem, memoria_ram_mini->x, memoria_ram_mini->y, 0);
 	}
-	
+
 	if (inv_placa)
-		al_draw_bitmap(placa_mae_inv, 0, 0, 0);
+		al_draw_bitmap(desc_placa_mae, 0, 0, 0);
+
 	//aqui!!
 	if (inventarioo)
 		al_draw_bitmap(inventario->imagem, 0, 0, 0);
-	
-}
 
+	if (descricao_processador) {
+		al_draw_bitmap(desc_processador, 0, 0, 0);
+	}
+	if (descricao_placa_mae) {
+		al_draw_bitmap(desc_placa_mae, 0, 0, 0);
+	}
+	if (descricao_placa_de_video) {
+		al_draw_bitmap(desc_placa_de_video, 0, 0, 0);
+	}
+	if (descricao_memoria_ram) {
+		al_draw_bitmap(desc_memoria_ram, 0, 0, 0);
+	}
+}
 
 // Main
 int main(void) {
@@ -360,8 +380,11 @@ int main(void) {
 	creditoss = al_load_bitmap("imagens/creditos.jpg");
 	inventario_placa_de_video = al_load_bitmap("imagens/inventario_placa_de_video.png");
 	// teste
-	processador_inv = al_load_bitmap("imagens/pc.png");
-	placa_mae_inv = al_load_bitmap("imagens/pcmae.png");
+	desc_processador = al_load_bitmap("imagens/desc_processador.png");
+	desc_placa_mae = al_load_bitmap("imagens/desc_placa_mae.png");
+	desc_memoria_ram = al_load_bitmap("imagens/desc_memoria_ram.png");
+	desc_placa_de_video = al_load_bitmap("imagens/desc_placa_de_video.png");
+
 	inventario = al_load_bitmap("imagens/inventario.png");
 	inventario_processador = al_load_bitmap("imagens/inventario_processador.png");
 	inventario_placa_mae = al_load_bitmap("imagens/inventario_placa_mae.png");;
@@ -642,8 +665,48 @@ int main(void) {
 				item_placa_de_video = NULL;
 				item_placa_de_video_mini = true;
 			}
+			
+		if (inventarioo) {
+				
+			if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
 
-			/*if (atacando) {
+				if ((evento.mouse.x >= 122 &&
+					evento.mouse.x <= 211 && evento.mouse.y <= 299 &&
+					evento.mouse.y >= 209)) {
+
+					descricao_processador = true;
+				}
+				if ((evento.mouse.x >= 227 &&
+					evento.mouse.x <= 317 && evento.mouse.y <= 299 &&
+					evento.mouse.y >= 219)) {
+
+					descricao_placa_mae = true;
+				}
+				if ((evento.mouse.x >= 327 &&
+					evento.mouse.x <= 416 && evento.mouse.y <= 302 &&
+					evento.mouse.y >= 210)) {
+
+					descricao_placa_de_video = true;
+				}
+				if ((evento.mouse.x >= 427 &&
+					evento.mouse.x <= 517 && evento.mouse.y <= 300 &&
+					evento.mouse.y >= 209)) {
+
+					descricao_memoria_ram = true;
+				}
+
+
+
+			}
+			else if (al_key_down(&key_state, ALLEGRO_KEY_ESCAPE)) {
+				descricao_processador = false;
+				descricao_placa_mae = false;
+				descricao_placa_de_video = false;
+				descricao_memoria_ram = false;
+			}
+		}
+
+				/*if (atacando) {
 				if (j == 1) {
 					if ((personagem->x + 50 >= goblin->x+10) && (personagem->y - personagem->altura >= goblin->y - goblin->altura)) {
 						inimigo1 = false;
