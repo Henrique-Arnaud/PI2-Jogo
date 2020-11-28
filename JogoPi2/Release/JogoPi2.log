@@ -1,0 +1,15 @@
+﻿  Main.c
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(115,6): warning C4142: 'velx': redefinição benigna de tipo
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(111): message : consulte a declaração de 'velx'
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(116,6): warning C4142: 'vely': redefinição benigna de tipo
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(112): message : consulte a declaração de 'vely'
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(445,55): warning C4133: '=': tipos incompatíveis - de 'ALLEGRO_BITMAP *' para 'Objeto *'
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(629,49): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(629,45): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(754,50): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(754,46): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(764,49): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(764,45): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
+Main.obj : error LNK2001: símbolo externo não resolvido _algif_get_bitmap
+Main.obj : error LNK2001: símbolo externo não resolvido _algif_load_animation
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Release\JogoPi2.exe : fatal error LNK1120: 2 externo não resolvidos
