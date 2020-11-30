@@ -30,7 +30,7 @@ struct objeto
 typedef struct objeto Objeto;
 
 Objeto* personagem, * sprite_parado, * goblin, * goblin2, * espada, * processador, * processador_mini, * placa_mae, * placa_mae_mini, * sprite_atacando, * inventario;
-Objeto* placa_de_video, * placa_de_video_mini, * memoria_ram, * memoria_ram_mini, * portal;
+Objeto* placa_de_video, * placa_de_video_mini, * memoria_ram, * memoria_ram_mini, * portal, * inimigo1_mapa2, * inimigo2_mapa2, * boss;
 
 ALLEGRO_FONT* fonte = NULL;
 ALLEGRO_BITMAP* frame = NULL;
@@ -49,14 +49,18 @@ ALLEGRO_BITMAP* plataforma3 = NULL;
 ALLEGRO_BITMAP* infoss = NULL;
 ALLEGRO_BITMAP* creditoss = NULL;
 ALLEGRO_SAMPLE* musica = NULL;
-ALLEGRO_SAMPLE_INSTANCE* songInstance = NULL;
 
+ALLEGRO_SAMPLE_INSTANCE* songInstance = NULL;
 ALLEGRO_BITMAP* placa_mae_inv = NULL;
 ALLEGRO_BITMAP* processador_inv = NULL;
 ALLEGRO_BITMAP* inventario_processador = NULL;
 ALLEGRO_BITMAP* inventario_placa_mae = NULL;
 ALLEGRO_BITMAP* inventario_placa_de_video = NULL;
 
+ALLEGRO_BITMAP* desc_placa_mae = NULL;
+ALLEGRO_BITMAP* desc_processador = NULL;
+ALLEGRO_BITMAP* desc_placa_de_video = NULL;
+ALLEGRO_BITMAP* desc_memoria_ram = NULL;
 
 ALLEGRO_SAMPLE* clique_menu = NULL;
 ALLEGRO_SAMPLE* som_espada = NULL;
@@ -69,10 +73,12 @@ int j = 0;
 int k = 0;
 int l = 0;
 int lado;
+int lado_inimigo1;
+int lado_inimigo2;
 
 bool draw = false, draw2 = true, ativo = false, item_processador = false, item_processador_mini = false, item_placa = false, item_placa_mini = false;
 bool item_placa_de_video = false, item_placa_de_video_mini = false, item_memoria_ram = false, item_memoria_ram_mini = false;
-
+bool descricao_processador, descricao_placa_mae, descricao_placa_de_video, descricao_memoria_ram;
 //teste
 bool inv_placa = false;
 bool inv_processador = false;
@@ -125,7 +131,7 @@ const float gravidade = 0.80;
 
 int sourceX = 0, sourceX_inimigo = 0, sourceX_atacando;
 
-bool inimigo1 = true, inimigo2 = true;
+bool inimigo1 = true, inimigo2 = true, inimigo3 = false, inimigo4 = false;
 float velocidade_inimigo = 1.5;
 
 float velocidade_projetil = 10.0;
@@ -356,7 +362,7 @@ void movimentacao(ALLEGRO_EVENT evento) {
 
 void desenha(ALLEGRO_EVENT evento) {
 
-
+	
 	if (atacando) {
 		al_draw_bitmap_region(sprite_atacando->imagem, sourceX_atacando, 0, sprite_atacando->largura / 10, sprite_atacando->altura, personagem->x - 3, personagem->y - 11, j);
 
@@ -383,6 +389,12 @@ void desenha(ALLEGRO_EVENT evento) {
 	}
 	if (inimigo2) {
 		al_draw_bitmap_region(goblin2->imagem, sourceX_inimigo, 0, goblin2->largura / 4, goblin2->altura, goblin2->x, goblin2->y, lado);
+	}
+	if (inimigo3) {
+		al_draw_bitmap(inimigo1_mapa2->imagem, inimigo1_mapa2->x, inimigo1_mapa2->y, lado_inimigo1);
+	}
+	if (inimigo4) {
+		al_draw_bitmap(inimigo2_mapa2->imagem, inimigo2_mapa2->x, inimigo2_mapa2->y, lado_inimigo2);
 	}
 	if (espada_ativa) {
 		al_draw_bitmap(espada->imagem, espada->x, espada->y, l);
@@ -422,10 +434,22 @@ void desenha(ALLEGRO_EVENT evento) {
 	//aqui!!
 	if (inventarioo)
 		al_draw_bitmap(inventario->imagem, 0, 0, 0);
-
+	if (descricao_processador) {
+		al_draw_bitmap(desc_processador, 0, 0, 0);
+	}
+	if (descricao_placa_mae) {
+		al_draw_bitmap(desc_placa_mae, 0, 0, 0);
+	}
+	if (descricao_placa_de_video) {
+		al_draw_bitmap(desc_placa_de_video, 0, 0, 0);
+	}
+	if (descricao_memoria_ram) {
+		al_draw_bitmap(desc_memoria_ram, 0, 0, 0);
+	}
 	if (portal_ativo) {
 		al_draw_bitmap(portal->imagem, portal->x, 150, 0);
 	}
+
 }
 
 void desenhar_mapa(int mapa[9][11]) {
@@ -435,7 +459,7 @@ void desenhar_mapa(int mapa[9][11]) {
 	for (cont_i = 0; cont_i < linhas_mapa1; cont_i++) {
 		for (cont_j = 0; cont_j < colunas_mapa1; cont_j++) {
 			if (mapa[cont_i][cont_j] == 0) {
-
+	
 			}
 			else if (mapa[cont_i][cont_j] == 2) {
 				al_draw_bitmap_region(chao, tileSize * 0, tileSize * 0, tileSize, tileSize, cont_j * tileSize, cont_i * tileSize, 0);
@@ -489,6 +513,12 @@ int main(void) {
 	clique_menu = al_load_sample("clique_menu.wav");//Som de clique
 	som_espada = al_load_sample("som_espada.wav");
 
+
+	desc_processador = al_load_bitmap("imagens/desc_processador.png");
+	desc_placa_mae = al_load_bitmap("imagens/desc_placa_mae.png");
+	desc_memoria_ram = al_load_bitmap("imagens/desc_memoria_ram.png");
+	desc_placa_de_video = al_load_bitmap("imagens/desc_placa_de_video.png");
+
 	songInstance = al_create_sample_instance(musica);
 	al_set_sample_instance_playmode(songInstance, ALLEGRO_PLAYMODE_LOOP);
 	al_attach_sample_instance_to_mixer(songInstance, al_get_default_mixer());
@@ -515,6 +545,8 @@ int main(void) {
 	sprite_parado->altura = 49;
 	sprite_parado->y = personagem->y;
 
+	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 	goblin = (Objeto*)malloc(sizeof(Objeto));
 	goblin->imagem = al_load_bitmap("Sprites/goblins.png");
 	goblin->x = 300;
@@ -530,6 +562,32 @@ int main(void) {
 	goblin2->y = tileSize * 4 - goblin2->altura;
 	goblin2->largura = 246;
 	goblin2->vida = 4;
+
+	inimigo1_mapa2 = (Objeto*)malloc(sizeof(Objeto));
+	inimigo1_mapa2->imagem = al_load_bitmap("Sprites/inimigo2.png");
+	inimigo1_mapa2->x = tileSize * 7;
+	inimigo1_mapa2->altura = 90;
+	inimigo1_mapa2->y = tileSize * 3 - inimigo1_mapa2->altura;
+	inimigo1_mapa2->largura = 41;
+	inimigo1_mapa2->vida = 4;
+
+	inimigo2_mapa2 = (Objeto*)malloc(sizeof(Objeto));
+	inimigo2_mapa2->imagem = al_load_bitmap("Sprites/inimigo2.png");
+	inimigo2_mapa2->x = tileSize * 5;
+	inimigo2_mapa2->altura = 90;
+	inimigo2_mapa2->y = Chao - inimigo2_mapa2->altura;
+	inimigo2_mapa2->largura = 41;
+	inimigo2_mapa2->vida = 4;
+
+	boss = (Objeto*)malloc(sizeof(Objeto));
+	boss->imagem = al_load_bitmap("Sprites/boss.png");
+	boss->x = tileSize * 5;
+	boss->altura = 49;
+	boss->y = tileSize * 4 - goblin2->altura;
+	boss->largura = 246;
+	boss->vida = 4;
+
+	//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	sprite_atacando = (Objeto*)malloc(sizeof(Objeto));
 	sprite_atacando->imagem = al_load_bitmap("Sprites/MC_Sprite_attack.png");
@@ -769,8 +827,6 @@ int main(void) {
 				else if (k == 1) {
 					goblin->x -= 10;
 				}
-				//jogar = 0; 
-				//venceu = 1;
 			}
 
 			if (inimigo1) {
@@ -786,14 +842,12 @@ int main(void) {
 			if (inimigo2 && espada_ativa && (espada->x + 50 >= goblin2->x) && (espada->x <= goblin2->x + 20) && (espada->y >= goblin2->y) && (espada->y <= goblin2->y + goblin2->altura)) {
 				espada_ativa = false;
 				goblin2->vida--;
-				if (k == 0) {
+				if (lado == 0) {
 					goblin2->x += 10;
 				}
-				else if (k == 1) {
+				else if (lado == 1) {
 					goblin2->x -= 10;
 				}
-				//jogar = 0; 
-				//venceu = 1;
 			}
 
 			if (inimigo2) {
@@ -804,7 +858,6 @@ int main(void) {
 					item_placa = true;
 					placa_mae->x = goblin2->x;
 					placa_mae->y = goblin2->y;
-					//item_placa_de_video = true;
 				}
 			}
 
@@ -820,13 +873,6 @@ int main(void) {
 
 				item_placa_mini = true;
 			}
-			/*if (!inimigo1 && (personagem->x <= placa_de_video->x + placa_mae->largura) && (personagem->x + personagem->largura / 10 >= placa_de_video->x) && (personagem->y - personagem->altura >= placa_de_video->y - placa_de_video->altura)) {
-				al_play_sample(pegar_item, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
-				placa_de_video->y = 1000, placa_de_video->x = 1000;
-				item_placa_de_video = false;
-				item_placa_de_video = NULL;
-				item_placa_de_video_mini = true;
-			}*/
 
 			if (!inimigo1 && !inimigo2 && item_placa_mini && item_processador_mini && mapa_atual == 1) {
 				portal_ativo = true;
@@ -839,6 +885,29 @@ int main(void) {
 				}
 			}
 
+			if (mapa_atual == 2) {
+
+				if (inimigo3 && espada_ativa && (espada->x + 50 >= inimigo1_mapa2->x) && (espada->x <= inimigo1_mapa2->x + 20) && (espada->y >= inimigo1_mapa2->y) && (espada->y <= inimigo1_mapa2->y + inimigo1_mapa2->altura)) {
+					espada_ativa = false;
+					inimigo1_mapa2->vida--;
+					if (lado_inimigo1 == 0) {
+						inimigo1_mapa2->x += 10;
+					}
+					else if (lado_inimigo1 == 1) {
+						inimigo1_mapa2->x -= 10;
+					}
+				}
+				if (inimigo4 && espada_ativa && (espada->x + 50 >= inimigo2_mapa2->x) && (espada->x <= inimigo2_mapa2->x + 20) && (espada->y >= inimigo2_mapa2->y) && (espada->y <= inimigo2_mapa2->y + inimigo2_mapa2->altura)) {
+					espada_ativa = false;
+					inimigo2_mapa2->vida--;
+					if (lado_inimigo2 == 0) {
+						inimigo2_mapa2->x += 10;
+					}
+					else if (lado_inimigo2 == 1) {
+						inimigo2_mapa2->x -= 10;
+					}
+				}
+			}
 
 			if (evento.type == ALLEGRO_EVENT_TIMER) {
 
@@ -874,6 +943,45 @@ int main(void) {
 					}
 
 					al_flip_display();
+				}
+			}
+			if (inventarioo) {
+
+				if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+
+					if ((evento.mouse.x >= 122 &&
+						evento.mouse.x <= 211 && evento.mouse.y <= 299 &&
+						evento.mouse.y >= 209)) {
+
+						descricao_processador = true;
+					}
+					if ((evento.mouse.x >= 227 &&
+						evento.mouse.x <= 317 && evento.mouse.y <= 299 &&
+						evento.mouse.y >= 219)) {
+
+						descricao_placa_mae = true;
+					}
+					if ((evento.mouse.x >= 327 &&
+						evento.mouse.x <= 416 && evento.mouse.y <= 302 &&
+						evento.mouse.y >= 210)) {
+
+						descricao_placa_de_video = true;
+					}
+					if ((evento.mouse.x >= 427 &&
+						evento.mouse.x <= 517 && evento.mouse.y <= 300 &&
+						evento.mouse.y >= 209)) {
+
+						descricao_memoria_ram = true;
+					}
+
+
+
+				}
+				else if (al_key_down(&key_state, ALLEGRO_KEY_ESCAPE)) {
+					descricao_processador = false;
+					descricao_placa_mae = false;
+					descricao_placa_de_video = false;
+					descricao_memoria_ram = false;
 				}
 			}
 
@@ -967,6 +1075,7 @@ int main(void) {
 	free(inventario);
 	free(memoria_ram);
 	free(memoria_ram_mini);
+
 
 	return 0;
 }
