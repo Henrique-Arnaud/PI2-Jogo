@@ -35,17 +35,29 @@ Objeto* placa_de_video, * placa_de_video_mini, * memoria_ram, * memoria_ram_mini
 ALLEGRO_FONT* fonte = NULL;
 ALLEGRO_BITMAP* frame = NULL;
 ALLEGRO_BITMAP* frame2 = NULL;
+
 ALLEGRO_TIMER* timer = NULL;
 ALLEGRO_TIMER* frametimer = NULL;
 ALLEGRO_EVENT_QUEUE* fila_eventos = NULL;
 ALLEGRO_DISPLAY* janela = NULL;
 ALLEGRO_BITMAP* background = NULL;
+ALLEGRO_BITMAP* background2 = NULL;
 ALLEGRO_BITMAP* background_jogo1 = NULL;
 ALLEGRO_BITMAP* chao = NULL;
 ALLEGRO_BITMAP* chao_fim = NULL;
+
 ALLEGRO_BITMAP* plataforma1 = NULL;
 ALLEGRO_BITMAP* plataforma2 = NULL;
 ALLEGRO_BITMAP* plataforma3 = NULL;
+ALLEGRO_BITMAP* chao2 = NULL;
+ALLEGRO_BITMAP* chao2_fim = NULL;
+ALLEGRO_BITMAP* pilar1 = NULL;
+ALLEGRO_BITMAP* caixa = NULL;
+ALLEGRO_BITMAP* plataforma_pedra = NULL;
+
+
+ALLEGRO_BITMAP* morreu1 = NULL;
+
 ALLEGRO_BITMAP* infoss = NULL;
 ALLEGRO_BITMAP* creditoss = NULL;
 ALLEGRO_SAMPLE* musica = NULL;
@@ -92,6 +104,10 @@ int linhas_mapa1 = 9;
 int tileSize = 59;
 int mapa_atual = 1;
 
+//pedra (chao) = 20
+//caixa = 40
+//pilar1 = 50
+//plataforma pedra = 60
 int map1[9][11] = { {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -102,15 +118,15 @@ int map1[9][11] = { {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 				  {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
 				  {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3} };
 
-int map2[9][11] = { {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+int map2[9][11] = { {0, 0, 0, 0, 50, 0, 50, 0, 0, 0, 0},
+				  {0, 0, 0, 0, 50, 0, 50, 0, 0, 0, 0},
+				  {0, 0, 0, 0, 50, 40, 50, 0, 0, 0, 0},
+				  {0, 60, 60, 60, 60, 60, 60, 60, 60, 60, 0},
 				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-				  {0, 0, 0, 0, 0, 0, 7, 8, 8, 8, 9},
+				  {60, 60, 60, 0, 0, 60, 60, 0, 0, 60, 60},
 				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-				  {0, 0, 0, 7, 8, 9, 0, 0, 0, 0, 0},
-				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-				  {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
-				  {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3} };
+				  {20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20},
+				  {21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21} };
 
 
 int pressionando = 0;
@@ -476,6 +492,21 @@ void desenhar_mapa(int mapa[9][11]) {
 			else if (mapa[cont_i][cont_j] == 9) {
 				al_draw_bitmap_region(plataforma3, tileSize * 0, tileSize * 0, tileSize, 44, cont_j * tileSize, cont_i * tileSize, 0);
 			}
+			else if (mapa[cont_i][cont_j] == 20) {
+				al_draw_bitmap_region(chao2, tileSize * 0, tileSize * 0, tileSize, tileSize, cont_j * tileSize, cont_i * tileSize, 0);
+			}
+			else if (mapa[cont_i][cont_j] == 21) {
+				al_draw_bitmap_region(chao2_fim, tileSize * 0, tileSize * 0, tileSize, tileSize, cont_j * tileSize, cont_i * tileSize, 0);
+			}
+			else if (mapa[cont_i][cont_j] == 40) {
+				al_draw_bitmap_region(caixa, tileSize * 0, tileSize * 0, tileSize, 44, cont_j * tileSize, cont_i * tileSize, 0);
+			}
+			else if (mapa[cont_i][cont_j] ==  50) {
+				al_draw_bitmap_region(pilar1, tileSize * 0, tileSize * 0, tileSize, 44, cont_j * tileSize, cont_i * tileSize, 0);
+			}
+			else if (mapa[cont_i][cont_j] == 60) {
+				al_draw_bitmap_region(plataforma_pedra, tileSize * 0, tileSize * 0, tileSize, 44, cont_j * tileSize, cont_i * tileSize, 0);
+			}
 		}
 	}
 }
@@ -492,11 +523,19 @@ int main(void) {
 	// Carrega imagem
 	background = al_load_bitmap("imagens/menu1.jpg");
 	background_jogo1 = al_load_bitmap("imagens/background.jpg");
+	background2 = al_load_bitmap("sprites/background2.jpg");
 	chao = al_load_bitmap("sprites/chao.jpg");
 	chao_fim = al_load_bitmap("sprites/chao_fim.jpg");
 	plataforma1 = al_load_bitmap("sprites/plataforma1.png");
 	plataforma2 = al_load_bitmap("sprites/plataforma2.png");
 	plataforma3 = al_load_bitmap("sprites/plataforma3.png");
+	chao2 = al_load_bitmap("sprites/plataforma4.png");
+	chao2_fim = al_load_bitmap("sprites/plataforma5.png");
+	pilar1 = al_load_bitmap("sprites/pilar1.png");
+	caixa = al_load_bitmap("sprites/caixa.png");
+	plataforma_pedra = al_load_bitmap("sprites/plataforma_pedra.png");
+	morreu1 = al_load_bitmap("imagens/morreu.png");
+
 	infoss = al_load_bitmap("imagens/infos.jpg");
 	creditoss = al_load_bitmap("imagens/creditos.jpg");
 	inventario_placa_de_video = al_load_bitmap("imagens/inventario_placa_de_video.png");
@@ -683,7 +722,7 @@ int main(void) {
 
 
 	// Variaveis de controle de menu
-	int menu = 1, jogar = 0, creditos = 0, infos = 0, jogo = 1, tocando = 1, morreu = 0, venceu = 0;
+	int menu = 1, jogar = 0, creditos = 0, infos = 0, jogo = 1, tocando = 1, morreu = 0, venceu = 0, morreu_cena = 0;
 
 
 	al_start_timer(timer);
@@ -803,11 +842,11 @@ int main(void) {
 			//se o GOBLIN encostar no PLAYER ou vice-versa
 			if (inimigo1 && (personagem->x <= goblin->x + 20) && (personagem->x + 20 >= goblin->x) && (personagem->y + personagem->altura >= goblin->y) && (personagem->y <= goblin->y + goblin->altura)) {
 				jogar = 0;
-				morreu = 1;
+				
 			}
 			if (inimigo2 && (personagem->x <= goblin2->x + 20) && (personagem->x + 20 >= goblin2->x) && (personagem->y + personagem->altura >= goblin2->y) && (personagem->y <= goblin2->y + goblin2->altura)) {
 				jogar = 0;
-				morreu = 1;
+				
 			}
 
 			if ((personagem->x <= processador->x + processador->largura) && (personagem->x + personagem->largura / 10 >= processador->x) && (personagem->y - personagem->altura >= processador->y - processador->altura)) {
@@ -916,11 +955,13 @@ int main(void) {
 				if (pressionando == 1 || pressionando == 0) {
 					if (evento.timer.source == frametimer) {
 
-						al_draw_bitmap(background_jogo1, 0, 0, NULL);
+						
 						if (mapa_atual == 1) {
+							al_draw_bitmap(background_jogo1, 0, 0, NULL);
 							desenhar_mapa(map1);
 						}
 						if (mapa_atual == 2) {
+							al_draw_bitmap(background2, 0, 0, NULL);
 							desenhar_mapa(map2);
 						}
 					}
@@ -931,7 +972,7 @@ int main(void) {
 
 				}
 				else {
-					al_draw_bitmap(background_jogo1, 0, 0, NULL);
+					al_draw_bitmap(background2, 0, 0, NULL);
 
 					desenha(evento);
 
@@ -1028,9 +1069,7 @@ int main(void) {
 			}
 
 		}
-
-
-
+		
 
 
 		// Se for no x da janela
