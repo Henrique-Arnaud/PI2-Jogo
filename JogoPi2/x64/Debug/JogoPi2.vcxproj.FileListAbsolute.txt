@@ -1,0 +1,2 @@
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\x64\Debug\JogoPi2.exe
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\x64\Debug\JogoPi2.pdb
