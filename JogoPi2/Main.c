@@ -850,16 +850,16 @@ int main(void) {
 		}
 
 		else if (jogar == 1) {
-	
+
 			printf("inimigo 3 Y:  %.2f\n\n", inimigo1_mapa2->y);
 
 			if (mapa_atual == 1 && !colisao(personagem->x, personagem->y, 0, Chao, personagem->largura / 10, personagem->altura, tileSize, tileSize, 640) == 1 && !colisao(personagem->x, personagem->y, tileSize * 4 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 4 - 50, 0, 0)) {
 				caindo = 1;
 			}
-			else if (mapa_atual == 2 && !colisao(personagem->x, personagem->y, 0, Chao, personagem->largura / 10, personagem->altura, tileSize, tileSize, 640) == 1 && !colisao(personagem->x, personagem->y, tileSize * 0 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 3 - 50, 0, 0) && (!colisao(personagem->x, personagem->y, tileSize * 5 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 2 - 50 , 0, 0)) && !colisao(personagem->x, personagem->y, tileSize * 9 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 2 - 50, 0, 0) && !colisao(personagem->x, personagem->y, tileSize * 1 + 30, tileSize * 3, personagem->largura / 10, personagem->altura, tileSize * 9 - 50, 0, 0)) {
+			else if (mapa_atual == 2 && !colisao(personagem->x, personagem->y, 0, Chao, personagem->largura / 10, personagem->altura, tileSize, tileSize, 640) == 1 && !colisao(personagem->x, personagem->y, tileSize * 0 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 3 - 50, 0, 0) && (!colisao(personagem->x, personagem->y, tileSize * 5 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 2 - 50, 0, 0)) && !colisao(personagem->x, personagem->y, tileSize * 9 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 2 - 50, 0, 0) && !colisao(personagem->x, personagem->y, tileSize * 1 + 30, tileSize * 3, personagem->largura / 10, personagem->altura, tileSize * 9 - 50, 0, 0)) {
 				caindo = 1;
 			}
-			
+
 			else {
 				caindo = 0;
 				pulando = 0;
@@ -963,14 +963,14 @@ int main(void) {
 			// MAPA2
 			if (mapa_atual == 2) {
 
-				
+
 				// Colisao com plataforma grande
 				if (colisao(personagem->x, personagem->y, tileSize * 1 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 3 - 105, 0, 0)) {
 					personagem->y = tileSize * 5 - personagem->altura;
 				}
 				// plataforma pequena meio
 				// tilesize * x depois tile size * y
-				else if (colisao(personagem->x, personagem->y, tileSize * 5 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 2 - 50 , 0, 0)) {
+				else if (colisao(personagem->x, personagem->y, tileSize * 5 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 2 - 50, 0, 0)) {
 					personagem->y = tileSize * 5 - personagem->altura;
 				}
 				//plataforma pequena direita
