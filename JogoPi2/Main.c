@@ -51,6 +51,10 @@ ALLEGRO_BITMAP* plataforma2 = NULL;
 ALLEGRO_BITMAP* plataforma3 = NULL;
 ALLEGRO_BITMAP* chao2 = NULL;
 ALLEGRO_BITMAP* chao2_fim = NULL;
+
+ALLEGRO_BITMAP* chao3 = NULL;
+ALLEGRO_BITMAP* chao3_fim = NULL;
+
 ALLEGRO_BITMAP* pilar1 = NULL;
 ALLEGRO_BITMAP* caixa = NULL;
 ALLEGRO_BITMAP* plataforma_pedra = NULL;
@@ -113,8 +117,8 @@ int map1[9][11] = { {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-				  {0, 0, 0, 0, 7, 8, 8, 9, 0, 0, 0},
 				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				  {0, 0, 0, 0, 7, 8, 8, 9, 0, 0, 0},
 				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 				  {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
 				  {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3} };
@@ -129,6 +133,15 @@ int map2[9][11] = { {0, 0, 0, 0, 50, 0, 50, 0, 0, 0, 0},
 				  {20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20},
 				  {21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21} };
 
+int map3[9][11] = { {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				  {0, 0, 10, 0, 10, 0, 10, 0, 10, 0, 0},
+				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				  {10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10},
+				  {11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11} };
 
 int pressionando = 0;
 float velocidade_movimento = 4.5;
@@ -140,7 +153,7 @@ velx = 0;
 vely = 0;
 
 atacando = false, espada_ativa = false;
-float velocidade_pulo = 18;
+float velocidade_pulo = 15;
 int caindo = 1;
 int pulando = 0;
 
@@ -148,7 +161,7 @@ const float gravidade = 0.80;
 
 int sourceX = 0, sourceX_inimigo = 0, sourceX_atacando;
 
-bool inimigo1 = true, inimigo2 = true, inimigo3 = false, inimigo4 = false;
+bool inimigo1 = true, inimigo2 = true, inimigo3 = true, inimigo4 = true;
 float velocidade_inimigo = 1.5;
 
 float velocidade_projetil = 10.0;
@@ -250,7 +263,7 @@ void movimentacao(ALLEGRO_EVENT evento) {
 			velx = 0;
 		}
 
-		if (pulando == 1 && personagem->y > pLimite - 35) {
+		if (pulando == 1 && personagem->y > pLimite - 25) {
 			//pulando = 0;
 			personagem->y += vely;
 			vely = -velocidade_pulo;
@@ -308,7 +321,6 @@ void movimentacao(ALLEGRO_EVENT evento) {
 			}
 		}
 
-
 		if (espada_ativa && l == 1) {
 			espada->x += velocidade_projetil;
 		}
@@ -318,7 +330,24 @@ void movimentacao(ALLEGRO_EVENT evento) {
 		else {
 			espada->x = personagem->x;
 		}
-
+		if (mapa_atual == 2) {
+			if (inimigo3 && personagem->x - inimigo1_mapa2->x < 0) {
+				inimigo1_mapa2->x -= velocidade_inimigo;
+				lado_inimigo1 = 0;
+			}
+			else if (inimigo3 && personagem->x - inimigo1_mapa2->x > 0) {
+				inimigo1_mapa2->x += velocidade_inimigo;
+				lado_inimigo1 = 1;
+			}
+			if (inimigo3) {
+				if (inimigo1_mapa2->y >= inimigo1_mapa2->y) {
+					inimigo1_mapa2->y -= 10;
+				}
+				else if (inimigo1_mapa2->y <= inimigo1_mapa2->y - 100) {
+					inimigo1_mapa2->y += 10;
+				}
+			}
+		}
 	}
 
 
@@ -379,7 +408,7 @@ void movimentacao(ALLEGRO_EVENT evento) {
 
 void desenha(ALLEGRO_EVENT evento) {
 
-	
+
 	if (atacando) {
 		al_draw_bitmap_region(sprite_atacando->imagem, sourceX_atacando, 0, sprite_atacando->largura / 10, sprite_atacando->altura, personagem->x - 3, personagem->y - 11, j);
 
@@ -407,11 +436,13 @@ void desenha(ALLEGRO_EVENT evento) {
 	if (inimigo2) {
 		al_draw_bitmap_region(goblin2->imagem, sourceX_inimigo, 0, goblin2->largura / 4, goblin2->altura, goblin2->x, goblin2->y, lado);
 	}
-	if (inimigo3) {
-		al_draw_bitmap(inimigo1_mapa2->imagem, inimigo1_mapa2->x, inimigo1_mapa2->y, lado_inimigo1);
-	}
-	if (inimigo4) {
-		al_draw_bitmap(inimigo2_mapa2->imagem, inimigo2_mapa2->x, inimigo2_mapa2->y, lado_inimigo2);
+	if (mapa_atual == 2) {
+		if (inimigo3) {
+			al_draw_bitmap(inimigo1_mapa2->imagem, inimigo1_mapa2->x, inimigo1_mapa2->y, lado_inimigo1);
+		}
+		if (inimigo4) {
+			al_draw_bitmap(inimigo2_mapa2->imagem, inimigo2_mapa2->x, inimigo2_mapa2->y, lado_inimigo2);
+		}
 	}
 	if (espada_ativa) {
 		al_draw_bitmap(espada->imagem, espada->x, espada->y, l);
@@ -433,7 +464,6 @@ void desenha(ALLEGRO_EVENT evento) {
 	}
 	/*if (item_placa_de_video) {
 		al_draw_bitmap(placa_de_video->imagem, placa_de_video->x, placa_de_video->y, 0);
-
 	}
 	if (item_placa_de_video_mini) {
 		al_draw_bitmap(placa_de_video_mini->imagem, placa_de_video_mini->x, placa_de_video_mini->y, 0);
@@ -476,7 +506,7 @@ void desenhar_mapa(int mapa[9][11]) {
 	for (cont_i = 0; cont_i < linhas_mapa1; cont_i++) {
 		for (cont_j = 0; cont_j < colunas_mapa1; cont_j++) {
 			if (mapa[cont_i][cont_j] == 0) {
-	
+
 			}
 			else if (mapa[cont_i][cont_j] == 2) {
 				al_draw_bitmap_region(chao, tileSize * 0, tileSize * 0, tileSize, tileSize, cont_j * tileSize, cont_i * tileSize, 0);
@@ -500,9 +530,13 @@ void desenhar_mapa(int mapa[9][11]) {
 				al_draw_bitmap_region(chao2_fim, tileSize * 0, tileSize * 0, tileSize, tileSize, cont_j * tileSize, cont_i * tileSize, 0);
 			}
 			else if (mapa[cont_i][cont_j] == 40) {
-				al_draw_bitmap_region(caixa, tileSize * 0, tileSize * 0, tileSize, 44, cont_j * tileSize, cont_i * tileSize, 0);
+				al_draw_bitmap_region(caixa, tileSize * 0, tileSize * 0, tileSize, tileSize, cont_j * tileSize, cont_i * tileSize, 0);
+				if (mapa_atual == 2)
+					if (!((personagem->x + personagem->largura >= cont_i * tileSize) && (personagem->y + personagem->altura >= tileSize * cont_j))) {
+						personagem->x += velx;
+					}
 			}
-			else if (mapa[cont_i][cont_j] ==  50) {
+			else if (mapa[cont_i][cont_j] == 50) {
 				al_draw_bitmap_region(pilar1, tileSize * 0, tileSize * 0, tileSize, 44, cont_j * tileSize, cont_i * tileSize, 0);
 			}
 			else if (mapa[cont_i][cont_j] == 60) {
@@ -517,7 +551,6 @@ void desenhar_mapa(int mapa[9][11]) {
 int main(void) {
 
 	inicialização();
-	printf("Oi gustavo");
 	al_clear_to_color(al_map_rgb(255, 255, 255));
 	al_flip_display();
 
@@ -537,6 +570,9 @@ int main(void) {
 	plataforma_pedra = al_load_bitmap("sprites/plataforma_pedra.png");
 	morreu1 = al_load_bitmap("imagens/morreu.png");
 	controless = al_load_bitmap("imagens/controles.png");
+
+	chao3 = al_load_bitmap("sprites/chao3.png");
+	chao3_fim = al_load_bitmap("sprites/chao3_fim.png");
 
 	infoss = al_load_bitmap("imagens/infos.jpg");
 	creditoss = al_load_bitmap("imagens/creditos.jpg");
@@ -600,25 +636,26 @@ int main(void) {
 	goblin2->imagem = al_load_bitmap("Sprites/goblins.png");
 	goblin2->x = tileSize * 5;
 	goblin2->altura = 49;
-	goblin2->y = tileSize * 4 - goblin2->altura;
+	goblin2->y = tileSize * 5 - goblin2->altura;
 	goblin2->largura = 246;
 	goblin2->vida = 4;
 
 	inimigo1_mapa2 = (Objeto*)malloc(sizeof(Objeto));
 	inimigo1_mapa2->imagem = al_load_bitmap("Sprites/inimigo2.png");
-	inimigo1_mapa2->x = tileSize * 7;
+	inimigo1_mapa2->x = tileSize * 5;
 	inimigo1_mapa2->altura = 90;
-	inimigo1_mapa2->y = tileSize * 3 - inimigo1_mapa2->altura;
+	inimigo1_mapa2->y = Chao - inimigo1_mapa2->altura;
 	inimigo1_mapa2->largura = 41;
 	inimigo1_mapa2->vida = 4;
 
 	inimigo2_mapa2 = (Objeto*)malloc(sizeof(Objeto));
 	inimigo2_mapa2->imagem = al_load_bitmap("Sprites/inimigo2.png");
-	inimigo2_mapa2->x = tileSize * 5;
+	inimigo2_mapa2->x = tileSize * 7;
 	inimigo2_mapa2->altura = 90;
-	inimigo2_mapa2->y = Chao - inimigo2_mapa2->altura;
+	inimigo2_mapa2->y = tileSize * 3 - inimigo1_mapa2->altura;
 	inimigo2_mapa2->largura = 41;
 	inimigo2_mapa2->vida = 4;
+
 
 	boss = (Objeto*)malloc(sizeof(Objeto));
 	boss->imagem = al_load_bitmap("Sprites/boss.png");
@@ -712,7 +749,6 @@ int main(void) {
 	memoria_ram->x = 300;
 	memoria_ram->y = 100;
 	// Memoria ram MINI
-
 	memoria_ram_mini = (Objeto*)malloc(sizeof(Objeto));
 	memoria_ram_mini->imagem = al_load_bitmap("imagens/memoria_ram_mini.png");
 	memoria_ram_mini->largura = 36;
@@ -831,9 +867,9 @@ int main(void) {
 
 		else if (jogar == 1) {
 
-			printf("mapa:  %d\n\n", mapa_atual);
+			printf("inimigo 3 Y:  %.2f\n\n", inimigo1_mapa2->y);
 
-			if (mapa_atual == 1 && !colisao(personagem->x, personagem->y, 0, Chao, personagem->largura / 10, personagem->altura, tileSize, tileSize, 640) == 1 && !colisao(personagem->x, personagem->y, tileSize * 4 + 30, tileSize * 4, personagem->largura / 10, personagem->altura, tileSize * 4 - 50, 0, 0)) {
+			if (mapa_atual == 1 && !colisao(personagem->x, personagem->y, 0, Chao, personagem->largura / 10, personagem->altura, tileSize, tileSize, 640) == 1 && !colisao(personagem->x, personagem->y, tileSize * 4 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 4 - 50, 0, 0)) {
 				caindo = 1;
 			}
 			else if (mapa_atual == 2 && !colisao(personagem->x, personagem->y, 0, Chao, personagem->largura / 10, personagem->altura, tileSize, tileSize, 640) == 1) {
@@ -847,18 +883,18 @@ int main(void) {
 			if (colisao(personagem->x, personagem->y, 0, Chao, personagem->largura / 10, personagem->altura, tileSize, tileSize, 640) == 1) {
 				personagem->y = Chao - personagem->altura;
 			}
-			if (mapa_atual == 1 && colisao(personagem->x, personagem->y, tileSize * 4 + 30, tileSize * 4, personagem->largura / 10, personagem->altura, tileSize * 4 - 50, 0, 0)) {
-				personagem->y = tileSize * 4 - personagem->altura;
+			if (mapa_atual == 1 && colisao(personagem->x, personagem->y, tileSize * 4 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 4 - 50, 0, 0)) {
+				personagem->y = tileSize * 5 - personagem->altura;
 			}
 
 			//se o GOBLIN encostar no PLAYER ou vice-versa
 			if (inimigo1 && (personagem->x <= goblin->x + 20) && (personagem->x + 20 >= goblin->x) && (personagem->y + personagem->altura >= goblin->y) && (personagem->y <= goblin->y + goblin->altura)) {
 				jogar = 0;
-				
+
 			}
 			if (inimigo2 && (personagem->x <= goblin2->x + 20) && (personagem->x + 20 >= goblin2->x) && (personagem->y + personagem->altura >= goblin2->y) && (personagem->y <= goblin2->y + goblin2->altura)) {
 				jogar = 0;
-				
+
 			}
 
 			if ((personagem->x <= processador->x + processador->largura) && (personagem->x + personagem->largura / 10 >= processador->x) && (personagem->y - personagem->altura >= processador->y - processador->altura)) {
@@ -916,7 +952,7 @@ int main(void) {
 				espada_ativa = false;
 			}
 
-			if (!inimigo1 && (personagem->x <= placa_mae->x + placa_mae->largura) && (personagem->x + personagem->largura / 10 >= placa_mae->x) && (personagem->y - personagem->altura >= placa_mae->y - placa_mae->altura)) {
+			if (!inimigo2 && (personagem->x <= placa_mae->x + placa_mae->largura) && (personagem->x + personagem->largura / 10 >= placa_mae->x) && (personagem->y - personagem->altura >= placa_mae->y - placa_mae->altura)) {
 
 				al_play_sample(pegar_item, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 				placa_mae->y = 1000, placa_mae->x = 1000;
@@ -927,8 +963,8 @@ int main(void) {
 
 			if (!inimigo1 && !inimigo2 && item_placa_mini && item_processador_mini && mapa_atual == 1) {
 				portal_ativo = true;
-				if (personagem->x + personagem->largura / 10 >= portal->x && personagem->x <= portal->x + portal->largura && personagem->y + personagem->altura > portal->y) {
-					al_rest(3);
+				if (personagem->x + personagem->largura / 10 >= portal->x && personagem->x <= portal->x + portal->largura && personagem->y + personagem->altura >= portal->y && personagem->y <= portal->y + portal->altura) {
+					al_rest(1);
 					portal_ativo = false;
 					mapa_atual = 2;
 					personagem->x = 20;
@@ -937,6 +973,22 @@ int main(void) {
 			}
 
 			if (mapa_atual == 2) {
+
+				if (inimigo3) {
+
+					if (inimigo1_mapa2->vida <= 0) {
+						inimigo3 = false;
+						espada_ativa = false;
+					}
+				}
+
+				if (inimigo4) {
+
+					if (inimigo2_mapa2->vida <= 0) {
+						inimigo4 = false;
+						espada_ativa = false;
+					}
+				}
 
 				if (inimigo3 && espada_ativa && (espada->x + 50 >= inimigo1_mapa2->x) && (espada->x <= inimigo1_mapa2->x + 20) && (espada->y >= inimigo1_mapa2->y) && (espada->y <= inimigo1_mapa2->y + inimigo1_mapa2->altura)) {
 					espada_ativa = false;
@@ -958,6 +1010,17 @@ int main(void) {
 						inimigo2_mapa2->x -= 10;
 					}
 				}
+
+				if (inimigo3 && (personagem->x <= inimigo1_mapa2->x + 20) && (personagem->x + 20 >= inimigo1_mapa2->x) && (personagem->y + personagem->altura >= inimigo1_mapa2->y) && (personagem->y <= inimigo1_mapa2->y + inimigo1_mapa2->altura)) {
+					jogar = 0;
+
+				}
+				if (inimigo4 && (personagem->x <= inimigo2_mapa2->x + 20) && (personagem->x + 20 >= inimigo2_mapa2->x) && (personagem->y + personagem->altura >= inimigo2_mapa2->y) && (personagem->y <= inimigo2_mapa2->y + inimigo2_mapa2->altura)) {
+					jogar = 0;
+
+				}
+
+
 			}
 
 			if (evento.type == ALLEGRO_EVENT_TIMER) {
@@ -967,7 +1030,7 @@ int main(void) {
 				if (pressionando == 1 || pressionando == 0) {
 					if (evento.timer.source == frametimer) {
 
-						
+
 						if (mapa_atual == 1) {
 							al_draw_bitmap(background_jogo1, 0, 0, NULL);
 							desenhar_mapa(map1);
