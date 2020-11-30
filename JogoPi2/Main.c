@@ -326,14 +326,14 @@ void movimentacao(ALLEGRO_EVENT evento) {
 				inimigo1_mapa2->x += velocidade_inimigo;
 				lado_inimigo1 = 1;
 			}
-			if (inimigo3) {
+			/*if (inimigo3) {
 				if (inimigo1_mapa2->y >= inimigo1_mapa2->y) {
 					inimigo1_mapa2->y -= 10;
 				}
 				else if (inimigo1_mapa2->y <= inimigo1_mapa2->y - 100) {
 					inimigo1_mapa2->y += 10;
 				}
-			}
+			}*/
 		}
 	}
 
@@ -959,6 +959,18 @@ int main(void) {
 			}
 
 			if (mapa_atual == 2) {
+
+				if (!colisao(personagem->x, personagem->y, tileSize * 1 + 30, tileSize * 3, personagem->largura / 10, personagem->altura, tileSize * 9 - 50, 0, 0)) {
+					caindo = 1;
+				}
+				else {
+					caindo = 0;
+					pulando = 0;
+				}
+
+				if (colisao(personagem->x, personagem->y, tileSize * 1 + 30, tileSize * 3, personagem->largura / 10, personagem->altura, tileSize * 9 - 50, 0, 0)) {
+					personagem->y = tileSize * 3 - personagem->altura;
+				}
 
 				if (inimigo3) {
 
