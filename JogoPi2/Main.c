@@ -61,6 +61,7 @@ ALLEGRO_BITMAP* morreu1 = NULL;
 ALLEGRO_BITMAP* infoss = NULL;
 ALLEGRO_BITMAP* creditoss = NULL;
 ALLEGRO_SAMPLE* musica = NULL;
+ALLEGRO_BITMAP* controless = NULL;
 
 ALLEGRO_SAMPLE_INSTANCE* songInstance = NULL;
 ALLEGRO_BITMAP* placa_mae_inv = NULL;
@@ -535,6 +536,7 @@ int main(void) {
 	caixa = al_load_bitmap("sprites/caixa.png");
 	plataforma_pedra = al_load_bitmap("sprites/plataforma_pedra.png");
 	morreu1 = al_load_bitmap("imagens/morreu.png");
+	controless = al_load_bitmap("imagens/controles.png");
 
 	infoss = al_load_bitmap("imagens/infos.jpg");
 	creditoss = al_load_bitmap("imagens/creditos.jpg");
@@ -722,7 +724,7 @@ int main(void) {
 
 
 	// Variaveis de controle de menu
-	int menu = 1, jogar = 0, creditos = 0, infos = 0, jogo = 1, tocando = 1, morreu = 0, venceu = 0, morreu_cena = 0;
+	int menu = 1, jogar = 0, creditos = 0, infos = 0, jogo = 1, tocando = 1, morreu = 0, venceu = 0, morreu_cena = 0, controles = 0;
 
 
 	al_start_timer(timer);
@@ -794,6 +796,16 @@ int main(void) {
 					menu = 0;
 					creditos = 1;
 				}
+				//se for em controles
+				else if ((evento.mouse.x >= 278 &&
+					evento.mouse.x <= 424 && evento.mouse.y <= 461 &&
+					evento.mouse.y >= 408)) {
+
+					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
+					menu = 0;
+					controles = 1;
+				}
+
 				// Se for em mutar som
 				else if ((evento.mouse.x >= 538 &&
 					evento.mouse.x <= 582 && evento.mouse.y <= 44 &&
@@ -994,24 +1006,28 @@ int main(void) {
 						evento.mouse.x <= 211 && evento.mouse.y <= 299 &&
 						evento.mouse.y >= 209)) {
 
+						al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 						descricao_processador = true;
 					}
 					if ((evento.mouse.x >= 227 &&
 						evento.mouse.x <= 317 && evento.mouse.y <= 299 &&
 						evento.mouse.y >= 219)) {
 
+						al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 						descricao_placa_mae = true;
 					}
 					if ((evento.mouse.x >= 327 &&
 						evento.mouse.x <= 416 && evento.mouse.y <= 302 &&
 						evento.mouse.y >= 210)) {
 
+						al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 						descricao_placa_de_video = true;
 					}
 					if ((evento.mouse.x >= 427 &&
 						evento.mouse.x <= 517 && evento.mouse.y <= 300 &&
 						evento.mouse.y >= 209)) {
 
+						al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 						descricao_memoria_ram = true;
 					}
 
@@ -1069,7 +1085,26 @@ int main(void) {
 			}
 
 		}
-		
+		else if (controles == 1) {
+
+			al_clear_to_color(al_map_rgb(0, 0, 0));
+			al_draw_bitmap(controless, 0, 0, 0);
+			al_flip_display();
+
+			if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+
+				if ((evento.mouse.x >= 590 &&
+					evento.mouse.x <= 630 && evento.mouse.y <= 42 &&
+					evento.mouse.y >= 6)) {
+
+					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
+
+					controles = 0;
+					menu = 1;
+				}
+
+			}
+		}
 
 
 		// Se for no x da janela
@@ -1078,6 +1113,7 @@ int main(void) {
 		}
 
 	}
+
 
 	al_destroy_display(janela);
 	al_destroy_bitmap(background);
