@@ -469,7 +469,7 @@ void desenhar_mapa(int mapa[9][11]){
 int main(void) {
 
 	inicialização();
-
+	printf("Oi gustavo");
 	al_clear_to_color(al_map_rgb(255, 255, 255));
 	al_flip_display();
 
