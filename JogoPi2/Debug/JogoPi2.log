@@ -6,10 +6,10 @@ C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(136): message : consulte a declara�
 C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(568,55): warning C4133: '=': tipos incompatíveis - de 'ALLEGRO_BITMAP *' para 'Objeto *'
 C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(801,49): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
 C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(801,45): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
-C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(1021,51): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
-C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(1021,47): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
-C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(1025,46): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
-C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(1025,42): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
-C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(1036,44): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
-C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(1036,40): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(1033,51): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(1033,47): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(1037,46): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(1037,42): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(1048,44): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
+C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Main.c(1048,40): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
   JogoPi2.vcxproj -> C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Debug\JogoPi2.exe
