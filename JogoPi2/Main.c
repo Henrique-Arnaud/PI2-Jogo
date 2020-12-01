@@ -105,6 +105,7 @@ ALLEGRO_BITMAP* img10 = NULL;
 int pressionadox = 0;
 int i = 0;
 int aux = 0;
+int contador_aux = 0;
 int j = 0;
 int k = 0;
 int l = 0;
@@ -370,8 +371,15 @@ void movimentacao(ALLEGRO_EVENT evento) {
 				inimigo1_mapa2->x += velocidade_inimigo;
 				lado_inimigo1 = 1;
 			}
-			if (inimigo3) {
-				inimigo1_mapa2->y -= 10;
+			if (inimigo3 || inimigo4) {
+				aux++;
+				if (contador_aux >= 0) {
+					inimigo1_mapa2 -= 10;
+					contador_aux++;
+				}
+				else if (aux >= 9) {
+
+				}
 			}
 		}
 	}
@@ -1077,25 +1085,6 @@ int main(void) {
 					personagem->y = tileSize * 3 - personagem->altura;
 				}
 
-<<<<<<< HEAD
-=======
-				////
-				/*
-				if (!colisao(personagem->x, personagem->y, tileSize * 0 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 3 - 50, 0, 0)) {
-					caindo = 1;
-				}
-				else {
-					caindo = 0;
-					pulando = 0;
-				}
-
-				if (colisao(personagem->x, personagem->y, tileSize * 0 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 3 - 50, 0, 0)) {
-					personagem->y = tileSize * 5 - personagem->altura;
-				}
-				*/
-				///
-
->>>>>>> 444925905c607de6e00514f572f0648664f1f670
 				if (inimigo3) {
 
 					if (inimigo1_mapa2->vida <= 0) {
