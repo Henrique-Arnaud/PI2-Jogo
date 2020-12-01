@@ -56,6 +56,8 @@ ALLEGRO_BITMAP* chao2_fim = NULL;
 ALLEGRO_BITMAP* chao3 = NULL;
 ALLEGRO_BITMAP* chao3_fim = NULL;
 
+ALLEGRO_BITMAP* background3 = NULL;
+
 ALLEGRO_BITMAP* pilar1 = NULL;
 ALLEGRO_BITMAP* caixa = NULL;
 ALLEGRO_BITMAP* plataforma_pedra = NULL;
@@ -84,6 +86,19 @@ ALLEGRO_BITMAP* desc_memoria_ram = NULL;
 ALLEGRO_SAMPLE* clique_menu = NULL;
 ALLEGRO_SAMPLE* som_espada = NULL;
 ALLEGRO_SAMPLE* pegar_item = NULL;
+
+ALLEGRO_BITMAP* img0 = NULL;
+ALLEGRO_BITMAP* img1 = NULL;
+ALLEGRO_BITMAP* img2 = NULL;
+ALLEGRO_BITMAP* img3 = NULL;
+ALLEGRO_BITMAP* img4 = NULL;
+ALLEGRO_BITMAP* img5 = NULL;
+ALLEGRO_BITMAP* img6 = NULL;
+ALLEGRO_BITMAP* img7 = NULL;
+ALLEGRO_BITMAP* img8 = NULL;
+ALLEGRO_BITMAP* img9 = NULL;
+ALLEGRO_BITMAP* img10 = NULL;
+
 
 
 int pressionadox = 0;
@@ -577,6 +592,19 @@ int main(void) {
 	morreu1 = al_load_bitmap("imagens/morreu.png");
 	controless = al_load_bitmap("imagens/controles.png");
 
+	img0 = al_load_bitmap("imagens/img0.jpg");
+	img1 = al_load_bitmap("imagens/img1.jpg");
+	img2 = al_load_bitmap("imagens/img2.jpg");
+	img3 = al_load_bitmap("imagens/img3.jpg");
+	img4 = al_load_bitmap("imagens/img4.jpg");
+	img5 = al_load_bitmap("imagens/img5.jpg");
+	img6 = al_load_bitmap("imagens/img6.jpg");
+	img7 = al_load_bitmap("imagens/img7.jpg");
+	img8 = al_load_bitmap("imagens/nomeJogo.jpg");
+	img9 = al_load_bitmap("imagens/nomesIntegrantes.jpg");
+	img10 = al_load_bitmap("imagens/transicao.jpg");
+
+
 	chao3 = al_load_bitmap("Sprites/chao3.png");
 	chao3_fim = al_load_bitmap("Sprites/chao3_fim.png");
 		
@@ -596,7 +624,7 @@ int main(void) {
 	pegar_item = al_load_sample("pegar_item.wav");
 	clique_menu = al_load_sample("clique_menu.wav");//Som de clique
 	som_espada = al_load_sample("som_espada.wav");
-
+	background3 = al_load_bitmap("imagens/background3.jpg");
 
 	desc_processador = al_load_bitmap("imagens/desc_processador.png");
 	desc_placa_mae = al_load_bitmap("imagens/desc_placa_mae.png");
@@ -780,6 +808,8 @@ int main(void) {
 	int atributoss = 0;
 	bool clique_velocidade = false, clique_vida = false, clique_ataque = false;
 	int teste = 1;
+	int introducao = 1;
+
 	al_start_timer(timer);
 	al_start_timer(frametimer);
 
@@ -1098,6 +1128,9 @@ int main(void) {
 					jogar = 0;
 
 				}
+				if (personagem->x >= 582 || personagem->x >= 650 ) {
+					mapa_atual = 3;
+				}
 
 			}
 			
@@ -1135,6 +1168,10 @@ int main(void) {
 						if (mapa_atual == 2) {
 							al_draw_bitmap(background2, 0, 0, NULL);
 							desenhar_mapa(map2);
+						}
+						if (mapa_atual == 3) {
+							al_draw_bitmap(background3, 0, 0, NULL);
+							desenhar_mapa(map3);
 						}
 					}
 					desenha(evento);
@@ -1368,6 +1405,18 @@ int main(void) {
 	al_destroy_timer(frametimer);
 	al_destroy_bitmap(chao2);
 	al_destroy_bitmap(chao2_fim);
+	al_destroy_bitmap(img0);
+	al_destroy_bitmap(img7);
+	al_destroy_bitmap(img8);
+	al_destroy_bitmap(img9);
+	al_destroy_bitmap(img1);
+	al_destroy_bitmap(img2);
+	al_destroy_bitmap(img3);
+	al_destroy_bitmap(img4);
+	al_destroy_bitmap(img5);
+	al_destroy_bitmap(img7);
+	al_destroy_bitmap(img6);
+	al_destroy_bitmap(img10);
 	free(goblin);
 	free(personagem);
 	free(sprite_atacando);
