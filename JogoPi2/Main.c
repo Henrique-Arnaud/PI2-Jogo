@@ -772,7 +772,7 @@ int main(void) {
 
 
 	// Placa de video
-	/*placa_de_video = (Objeto*)malloc(sizeof(Objeto));
+	placa_de_video = (Objeto*)malloc(sizeof(Objeto));
 	placa_de_video->imagem = al_load_bitmap("imagens/placa_de_video.png");
 	placa_de_video->largura = 63;
 	placa_de_video->altura = 57;
@@ -798,7 +798,7 @@ int main(void) {
 	memoria_ram_mini->largura = 36;
 	memoria_ram_mini->altura = 33;
 	memoria_ram_mini->x = 140;
-	memoria_ram_mini->y = 100;*/
+	memoria_ram_mini->y = 100;
 
 	frame2 = al_create_sub_bitmap(sprite_parado->imagem, (sprite_parado->largura / 11) * i, 0, sprite_parado->largura / 11, sprite_parado->altura);
 
@@ -1128,10 +1128,7 @@ int main(void) {
 					jogar = 0;
 
 				}
-				if (personagem->x >= 582 || personagem->x >= 650 ) {
-					mapa_atual = 3;
-				}
-
+				
 			}
 			
 			/// ///////////////////////////////////////////////
@@ -1144,10 +1141,10 @@ int main(void) {
 				if (colisao(personagem->x, personagem->y, tileSize * 0 + 30, tileSize * 7, personagem->largura / 10, personagem->altura, tileSize * 11 - 105, 0, 0)) {
 					personagem->y = tileSize * 5 - personagem->altura;
 				}
-				if (colisao(personagem->x, personagem->y, tileSize * 1 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 1 - 105, 0, 0)) {
+				else if (colisao(personagem->x, personagem->y, tileSize * 1 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 1 - 105, 0, 0)) {
 					personagem->y = tileSize * 5 - personagem->altura;
 				}
-				if (colisao(personagem->x, personagem->y, tileSize * 5 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 1 - 105, 0, 0)) {
+				else if (colisao(personagem->x, personagem->y, tileSize * 5 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 1 - 105, 0, 0)) {
 					personagem->y = tileSize * 5 - personagem->altura;
 				}
 			}
@@ -1414,9 +1411,9 @@ int main(void) {
 	al_destroy_bitmap(img3);
 	al_destroy_bitmap(img4);
 	al_destroy_bitmap(img5);
-	al_destroy_bitmap(img7);
 	al_destroy_bitmap(img6);
 	al_destroy_bitmap(img10);
+
 	free(goblin);
 	free(personagem);
 	free(sprite_atacando);
