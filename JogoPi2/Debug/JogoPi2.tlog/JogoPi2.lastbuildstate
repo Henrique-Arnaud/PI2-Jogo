@@ -1,2 +1,7 @@
+<<<<<<< HEAD
 PlatformToolSet=v142:VCToolArchitecture=Native32Bit:VCToolsVersion=14.27.29109:TargetPlatformVersion=10.0.18362.0:
 Debug|Win32|C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\|
+=======
+PlatformToolSet=v142:VCToolArchitecture=Native32Bit:VCToolsVersion=14.27.29110:TargetPlatformVersion=10.0.18362.0:
+Debug|Win32|C:\Jogo PI 2\PI2-Jogo\JogoPi2\|
+>>>>>>> cbb51b8d5475f71f1837421302011483a343cb73
