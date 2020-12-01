@@ -64,6 +64,7 @@ ALLEGRO_BITMAP* plataforma_pedra = NULL;
 
 
 ALLEGRO_BITMAP* morreu1 = NULL;
+ALLEGRO_BITMAP* venceu1 = NULL;
 
 ALLEGRO_BITMAP* infoss = NULL;
 ALLEGRO_BITMAP* creditoss = NULL;
@@ -114,7 +115,9 @@ int lado_inimigo2;
 bool draw = false, draw2 = true, ativo = false, item_processador = false, item_processador_mini = false, item_placa = false, item_placa_mini = false;
 bool item_placa_de_video = false, item_placa_de_video_mini = false, item_memoria_ram = false, item_memoria_ram_mini = false;
 bool descricao_processador, descricao_placa_mae, descricao_placa_de_video, descricao_memoria_ram;
+
 bool item_chave = false;
+
 //teste
 bool inv_placa = false;
 bool inv_processador = false;
@@ -248,6 +251,7 @@ void movimentacao(ALLEGRO_EVENT evento) {
 
 		if (al_key_down(&key_state, ALLEGRO_KEY_UP) && pulando == 0 && caindo == 0) {
 			pulando = 1;
+			
 			printf("%d\n\n", pulando);
 			pLimite = personagem->y;
 
@@ -270,7 +274,7 @@ void movimentacao(ALLEGRO_EVENT evento) {
 		}
 		if (al_key_down(&key_state, ALLEGRO_KEY_RIGHT)) {
 			velx = velocidade_movimento;
-
+	
 			j = 1;
 
 			pressionando = 1;
@@ -593,8 +597,11 @@ int main(void) {
 	pilar1 = al_load_bitmap("sprites/pilar1.png");
 	caixa = al_load_bitmap("sprites/caixa.png");
 	plataforma_pedra = al_load_bitmap("sprites/plataforma_pedra.png");
-	morreu1 = al_load_bitmap("imagens/morreu.png");
 	controless = al_load_bitmap("imagens/controles.png");
+
+
+	morreu1 = al_load_bitmap("imagens/morreu.png");
+	venceu1 = al_load_bitmap("imagens/venceu.png");
 
 	img0 = al_load_bitmap("imagens/img0.jpg");
 	img1 = al_load_bitmap("imagens/img1.jpg");
@@ -854,9 +861,9 @@ int main(void) {
 					jogo = 0;
 				}
 				// Se for em jogar
-				else if ((evento.mouse.x >= 217 &&
-					evento.mouse.x <= 400 && evento.mouse.y <= 204 &&
-					evento.mouse.y >= 144)) {
+				else if ((evento.mouse.x >= 185 &&
+					evento.mouse.x <= 327 && evento.mouse.y <= 229 &&
+					evento.mouse.y >= 178)) {
 
 					al_stop_sample_instance(songInstance);
 					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
@@ -892,9 +899,10 @@ int main(void) {
 					menu = 0;
 					controles = 1;
 				}
-				else if ((evento.mouse.x >= 425 &&
-					evento.mouse.x <= 491 && evento.mouse.y <= 227 &&
-					evento.mouse.y >= 184)) {
+				// se for em atributos
+				else if ((evento.mouse.x >= 332 &&
+					evento.mouse.x <= 487 && evento.mouse.y <= 228 &&
+					evento.mouse.y >= 179)) {
 
 					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 					menu = 0;
@@ -1084,15 +1092,12 @@ int main(void) {
 				*/
 				///
 
-
-
-
 				if (inimigo3) {
 
 					if (inimigo1_mapa2->vida <= 0) {
 						inimigo3 = false;
 						espada_ativa = false;
-						//item_chave = true;
+						
 					}
 				}
 
@@ -1369,8 +1374,6 @@ int main(void) {
 
 					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 
-
-					
 					velocidade_projetil = 15.0;
 
 					velocidade_movimento = 4.5;
