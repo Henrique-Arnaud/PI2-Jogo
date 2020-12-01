@@ -1,3 +1,5 @@
+cod 01 - 12
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <allegro5/allegro.h>
@@ -519,7 +521,7 @@ void desenha(ALLEGRO_EVENT evento) {
 	if (portal_ativo) {
 		al_draw_bitmap(portal->imagem, portal->x, 150, 0);
 	}
-	
+
 
 }
 
@@ -607,7 +609,7 @@ int main(void) {
 
 	chao3 = al_load_bitmap("Sprites/chao3.png");
 	chao3_fim = al_load_bitmap("Sprites/chao3_fim.png");
-		
+
 
 	infoss = al_load_bitmap("imagens/infos.jpg");
 	creditoss = al_load_bitmap("imagens/creditos.jpg");
@@ -620,7 +622,7 @@ int main(void) {
 	inventario_placa_mae = al_load_bitmap("imagens/inventario_placa_mae.png");;
 	musica = al_load_sample("musica.ogg");
 	fonte = al_load_font("Fontes/arial.ttf", 48, 0);
-	
+
 	pegar_item = al_load_sample("pegar_item.wav");
 	clique_menu = al_load_sample("clique_menu.wav");//Som de clique
 	som_espada = al_load_sample("som_espada.wav");
@@ -700,7 +702,7 @@ int main(void) {
 	chave->x = 700;
 	chave->y = Chao - chave->altura;
 	*/
-	
+
 	boss = (Objeto*)malloc(sizeof(Objeto));
 	boss->imagem = al_load_bitmap("Sprites/boss.png");
 	boss->x = tileSize * 5;
@@ -889,7 +891,7 @@ int main(void) {
 					controles = 1;
 				}
 				else if ((evento.mouse.x >= 425 &&
-					evento.mouse.x <=	491 && evento.mouse.y <= 227 &&
+					evento.mouse.x <= 491 && evento.mouse.y <= 227 &&
 					evento.mouse.y >= 184)) {
 
 					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
@@ -922,15 +924,15 @@ int main(void) {
 		else if (jogar == 1) {
 
 			printf("inimigo 3 Y:  %.2f\n\n", inimigo1_mapa2->y);
-	
-				// MAPAS //
+
+			// MAPAS //
 			if (mapa_atual == 1 && !colisao(personagem->x, personagem->y, 0, Chao, personagem->largura / 10, personagem->altura, tileSize, tileSize, 640) == 1 && !colisao(personagem->x, personagem->y, tileSize * 4 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 4 - 50, 0, 0)) {
 				caindo = 1;
 			}
 			else if (mapa_atual == 2 && !colisao(personagem->x, personagem->y, 0, Chao, personagem->largura / 10, personagem->altura, tileSize, tileSize, 640) == 1 && !colisao(personagem->x, personagem->y, tileSize * 0 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 3 - 50, 0, 0) && (!colisao(personagem->x, personagem->y, tileSize * 5 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 2 - 50, 0, 0)) && !colisao(personagem->x, personagem->y, tileSize * 9 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 2 - 50, 0, 0) && !colisao(personagem->x, personagem->y, tileSize * 1 + 30, tileSize * 3, personagem->largura / 10, personagem->altura, tileSize * 9 - 50, 0, 0)) {
 				caindo = 1;
 			}
-			else if (mapa_atual == 3 && !colisao(personagem->x, personagem->y, 0, Chao, personagem->largura / 10, personagem->altura, tileSize, tileSize, 640) == 1 && !colisao(personagem->x, personagem->y, tileSize * 0 + 30, tileSize * 7, personagem->largura / 10, personagem->altura, tileSize * 11 - 105, 0, 0) && !colisao(personagem->x, personagem->y, tileSize * 1 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 1 - 105, 0, 0) && !colisao(personagem->x, personagem->y, tileSize * 3 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 1 - 105, 0, 0)&& !colisao(personagem->x, personagem->y, tileSize * 5 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 1 - 105, 0, 0)) {
+			else if (mapa_atual == 3 && !colisao(personagem->x, personagem->y, 0, Chao, personagem->largura / 10, personagem->altura, tileSize, tileSize, 640) == 1 && !colisao(personagem->x, personagem->y, tileSize * 0 + 30, tileSize * 7, personagem->largura / 10, personagem->altura, tileSize * 11 - 105, 0, 0) && !colisao(personagem->x, personagem->y, tileSize * 1 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 1 - 105, 0, 0) && !colisao(personagem->x, personagem->y, tileSize * 3 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 1 - 105, 0, 0) && !colisao(personagem->x, personagem->y, tileSize * 5 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 1 - 105, 0, 0)) {
 				caindo = 1;
 			}
 			else {
@@ -1029,14 +1031,14 @@ int main(void) {
 					personagem->y = 75;
 				}
 			}
-			
+
 			if (item_processador_mini) {
 				processador->x = 1000, processador->y = 1000;
 			}
 			if (item_placa_mini) {
 				placa_mae->x = 1000, placa_mae->y = 1000;
 			}
-			
+
 
 			//////////////////////////
 			/////////////////////////////////////
@@ -1045,7 +1047,7 @@ int main(void) {
 			// MAPA2
 			if (mapa_atual == 2) {
 
-			
+
 				// Colisao com plataforma grande
 				if (colisao(personagem->x, personagem->y, tileSize * 1 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 3 - 105, 0, 0)) {
 					personagem->y = tileSize * 5 - personagem->altura;
@@ -1128,9 +1130,9 @@ int main(void) {
 					jogar = 0;
 
 				}
-				
+
 			}
-			
+
 			/// ///////////////////////////////////////////////
 			/// ///////////////////////////////////////////////
 			/// /// ///////////////////////////////////////////////
@@ -1280,12 +1282,12 @@ int main(void) {
 
 		}
 		else if (controles == 1) {
-			
-			
+
+
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			al_draw_bitmap(controless, 0, 0, 0);
 			al_flip_display();
-			
+
 			if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
 
 				if ((evento.mouse.x >= 590 &&
@@ -1314,7 +1316,7 @@ int main(void) {
 
 					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 
-					
+
 					velocidade_movimento = 6.5;
 					atributoss = 0;
 					menu = 1;
@@ -1334,7 +1336,7 @@ int main(void) {
 					goblin2->vida = 5;
 					inimigo1_mapa2->vida = 3;
 					inimigo2_mapa2->vida = 3;
-					
+
 					//vida boss
 					atributoss = 0;
 					menu = 1;
@@ -1357,7 +1359,7 @@ int main(void) {
 				}
 
 			}
-			if(evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+			if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
 
 				if ((evento.mouse.x >= 590 &&
 					evento.mouse.x <= 630 && evento.mouse.y <= 42 &&

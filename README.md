@@ -20,9 +20,11 @@
  ### Mecânicas
  
  
- Conta com as mecânicas de correr pelo mapa, pular pelas plataformas e atacar seus inimigos arremesando sua espada. O jogador possui 3 vidas, onde cada acerto que recebe conta como menos 1 vida disponível, morrendo ao chegar em 0. Os inimigos também possuem vida, variando para cada um. 
+ Conta com as mecânicas de correr pelo mapa, pular pelas plataformas e atacar seus inimigos arremesando sua espada.
+
+ O jogador possui 3 vidas, onde cada acerto que recebe conta como menos 1 vida disponível, morrendo ao chegar em 0.
+
+ Os inimigos também possuem vida, variando para cada um. 
 
 
-Oi mundo
-
-oi mundo dnv
+Prof. Fabio Abenza
