@@ -31,7 +31,7 @@ typedef struct objeto Objeto;
 
 Objeto* personagem, * sprite_parado, * goblin, * goblin2, * espada, * processador, * processador_mini, * placa_mae, * placa_mae_mini, * sprite_atacando, * inventario;
 Objeto* placa_de_video, * placa_de_video_mini, * memoria_ram, * memoria_ram_mini, * portal, * inimigo1_mapa2, * inimigo2_mapa2, * boss;
-
+Objeto* chave;
 ALLEGRO_FONT* fonte = NULL;
 ALLEGRO_BITMAP* frame = NULL;
 ALLEGRO_BITMAP* frame2 = NULL;
@@ -45,6 +45,7 @@ ALLEGRO_BITMAP* background2 = NULL;
 ALLEGRO_BITMAP* background_jogo1 = NULL;
 ALLEGRO_BITMAP* chao = NULL;
 ALLEGRO_BITMAP* chao_fim = NULL;
+ALLEGRO_BITMAP* atributos = NULL;
 
 ALLEGRO_BITMAP* plataforma1 = NULL;
 ALLEGRO_BITMAP* plataforma2 = NULL;
@@ -62,6 +63,7 @@ ALLEGRO_BITMAP* infoss = NULL;
 ALLEGRO_BITMAP* creditoss = NULL;
 ALLEGRO_SAMPLE* musica = NULL;
 ALLEGRO_BITMAP* controless = NULL;
+
 
 ALLEGRO_SAMPLE_INSTANCE* songInstance = NULL;
 ALLEGRO_BITMAP* placa_mae_inv = NULL;
@@ -97,6 +99,7 @@ bool inv_placa = false;
 bool inv_processador = false;
 bool inventarioo = false;
 bool portal_ativo = false;
+
 
 //variaveis do mapa
 
@@ -150,7 +153,7 @@ velx = 0;
 vely = 0;
 
 atacando = false, espada_ativa = false;
-float velocidade_pulo = 15;
+float velocidade_pulo = 14;
 int caindo = 1;
 int pulando = 0;
 
@@ -493,6 +496,7 @@ void desenha(ALLEGRO_EVENT evento) {
 	if (portal_ativo) {
 		al_draw_bitmap(portal->imagem, portal->x, 150, 0);
 	}
+	
 
 }
 
@@ -542,7 +546,8 @@ int main(void) {
 	al_flip_display();
 
 	// Carrega imagem
-	background = al_load_bitmap("imagens/menu1.jpg");
+	background = al_load_bitmap("imagens/menu2.jpg");
+	atributos = al_load_bitmap("imagens/atributos.png");
 	background_jogo1 = al_load_bitmap("imagens/background.jpg");
 	background2 = al_load_bitmap("sprites/background2.jpg");
 	chao = al_load_bitmap("sprites/chao.jpg");
@@ -569,7 +574,7 @@ int main(void) {
 	inventario_placa_mae = al_load_bitmap("imagens/inventario_placa_mae.png");;
 	musica = al_load_sample("musica.ogg");
 	fonte = al_load_font("Fontes/arial.ttf", 48, 0);
-
+	
 	pegar_item = al_load_sample("pegar_item.wav");
 	clique_menu = al_load_sample("clique_menu.wav");//Som de clique
 	som_espada = al_load_sample("som_espada.wav");
@@ -641,6 +646,15 @@ int main(void) {
 	inimigo2_mapa2->vida = 4;
 
 
+	/*
+	chave = (Objeto*)malloc(sizeof(Objeto));
+	chave->imagem = al_load_bitmap("Sprites/chave.png");
+	chave->altura = 67;
+	chave->largura = 98;
+	chave->x = 700;
+	chave->y = Chao - chave->altura;
+	*/
+	
 	boss = (Objeto*)malloc(sizeof(Objeto));
 	boss->imagem = al_load_bitmap("Sprites/boss.png");
 	boss->x = tileSize * 5;
@@ -745,7 +759,8 @@ int main(void) {
 
 	// Variaveis de controle de menu
 	int menu = 1, jogar = 0, creditos = 0, infos = 0, jogo = 1, tocando = 1, morreu = 0, venceu = 0, morreu_cena = 0, controles = 0;
-
+	int atributoss = 0;
+	bool clique_velocidade = false, clique_vida = false, clique_ataque = false;
 
 	al_start_timer(timer);
 	al_start_timer(frametimer);
@@ -825,7 +840,14 @@ int main(void) {
 					menu = 0;
 					controles = 1;
 				}
+				else if ((evento.mouse.x >= 425 &&
+					evento.mouse.x <=	491 && evento.mouse.y <= 227 &&
+					evento.mouse.y >= 184)) {
 
+					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
+					menu = 0;
+					atributoss = 1;
+				}
 				// Se for em mutar som
 				else if ((evento.mouse.x >= 538 &&
 					evento.mouse.x <= 582 && evento.mouse.y <= 44 &&
@@ -852,7 +874,7 @@ int main(void) {
 		else if (jogar == 1) {
 
 			printf("inimigo 3 Y:  %.2f\n\n", inimigo1_mapa2->y);
-
+	
 			if (mapa_atual == 1 && !colisao(personagem->x, personagem->y, 0, Chao, personagem->largura / 10, personagem->altura, tileSize, tileSize, 640) == 1 && !colisao(personagem->x, personagem->y, tileSize * 4 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 4 - 50, 0, 0)) {
 				caindo = 1;
 			}
@@ -956,6 +978,15 @@ int main(void) {
 					personagem->y = 75;
 				}
 			}
+			
+			if (item_processador_mini) {
+				processador->x = 1000, processador->y = 1000;
+			}
+			if (item_placa_mini) {
+				placa_mae->x = 1000, placa_mae->y = 1000;
+			}
+			
+
 			//////////////////////////
 			/////////////////////////////////////
 			///////////////////////////////////////////////////
@@ -963,7 +994,7 @@ int main(void) {
 			// MAPA2
 			if (mapa_atual == 2) {
 
-
+			
 				// Colisao com plataforma grande
 				if (colisao(personagem->x, personagem->y, tileSize * 1 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 3 - 105, 0, 0)) {
 					personagem->y = tileSize * 5 - personagem->altura;
@@ -1194,6 +1225,76 @@ int main(void) {
 				}
 
 			}
+		}
+		else if (atributoss) {
+
+			al_clear_to_color(al_map_rgb(0, 0, 0));
+			al_draw_bitmap(atributos, 0, 0, 0);
+			al_flip_display();
+
+			if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+
+				if ((evento.mouse.x >= 47 &&
+					evento.mouse.x <= 141 && evento.mouse.y <= 209 &&
+					evento.mouse.y >= 128)) {
+
+					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
+
+					
+					velocidade_movimento = 6.5;
+					atributoss = 0;
+					menu = 1;
+					clique_velocidade = true;
+				}
+
+			}
+			if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+
+				if ((evento.mouse.x >= 45 &&
+					evento.mouse.x <= 142 && evento.mouse.y <= 317 &&
+					evento.mouse.y >= 234)) {
+
+					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
+
+					goblin->vida = 4;
+					goblin2->vida = 5;
+					inimigo1_mapa2->vida = 3;
+					inimigo2_mapa2->vida = 3;
+					
+					//vida boss
+					atributoss = 0;
+					menu = 1;
+					clique_vida = true;
+				}
+
+			}
+			if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+
+				if ((evento.mouse.x >= 45 &&
+					evento.mouse.x <= 142 && evento.mouse.y <= 425 &&
+					evento.mouse.y >= 339)) {
+
+					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
+
+					velocidade_projetil = 15.0;
+					atributoss = 0;
+					menu = 1;
+					clique_ataque = true;
+				}
+
+			}
+			if(evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+
+				if ((evento.mouse.x >= 590 &&
+					evento.mouse.x <= 630 && evento.mouse.y <= 42 &&
+					evento.mouse.y >= 6)) {
+
+					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
+					atributoss = 0;
+					menu = 1;
+				}
+			}
+
 		}
 
 
