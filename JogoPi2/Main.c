@@ -1323,12 +1323,19 @@ int main(void) {
 
 
 					velocidade_movimento = 6.5;
+					velocidade_projetil = 13.0;
+
+					goblin->vida = 5;
+					goblin2->vida = 6;
+					inimigo1_mapa2->vida = 4;
+					inimigo2_mapa2->vida = 4;
 					atributoss = 0;
 					menu = 1;
-					clique_velocidade = true;
+					
 				}
 
 			}
+			// vida
 			if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
 
 				if ((evento.mouse.x >= 45 &&
@@ -1337,18 +1344,23 @@ int main(void) {
 
 					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 
+					
+
+					velocidade_projetil = 13.0;
+					velocidade_movimento = 4.5;
+
 					goblin->vida = 4;
 					goblin2->vida = 5;
 					inimigo1_mapa2->vida = 3;
 					inimigo2_mapa2->vida = 3;
 
-					//vida boss
 					atributoss = 0;
 					menu = 1;
-					clique_vida = true;
+					
 				}
 
 			}
+			//velocidade projetil
 			if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
 
 				if ((evento.mouse.x >= 45 &&
@@ -1357,10 +1369,19 @@ int main(void) {
 
 					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 
+
+					
 					velocidade_projetil = 15.0;
+
+					velocidade_movimento = 4.5;
+					goblin->vida = 5;
+					goblin2->vida = 6;
+					inimigo1_mapa2->vida = 4;
+					inimigo2_mapa2->vida = 4;
+
 					atributoss = 0;
 					menu = 1;
-					clique_ataque = true;
+					
 				}
 
 			}
