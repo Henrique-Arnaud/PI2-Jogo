@@ -1,5 +1,3 @@
-cod 01 - 12
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <allegro5/allegro.h>
@@ -116,6 +114,7 @@ int lado_inimigo2;
 bool draw = false, draw2 = true, ativo = false, item_processador = false, item_processador_mini = false, item_placa = false, item_placa_mini = false;
 bool item_placa_de_video = false, item_placa_de_video_mini = false, item_memoria_ram = false, item_memoria_ram_mini = false;
 bool descricao_processador, descricao_placa_mae, descricao_placa_de_video, descricao_memoria_ram;
+bool item_chave = false;
 //teste
 bool inv_placa = false;
 bool inv_processador = false;
@@ -521,6 +520,9 @@ void desenha(ALLEGRO_EVENT evento) {
 	if (portal_ativo) {
 		al_draw_bitmap(portal->imagem, portal->x, 150, 0);
 	}
+	if (item_chave) {
+		al_draw_bitmap(chave->imagem, chave->x, chave->y, 0);
+	}
 
 
 }
@@ -694,14 +696,14 @@ int main(void) {
 	inimigo2_mapa2->vida = 4;
 
 
-	/*
+	
 	chave = (Objeto*)malloc(sizeof(Objeto));
 	chave->imagem = al_load_bitmap("Sprites/chave.png");
-	chave->altura = 67;
-	chave->largura = 98;
+	chave->altura = 50;
+	chave->largura = 30;
 	chave->x = 700;
 	chave->y = Chao - chave->altura;
-	*/
+	
 
 	boss = (Objeto*)malloc(sizeof(Objeto));
 	boss->imagem = al_load_bitmap("Sprites/boss.png");
@@ -1090,12 +1092,14 @@ int main(void) {
 					if (inimigo1_mapa2->vida <= 0) {
 						inimigo3 = false;
 						espada_ativa = false;
+						//item_chave = true;
 					}
 				}
 
 				if (inimigo4) {
 
 					if (inimigo2_mapa2->vida <= 0) {
+						item_chave = true;
 						inimigo4 = false;
 						espada_ativa = false;
 					}
@@ -1131,6 +1135,7 @@ int main(void) {
 
 				}
 
+			
 			}
 
 			/// ///////////////////////////////////////////////
