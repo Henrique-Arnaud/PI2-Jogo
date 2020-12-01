@@ -95,9 +95,9 @@ ALLEGRO_BITMAP* img4 = NULL;
 ALLEGRO_BITMAP* img5 = NULL;
 ALLEGRO_BITMAP* img6 = NULL;
 ALLEGRO_BITMAP* img7 = NULL;
-ALLEGRO_BITMAP* img8 = NULL;
-ALLEGRO_BITMAP* img9 = NULL;
-ALLEGRO_BITMAP* img10 = NULL;
+ALLEGRO_BITMAP* transicao = NULL;
+ALLEGRO_BITMAP* nomeIntegrantes = NULL;
+ALLEGRO_BITMAP* nomeJogo = NULL;
 
 
 
@@ -600,9 +600,9 @@ int main(void) {
 	img5 = al_load_bitmap("imagens/img5.jpg");
 	img6 = al_load_bitmap("imagens/img6.jpg");
 	img7 = al_load_bitmap("imagens/img7.jpg");
-	img8 = al_load_bitmap("imagens/nomeJogo.jpg");
-	img9 = al_load_bitmap("imagens/nomesIntegrantes.jpg");
-	img10 = al_load_bitmap("imagens/transicao.jpg");
+	nomeJogo = al_load_bitmap("imagens/nomeJogo.jpg");
+	nomeIntegrantes = al_load_bitmap("imagens/nomesIntegrantes.jpg");
+	transicao = al_load_bitmap("imagens/transicao.jpg");
 
 
 	chao3 = al_load_bitmap("Sprites/chao3.png");
@@ -889,7 +889,7 @@ int main(void) {
 					controles = 1;
 				}
 				else if ((evento.mouse.x >= 425 &&
-					evento.mouse.x <=	491 && evento.mouse.y <= 227 &&
+					evento.mouse.x <= 491 && evento.mouse.y <= 227 &&
 					evento.mouse.y >= 184)) {
 
 					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
@@ -918,8 +918,66 @@ int main(void) {
 			}
 
 		}
+		/*else if (jogar == 1) {
+			al_draw_bitmap(img0, 0, 0, 0);
+			al_flip_display();
+			al_rest(1.0);
+			al_draw_bitmap(nomeJogo, 0, 0, 0);
+			al_flip_display();
+			al_rest(4.5);
+			al_draw_bitmap(img0, 0, 0, 0);
+			al_flip_display();
+			al_rest(1.0);
+			al_draw_bitmap(nomeIntegrantes, 0, 0, 0);
+			al_flip_display();
+			al_rest(4.5);
+			al_draw_bitmap(img0, 0, 0, 0);
+			al_flip_display();
+			al_rest(1.0);
+			al_draw_bitmap(img6, 0, 0, 0);
+			al_flip_display();
+			al_rest(4.5);
+			al_draw_bitmap(img0, 0, 0, 0);
+			al_flip_display();
+			al_rest(1.0);
+			al_draw_bitmap(img7, 0, 0, 0);
+			al_flip_display();
+			al_rest(4.5);
+			al_draw_bitmap(transicao, 0, 0, 0);
+			al_flip_display();
+			al_rest(1.0);
+			al_draw_bitmap(img2, 0, 0, 0);
+			al_flip_display();
+			al_rest(5.5);
+			al_draw_bitmap(transicao, 0, 0, 0);
+			al_flip_display();
+			al_rest(1.0);
+			al_draw_bitmap(img3, 0, 0, 0);
+			al_flip_display();
+			al_rest(5.5);
+			al_draw_bitmap(transicao, 0, 0, 0);
+			al_flip_display();
+			al_rest(1.0);
+			al_draw_bitmap(img4, 0, 0, 0);
+			al_flip_display();
+			al_rest(5.5);
+			al_draw_bitmap(transicao, 0, 0, 0);
+			al_flip_display();
+			al_rest(1.0);
+			al_draw_bitmap(img5, 0, 0, 0);
+			al_flip_display();
+			al_rest(5.5);
+			al_draw_bitmap(transicao, 0, 0, 0);
+			al_flip_display();
+			al_rest(1.0);
+			jogar = 2;
+		}
+		*/
+		else if (jogar == 2) {
 
-		else if (jogar == 1) {
+
+			
+			
 
 			printf("inimigo 3 Y:  %.2f\n\n", inimigo1_mapa2->y);
 	
@@ -1407,8 +1465,8 @@ int main(void) {
 	al_destroy_bitmap(chao2_fim);
 	al_destroy_bitmap(img0);
 	al_destroy_bitmap(img7);
-	al_destroy_bitmap(img8);
-	al_destroy_bitmap(img9);
+	al_destroy_bitmap(nomeJogo);
+	al_destroy_bitmap(transicao);
 	al_destroy_bitmap(img1);
 	al_destroy_bitmap(img2);
 	al_destroy_bitmap(img3);
@@ -1416,7 +1474,7 @@ int main(void) {
 	al_destroy_bitmap(img5);
 	al_destroy_bitmap(img7);
 	al_destroy_bitmap(img6);
-	al_destroy_bitmap(img10);
+	al_destroy_bitmap(nomeIntegrantes);
 	free(goblin);
 	free(personagem);
 	free(sprite_atacando);
