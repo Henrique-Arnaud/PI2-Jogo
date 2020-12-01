@@ -52,6 +52,10 @@ ALLEGRO_BITMAP* plataforma2 = NULL;
 ALLEGRO_BITMAP* plataforma3 = NULL;
 ALLEGRO_BITMAP* chao2 = NULL;
 ALLEGRO_BITMAP* chao2_fim = NULL;
+
+ALLEGRO_BITMAP* chao3 = NULL;
+ALLEGRO_BITMAP* chao3_fim = NULL;
+
 ALLEGRO_BITMAP* pilar1 = NULL;
 ALLEGRO_BITMAP* caixa = NULL;
 ALLEGRO_BITMAP* plataforma_pedra = NULL;
@@ -81,6 +85,7 @@ ALLEGRO_SAMPLE* clique_menu = NULL;
 ALLEGRO_SAMPLE* som_espada = NULL;
 ALLEGRO_SAMPLE* pegar_item = NULL;
 
+
 int pressionadox = 0;
 int i = 0;
 int aux = 0;
@@ -107,6 +112,9 @@ int colunas_mapa1 = 11;
 int linhas_mapa1 = 9;
 int tileSize = 59;
 int mapa_atual = 1;
+
+
+
 
 //pedra (chao) = 20
 //caixa = 40
@@ -533,6 +541,12 @@ void desenhar_mapa(int mapa[9][11]) {
 			else if (mapa[cont_i][cont_j] == 60) {
 				al_draw_bitmap_region(plataforma_pedra, tileSize * 0, tileSize * 0, tileSize, 44, cont_j * tileSize, cont_i * tileSize, 0);
 			}
+			else if (mapa[cont_i][cont_j] == 10) {
+				al_draw_bitmap_region(chao3, tileSize * 0, tileSize * 0, tileSize, tileSize, cont_j * tileSize, cont_i * tileSize, 0);
+			}
+			else if (mapa[cont_i][cont_j] == 11) {
+				al_draw_bitmap_region(chao3_fim, tileSize * 0, tileSize * 0, tileSize, tileSize, cont_j * tileSize, cont_i * tileSize, 0);
+			}
 		}
 	}
 }
@@ -562,6 +576,10 @@ int main(void) {
 	plataforma_pedra = al_load_bitmap("sprites/plataforma_pedra.png");
 	morreu1 = al_load_bitmap("imagens/morreu.png");
 	controless = al_load_bitmap("imagens/controles.png");
+
+	chao3 = al_load_bitmap("Sprites/chao3.png");
+	chao3_fim = al_load_bitmap("Sprites/chao3_fim.png");
+		
 
 	infoss = al_load_bitmap("imagens/infos.jpg");
 	creditoss = al_load_bitmap("imagens/creditos.jpg");
@@ -761,7 +779,7 @@ int main(void) {
 	int menu = 1, jogar = 0, creditos = 0, infos = 0, jogo = 1, tocando = 1, morreu = 0, venceu = 0, morreu_cena = 0, controles = 0;
 	int atributoss = 0;
 	bool clique_velocidade = false, clique_vida = false, clique_ataque = false;
-
+	int teste = 1;
 	al_start_timer(timer);
 	al_start_timer(frametimer);
 
@@ -875,13 +893,16 @@ int main(void) {
 
 			printf("inimigo 3 Y:  %.2f\n\n", inimigo1_mapa2->y);
 	
+				// MAPAS //
 			if (mapa_atual == 1 && !colisao(personagem->x, personagem->y, 0, Chao, personagem->largura / 10, personagem->altura, tileSize, tileSize, 640) == 1 && !colisao(personagem->x, personagem->y, tileSize * 4 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 4 - 50, 0, 0)) {
 				caindo = 1;
 			}
 			else if (mapa_atual == 2 && !colisao(personagem->x, personagem->y, 0, Chao, personagem->largura / 10, personagem->altura, tileSize, tileSize, 640) == 1 && !colisao(personagem->x, personagem->y, tileSize * 0 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 3 - 50, 0, 0) && (!colisao(personagem->x, personagem->y, tileSize * 5 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 2 - 50, 0, 0)) && !colisao(personagem->x, personagem->y, tileSize * 9 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 2 - 50, 0, 0) && !colisao(personagem->x, personagem->y, tileSize * 1 + 30, tileSize * 3, personagem->largura / 10, personagem->altura, tileSize * 9 - 50, 0, 0)) {
 				caindo = 1;
 			}
-
+			else if (mapa_atual == 3 && !colisao(personagem->x, personagem->y, 0, Chao, personagem->largura / 10, personagem->altura, tileSize, tileSize, 640) == 1 && !colisao(personagem->x, personagem->y, tileSize * 0 + 30, tileSize * 7, personagem->largura / 10, personagem->altura, tileSize * 11 - 105, 0, 0) && !colisao(personagem->x, personagem->y, tileSize * 1 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 1 - 105, 0, 0) && !colisao(personagem->x, personagem->y, tileSize * 3 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 1 - 105, 0, 0)&& !colisao(personagem->x, personagem->y, tileSize * 5 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 1 - 105, 0, 0)) {
+				caindo = 1;
+			}
 			else {
 				caindo = 0;
 				pulando = 0;
@@ -1078,8 +1099,26 @@ int main(void) {
 
 				}
 
-
 			}
+			
+			/// ///////////////////////////////////////////////
+			/// ///////////////////////////////////////////////
+			/// /// ///////////////////////////////////////////////
+			//MAPA3
+
+			if (mapa_atual == 3) {
+				//x = 0 y = 
+				if (colisao(personagem->x, personagem->y, tileSize * 0 + 30, tileSize * 7, personagem->largura / 10, personagem->altura, tileSize * 11 - 105, 0, 0)) {
+					personagem->y = tileSize * 5 - personagem->altura;
+				}
+				if (colisao(personagem->x, personagem->y, tileSize * 1 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 1 - 105, 0, 0)) {
+					personagem->y = tileSize * 5 - personagem->altura;
+				}
+				if (colisao(personagem->x, personagem->y, tileSize * 5 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 1 - 105, 0, 0)) {
+					personagem->y = tileSize * 5 - personagem->altura;
+				}
+			}
+
 
 			if (evento.type == ALLEGRO_EVENT_TIMER) {
 
@@ -1207,11 +1246,12 @@ int main(void) {
 
 		}
 		else if (controles == 1) {
-
+			
+			
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			al_draw_bitmap(controless, 0, 0, 0);
 			al_flip_display();
-
+			
 			if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
 
 				if ((evento.mouse.x >= 590 &&
