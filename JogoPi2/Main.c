@@ -111,6 +111,9 @@ int lado;
 int lado_inimigo1;
 int lado_inimigo2;
 
+int yInicial1 = 0;
+int yInicial2 = 0;
+
 bool draw = false, draw2 = true, ativo = false, item_processador = false, item_processador_mini = false, item_placa = false, item_placa_mini = false;
 bool item_placa_de_video = false, item_placa_de_video_mini = false, item_memoria_ram = false, item_memoria_ram_mini = false;
 bool descricao_processador, descricao_placa_mae, descricao_placa_de_video, descricao_memoria_ram;
@@ -363,14 +366,9 @@ void movimentacao(ALLEGRO_EVENT evento) {
 				inimigo1_mapa2->x += velocidade_inimigo;
 				lado_inimigo1 = 1;
 			}
-			/*if (inimigo3) {
-				if (inimigo1_mapa2->y >= inimigo1_mapa2->y) {
-					inimigo1_mapa2->y -= 10;
-				}
-				else if (inimigo1_mapa2->y <= inimigo1_mapa2->y - 100) {
-					inimigo1_mapa2->y += 10;
-				}
-			}*/
+			if (inimigo3) {
+				inimigo1_mapa2->y -= 10;
+			}
 		}
 	}
 
@@ -717,8 +715,8 @@ int main(void) {
 
 	sprite_atacando = (Objeto*)malloc(sizeof(Objeto));
 	sprite_atacando->imagem = al_load_bitmap("Sprites/MC_Sprite_attack.png");
-	sprite_atacando->largura = 630;
-	sprite_atacando->altura = 60;
+	sprite_atacando->largura = 649;
+	sprite_atacando->altura = 61;
 	sprite_atacando->y = personagem->y;
 	sprite_atacando->x = personagem->x;
 
@@ -813,6 +811,9 @@ int main(void) {
 	bool clique_velocidade = false, clique_vida = false, clique_ataque = false;
 	int teste = 1;
 	int introducao = 1;
+
+	yInicial1 = inimigo1_mapa2->y;
+	yInicial2 = inimigo2_mapa2->y;
 
 	al_start_timer(timer);
 	al_start_timer(frametimer);
@@ -991,10 +992,10 @@ int main(void) {
 			if (inimigo2 && espada_ativa && (espada->x + 50 >= goblin2->x) && (espada->x <= goblin2->x + 20) && (espada->y >= goblin2->y) && (espada->y <= goblin2->y + goblin2->altura)) {
 				espada_ativa = false;
 				goblin2->vida--;
-				if (lado == 0) {
+				if (l == 1) {
 					goblin2->x += 10;
 				}
-				else if (lado == 1) {
+				else if (l == 0) {
 					goblin2->x -= 10;
 				}
 			}
@@ -1068,25 +1069,6 @@ int main(void) {
 					personagem->y = tileSize * 3 - personagem->altura;
 				}
 
-				////
-				/*
-				if (!colisao(personagem->x, personagem->y, tileSize * 0 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 3 - 50, 0, 0)) {
-					caindo = 1;
-				}
-				else {
-					caindo = 0;
-					pulando = 0;
-				}
-
-				if (colisao(personagem->x, personagem->y, tileSize * 0 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 3 - 50, 0, 0)) {
-					personagem->y = tileSize * 5 - personagem->altura;
-				}
-				*/
-				///
-
-
-
-
 				if (inimigo3) {
 
 					if (inimigo1_mapa2->vida <= 0) {
@@ -1108,20 +1090,20 @@ int main(void) {
 				if (inimigo3 && espada_ativa && (espada->x + 50 >= inimigo1_mapa2->x) && (espada->x <= inimigo1_mapa2->x + 20) && (espada->y >= inimigo1_mapa2->y) && (espada->y <= inimigo1_mapa2->y + inimigo1_mapa2->altura)) {
 					espada_ativa = false;
 					inimigo1_mapa2->vida--;
-					if (lado_inimigo1 == 0) {
+					if (l == 1) {
 						inimigo1_mapa2->x += 10;
 					}
-					else if (lado_inimigo1 == 1) {
+					else if (l == 0) {
 						inimigo1_mapa2->x -= 10;
 					}
 				}
 				if (inimigo4 && espada_ativa && (espada->x + 50 >= inimigo2_mapa2->x) && (espada->x <= inimigo2_mapa2->x + 20) && (espada->y >= inimigo2_mapa2->y) && (espada->y <= inimigo2_mapa2->y + inimigo2_mapa2->altura)) {
 					espada_ativa = false;
 					inimigo2_mapa2->vida--;
-					if (lado_inimigo2 == 0) {
+					if (l == 1) {
 						inimigo2_mapa2->x += 10;
 					}
-					else if (lado_inimigo2 == 1) {
+					else if (l == 0) {
 						inimigo2_mapa2->x -= 10;
 					}
 				}
