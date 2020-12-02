@@ -63,6 +63,7 @@ ALLEGRO_BITMAP* img7 = NULL;
 ALLEGRO_BITMAP* img8 = NULL;
 ALLEGRO_BITMAP* img9 = NULL;
 ALLEGRO_BITMAP* img10 = NULL;
+ALLEGRO_BITMAP* background33 = NULL;
 ALLEGRO_BITMAP* inventario_memoria_ram = NULL;
 ALLEGRO_BITMAP* plataforma1 = NULL;
 ALLEGRO_BITMAP* plataforma2 = NULL;
@@ -674,6 +675,7 @@ int main(void) {
 	clique_menu = al_load_sample("clique_menu.wav");//Som de clique
 	som_espada = al_load_sample("som_espada.wav");
 	background3 = al_load_bitmap("imagens/background3.jpg");
+	background33 = al_load_bitmap("imagens/portal3.png");
 
 	desc_processador = al_load_bitmap("imagens/desc_processador.png");
 	desc_placa_mae = al_load_bitmap("imagens/desc_placa_mae.png");
@@ -862,8 +864,8 @@ int main(void) {
 	int atributoss = 0;
 	bool clique_velocidade = false, clique_vida = false, clique_ataque = false;
 	int teste = 1;
-
-
+	int introducao = 0;
+	int contador = 0;
 
 	yInicial1 = inimigo1_mapa2->y;
 	yInicial2 = inimigo2_mapa2->y;
@@ -881,9 +883,6 @@ int main(void) {
 		printf("Boss espada: %d\n\n", chefao_espada);
 		printf("Mapa: %d\n\n", mapa_atual);
 		*/
-
-		printf("jogar: %d\n\n", jogar);
-		printf("\n\nmenu: %d\n", menu);
 
 		ALLEGRO_EVENT evento;
 		al_wait_for_event(fila_eventos, &evento);
@@ -927,9 +926,10 @@ int main(void) {
 					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 					menu = 0;
 					// Inicia a função jogar
-					jogar = 1;
+					introducao = 1;
+					//jogar = 1;
 
-					al_draw_bitmap(background_jogo1, 0, 0, NULL);
+					al_draw_bitmap(img8, 0, 0, NULL);
 					al_flip_display();
 				}
 				// Se for em infos
@@ -989,10 +989,64 @@ int main(void) {
 			}
 
 		}
+		else if (introducao == 1) {
+
+			if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+
+				
+
+				if ((evento.mouse.x >= 1 &&
+					evento.mouse.x <= 640 && evento.mouse.y <= 480 &&
+					evento.mouse.y >= 1)) {
+					contador ++;
+
+					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
+				}
+				if (contador == 1) {
+					al_draw_bitmap(img9, 0, 0, 0);
+					al_flip_display();
+				}
+				if (contador == 2) {
+					al_draw_bitmap(img6, 0, 0, 0);
+					al_flip_display();
+				}
+				if (contador == 3) {
+					al_draw_bitmap(img7, 0, 0, 0);
+					al_flip_display();
+				}
+				if (contador == 4) {
+					al_draw_bitmap(img7, 0, 0, 0);
+					al_flip_display();
+				}
+				if (contador == 5) {
+					al_draw_bitmap(img2, 0, 0, 0);
+					al_flip_display();
+				}
+				if (contador == 6) {
+					al_draw_bitmap(img3, 0, 0, 0);
+					al_flip_display();
+				}
+				if (contador == 7) {
+					al_draw_bitmap(img4, 0, 0, 0);
+					al_flip_display();
+				}
+				if (contador == 8) {
+					al_draw_bitmap(img5, 0, 0, 0);
+					al_flip_display();
+				}
+				if (contador == 9) {
+					introducao = 0;
+					jogar = 1;
+					al_draw_bitmap(background, 0, 0, 0);
+					al_flip_display();
+				}
+
+			}
+		}
 		//inicia o jogo
 		else if (jogar == 1) {
 
-
+			//al_destroy_bitmap(img0);
 			// MAPAS //
 			if (mapa_atual == 1 && !colisao(personagem->x, personagem->y, 0, Chao, personagem->largura / 10, personagem->altura, tileSize, tileSize, 640) == 1 && !colisao(personagem->x, personagem->y, tileSize * 4 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 4 - 50, 0, 0) && !(mapa_atual == 1 && colisao(personagem->x, personagem->y, tileSize * 0 + 30, tileSize * 4, personagem->largura / 10, personagem->altura, tileSize * 2 - 50, 0, 0)) && !colisao(personagem->x, personagem->y, tileSize * 3 + 30, tileSize * 2, personagem->largura / 10, personagem->altura, tileSize * 3 - 50, 0, 0)) {
 				caindo = 1;
@@ -1292,10 +1346,20 @@ int main(void) {
 					placa_de_video->y = 1000, placa_de_video->x = 1000;
 					item_placa_de_video = false;
 					item_placa_de_video_mini = true;
-					venceu = 1;
-					jogar = 0;
+
+
+					
+					//descricao_placa_de_video = true;
+
+					//venceu = 1;
+					//jogar = 0;
 				}
 
+				if (mapa_atual == 3 && item_placa_de_video_mini && personagem->x >= 576 && personagem->y + personagem->altura >= 396) {
+					venceu = 1;
+					jogar = 0;
+
+				}
 
 			}
 
@@ -1316,10 +1380,15 @@ int main(void) {
 							al_draw_bitmap(background2, 0, 0, NULL);
 							desenhar_mapa(map2);
 						}
-						if (mapa_atual == 3) {
+						if (mapa_atual == 3 && !item_placa_de_video_mini) {
 							al_draw_bitmap(background3, 0, 0, NULL);
 							desenhar_mapa(map3);
 						}
+						if (mapa_atual == 3 && item_placa_de_video_mini) {
+							al_draw_bitmap(background33, 0, 0, NULL);
+							desenhar_mapa(map3);
+						}
+						
 					}
 					desenha(evento);
 
