@@ -7,6 +7,7 @@
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_primitives.h>
 
 #define LARGURA 640
 #define ALTURA 480
@@ -47,11 +48,15 @@ ALLEGRO_BITMAP* chao = NULL;
 ALLEGRO_BITMAP* chao_fim = NULL;
 ALLEGRO_BITMAP* atributos = NULL;
 
+ALLEGRO_BITMAP* inventario_memoria_ram = NULL;  
+
 ALLEGRO_BITMAP* plataforma1 = NULL;
 ALLEGRO_BITMAP* plataforma2 = NULL;
 ALLEGRO_BITMAP* plataforma3 = NULL;
 ALLEGRO_BITMAP* chao2 = NULL;
 ALLEGRO_BITMAP* chao2_fim = NULL;
+
+ALLEGRO_BITMAP* inventario_chave = NULL;
 
 ALLEGRO_BITMAP* chao3 = NULL;
 ALLEGRO_BITMAP* chao3_fim = NULL;
@@ -119,7 +124,7 @@ int yInicial2 = 0;
 bool draw = false, draw2 = true, ativo = false, item_processador = false, item_processador_mini = false, item_placa = false, item_placa_mini = false;
 bool item_placa_de_video = false, item_placa_de_video_mini = false, item_memoria_ram = false, item_memoria_ram_mini = false;
 bool descricao_processador, descricao_placa_mae, descricao_placa_de_video, descricao_memoria_ram;
-
+bool item_chave_mini = false;
 bool item_chave = false, pegou_chave = false;
 
 //teste
@@ -523,21 +528,22 @@ void desenha(ALLEGRO_EVENT evento) {
 		al_draw_bitmap(placa_mae_mini->imagem, placa_mae_mini->x, placa_mae_mini->y, 0);
 		inventario->imagem = inventario_placa_mae;
 	}
-	/*if (item_placa_de_video) {
+
+	if (item_memoria_ram) {
+		al_draw_bitmap(memoria_ram->imagem, memoria_ram->x, memoria_ram->y, 0);
+	}
+	if (item_memoria_ram_mini) {
+		al_draw_bitmap(memoria_ram_mini->imagem, memoria_ram_mini->x, memoria_ram_mini->y, 0);
+		inventario->imagem = inventario_memoria_ram;
+	}
+	if (item_placa_de_video) {
 		al_draw_bitmap(placa_de_video->imagem, placa_de_video->x, placa_de_video->y, 0);
 	}
 	if (item_placa_de_video_mini) {
 		al_draw_bitmap(placa_de_video_mini->imagem, placa_de_video_mini->x, placa_de_video_mini->y, 0);
 		inventario->imagem = inventario_placa_de_video;
 	}
-	*/
-	if (item_memoria_ram) {
-		al_draw_bitmap(memoria_ram->imagem, memoria_ram->x, memoria_ram->y, 0);
-	}
-	if (item_memoria_ram_mini) {
-		al_draw_bitmap(memoria_ram_mini->imagem, memoria_ram_mini->x, memoria_ram_mini->y, 0);
-	}
-
+	
 	if (inv_placa)
 		al_draw_bitmap(placa_mae_inv, 0, 0, 0);
 	//aqui!!
@@ -555,13 +561,13 @@ void desenha(ALLEGRO_EVENT evento) {
 	if (descricao_memoria_ram) {
 		al_draw_bitmap(desc_memoria_ram, 0, 0, 0);
 	}
-	if (portal_ativo) {
+	if ( portal_ativo && !inventarioo) {
 		al_draw_bitmap(portal->imagem, portal->x, 150, 0);
 	}
 	if (item_chave) {
 		al_draw_bitmap(chave->imagem, chave->x, chave->y, 0);
 	}
-
+	
 
 }
 
@@ -649,6 +655,7 @@ int main(void) {
 	img9 = al_load_bitmap("imagens/nomesIntegrantes.jpg");
 	img10 = al_load_bitmap("imagens/transicao.jpg");
 
+	inventario_chave = al_load_bitmap("imagens/inventario_chave.png");
 
 	chao3 = al_load_bitmap("Sprites/chao3.png");
 	chao3_fim = al_load_bitmap("Sprites/chao3_fim.png");
@@ -662,7 +669,8 @@ int main(void) {
 	placa_mae_inv = al_load_bitmap("imagens/pcmae.png");
 	inventario = al_load_bitmap("imagens/inventario.png");
 	inventario_processador = al_load_bitmap("imagens/inventario_processador.png");
-	inventario_placa_mae = al_load_bitmap("imagens/inventario_placa_mae.png");;
+	inventario_placa_mae = al_load_bitmap("imagens/inventario_placa_mae.png");
+	inventario_memoria_ram = al_load_bitmap("imagens/inventario_memoria_ram.png");
 	musica = al_load_sample("musica.ogg");
 	fonte = al_load_font("Fontes/arial.ttf", 48, 0);
 
@@ -750,7 +758,7 @@ int main(void) {
 	boss->altura = 350;
 	boss->y = Chao - boss->altura;
 	boss->largura = 192;
-	boss->vida = 20;
+	boss->vida = 1;
 
 	boss_sword = (Objeto*)malloc(sizeof(Objeto));
 	boss_sword->imagem = al_load_bitmap("Sprites/boss_sword.png");
@@ -833,7 +841,7 @@ int main(void) {
 	placa_de_video_mini->imagem = al_load_bitmap("imagens/placa_de_video_mini.png");
 	placa_de_video_mini->largura = 36;
 	placa_de_video_mini->altura = 33;
-	placa_de_video_mini->x = 140;
+	placa_de_video_mini->x = 130;
 	placa_de_video_mini->y = 100;
 	// Memoria ram
 	memoria_ram = (Objeto*)malloc(sizeof(Objeto));
@@ -1027,6 +1035,7 @@ int main(void) {
 				espada_ativa = false;
 				espada->x = personagem->x;
 				goblin->vida--;
+	
 				if (k == 0) {
 					goblin->x += 10;
 				}
@@ -1142,6 +1151,9 @@ int main(void) {
 
 				if (!inimigo3 && (personagem->x <= memoria_ram->x + memoria_ram->largura) && (personagem->x + personagem->largura / 10 >= memoria_ram->x) && (personagem->y - personagem->altura >= memoria_ram->y - memoria_ram->altura)) {
 					item_memoria_ram = false;
+					al_play_sample(pegar_item, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
+					memoria_ram->x = 1000;
+					memoria_ram->y = 1000;
 					item_memoria_ram_mini = true;
 				}
 
@@ -1159,6 +1171,10 @@ int main(void) {
 
 				if (!inimigo4 && (personagem->x <= chave->x + chave->largura) && (personagem->x + personagem->largura / 10 >= chave->x) && (personagem->y + personagem->altura >= chave->y) && (personagem->y <= chave->y + chave->altura)) {
 					item_chave = false;
+					item_chave_mini = true;
+					al_play_sample(pegar_item, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
+					chave->x = 1000;
+					chave->y = 1000;
 					pegou_chave = true;
 				}
 
@@ -1240,6 +1256,8 @@ int main(void) {
 						chefao = false;
 						chefao_ataque = false;
 						chefao_espada = false;
+						item_placa_de_video = true;
+						placa_de_video->x = boss->x;
 					}
 					if (boss_sword->x + 100 <= 0) {
 						chefao_espada = false;
@@ -1250,6 +1268,13 @@ int main(void) {
 						jogar = 0;
 					}
 				}
+				if (!chefao && (personagem->x <= placa_de_video->x + placa_de_video->largura) && (personagem->x + personagem->largura / 10 >= placa_de_video->x) && (personagem->y + personagem->altura >= placa_de_video->y) && (personagem->y <= placa_de_video->y + placa_de_video->altura)) {
+					al_play_sample(pegar_item, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
+					placa_de_video->y = 1000, placa_de_video->x = 1000;
+					item_placa_de_video = false;
+					item_placa_de_video_mini = true;
+				}
+				
 			}
 
 
@@ -1304,27 +1329,27 @@ int main(void) {
 
 					if ((evento.mouse.x >= 122 &&
 						evento.mouse.x <= 211 && evento.mouse.y <= 299 &&
-						evento.mouse.y >= 209)) {
+						evento.mouse.y >= 209) && item_processador_mini) {
 
 						al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 						descricao_processador = true;
 					}
 					if ((evento.mouse.x >= 227 &&
 						evento.mouse.x <= 317 && evento.mouse.y <= 299 &&
-						evento.mouse.y >= 219)) {
+						evento.mouse.y >= 219) && item_placa_mini) {
 
 						al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 						descricao_placa_mae = true;
 					}
 					if ((evento.mouse.x >= 327 &&
 						evento.mouse.x <= 416 && evento.mouse.y <= 302 &&
-						evento.mouse.y >= 210)) {
+						evento.mouse.y >= 210) && item_memoria_ram_mini) {
 						al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 						descricao_memoria_ram = true;
 					}
 					if ((evento.mouse.x >= 427 &&
 						evento.mouse.x <= 517 && evento.mouse.y <= 300 &&
-						evento.mouse.y >= 209)) {
+						evento.mouse.y >= 209) && item_placa_de_video_mini) {
 
 
 						al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
