@@ -1214,7 +1214,11 @@ int main(void) {
 			}
 
 
+<<<<<<< HEAD
 			if (mapa_atual == 2 && item_memoria_ram_mini && pegou_chave && personagem->x >= 581 && personagem->y + personagem->altura >= 412) {
+=======
+			if (mapa_atual==2 && item_memoria_ram_mini && pegou_chave && personagem->x >= 581 && personagem->y + personagem->altura >= 412) {				
+>>>>>>> b81d5a2a721d3ea07ae36a72718e7f4ebd2c4210
 				personagem->x = 20;
 				personagem->y = 75;
 				mapa_atual = 3;
@@ -1256,14 +1260,21 @@ int main(void) {
 						chefao = false;
 						chefao_ataque = false;
 						chefao_espada = false;
+<<<<<<< HEAD
 						item_placa_de_video = true;
 						placa_de_video->x = boss->x;
+=======
+>>>>>>> b81d5a2a721d3ea07ae36a72718e7f4ebd2c4210
 					}
 					if (boss_sword->x + 100 <= 0) {
 						chefao_espada = false;
 						boss_sword->x = boss->x - 100;
 					}
+<<<<<<< HEAD
 					if (chefao_espada && boss_sword->x <= personagem->x + personagem->largura / 10 && boss_sword->x >= personagem->x && boss_sword->y <= personagem->y + personagem->altura && boss_sword->y >= personagem->y) {
+=======
+					if (chefao_espada && boss_sword->x <= personagem->x+personagem->largura/10 && boss_sword->x >= personagem->x && boss_sword->y <= personagem->y + personagem->altura && boss_sword->y >= personagem->y) {
+>>>>>>> b81d5a2a721d3ea07ae36a72718e7f4ebd2c4210
 						chefao_espada = false;
 						jogar = 0;
 					}
