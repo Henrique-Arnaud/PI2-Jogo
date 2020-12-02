@@ -48,7 +48,7 @@ ALLEGRO_BITMAP* chao = NULL;
 ALLEGRO_BITMAP* chao_fim = NULL;
 ALLEGRO_BITMAP* atributos = NULL;
 
-ALLEGRO_BITMAP* inventario_memoria_ram = NULL;  
+ALLEGRO_BITMAP* inventario_memoria_ram = NULL;
 
 ALLEGRO_BITMAP* plataforma1 = NULL;
 ALLEGRO_BITMAP* plataforma2 = NULL;
@@ -543,7 +543,7 @@ void desenha(ALLEGRO_EVENT evento) {
 		al_draw_bitmap(placa_de_video_mini->imagem, placa_de_video_mini->x, placa_de_video_mini->y, 0);
 		inventario->imagem = inventario_placa_de_video;
 	}
-	
+
 	if (inv_placa)
 		al_draw_bitmap(placa_mae_inv, 0, 0, 0);
 	//aqui!!
@@ -561,13 +561,13 @@ void desenha(ALLEGRO_EVENT evento) {
 	if (descricao_memoria_ram) {
 		al_draw_bitmap(desc_memoria_ram, 0, 0, 0);
 	}
-	if ( portal_ativo && !inventarioo) {
+	if (portal_ativo && !inventarioo) {
 		al_draw_bitmap(portal->imagem, portal->x, 150, 0);
 	}
 	if (item_chave) {
 		al_draw_bitmap(chave->imagem, chave->x, chave->y, 0);
 	}
-	
+
 
 }
 
@@ -1035,7 +1035,7 @@ int main(void) {
 				espada_ativa = false;
 				espada->x = personagem->x;
 				goblin->vida--;
-	
+
 				if (k == 0) {
 					goblin->x += 10;
 				}
@@ -1214,11 +1214,7 @@ int main(void) {
 			}
 
 
-<<<<<<< HEAD
 			if (mapa_atual == 2 && item_memoria_ram_mini && pegou_chave && personagem->x >= 581 && personagem->y + personagem->altura >= 412) {
-=======
-			if (mapa_atual==2 && item_memoria_ram_mini && pegou_chave && personagem->x >= 581 && personagem->y + personagem->altura >= 412) {				
->>>>>>> b81d5a2a721d3ea07ae36a72718e7f4ebd2c4210
 				personagem->x = 20;
 				personagem->y = 75;
 				mapa_atual = 3;
@@ -1260,21 +1256,14 @@ int main(void) {
 						chefao = false;
 						chefao_ataque = false;
 						chefao_espada = false;
-<<<<<<< HEAD
 						item_placa_de_video = true;
 						placa_de_video->x = boss->x;
-=======
->>>>>>> b81d5a2a721d3ea07ae36a72718e7f4ebd2c4210
 					}
 					if (boss_sword->x + 100 <= 0) {
 						chefao_espada = false;
 						boss_sword->x = boss->x - 100;
 					}
-<<<<<<< HEAD
 					if (chefao_espada && boss_sword->x <= personagem->x + personagem->largura / 10 && boss_sword->x >= personagem->x && boss_sword->y <= personagem->y + personagem->altura && boss_sword->y >= personagem->y) {
-=======
-					if (chefao_espada && boss_sword->x <= personagem->x+personagem->largura/10 && boss_sword->x >= personagem->x && boss_sword->y <= personagem->y + personagem->altura && boss_sword->y >= personagem->y) {
->>>>>>> b81d5a2a721d3ea07ae36a72718e7f4ebd2c4210
 						chefao_espada = false;
 						jogar = 0;
 					}
@@ -1285,7 +1274,7 @@ int main(void) {
 					item_placa_de_video = false;
 					item_placa_de_video_mini = true;
 				}
-				
+
 			}
 
 
