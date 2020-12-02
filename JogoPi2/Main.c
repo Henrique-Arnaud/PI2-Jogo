@@ -43,8 +43,7 @@ ALLEGRO_SAMPLE_INSTANCE* songInstance = NULL;
 ALLEGRO_SAMPLE* clique_menu = NULL;
 ALLEGRO_SAMPLE* som_espada = NULL;
 ALLEGRO_SAMPLE* pegar_item = NULL;
-int altura = 480;
-int largura = 640;
+
 //ponteiros de bitmap
 ALLEGRO_BITMAP* background = NULL;
 ALLEGRO_BITMAP* background2 = NULL;
@@ -231,7 +230,10 @@ void inicialização() {
 
 }
 
-
+// a personagem
+// b obj
+// aw = largura
+// Ele pega a posicao do personagem e compara com o inico e fim do objeto x, e compara o y tambem
 int colisao(float ax, float ay, float bx, float by, int aw, int ah, int bw, int bh, int limite) {
 	if (ax + aw > bx && ax < bx + limite + bw && ay + ah > by && ay < by + bh) {
 		return 1;
@@ -873,7 +875,7 @@ int main(void) {
 	al_start_timer(timer);
 	al_start_timer(frametimer);
 
-	//Looping principal
+	//	LOOPING PRINCIPAL
 	while (jogo == 1) {
 		//printf para testar o valor das variaveis (um facilitador para fazer o jogo)
 		/*
@@ -1085,8 +1087,6 @@ int main(void) {
 				morreu = 1;
 				//menu = 1;
 				//inimigo1 = false;
-
-
 			}
 			if (inimigo2 && (personagem->x <= goblin2->x + 20) && (personagem->x + 20 >= goblin2->x) && (personagem->y + personagem->altura >= goblin2->y) && (personagem->y <= goblin2->y + goblin2->altura)) {
 				jogar = 0;
@@ -1098,9 +1098,9 @@ int main(void) {
 			if ((personagem->x <= processador->x + processador->largura) && (personagem->x + personagem->largura / 10 >= processador->x) && (personagem->y - personagem->altura >= processador->y - processador->altura)) {
 				al_play_sample(pegar_item, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 				processador->y = 1000, processador->x = 1000;
+
 				item_processador = false;
 				item_processador_mini = true;
-
 			}
 			//colisao da espada com o inimigo
 			if (inimigo1 && espada_ativa && (espada->x + 50 >= goblin->x) && (espada->x <= goblin->x + 20) && (espada->y >= goblin->y) && (espada->y <= goblin->y + goblin->altura)) {
@@ -1192,6 +1192,7 @@ int main(void) {
 
 
 				// Colisao com plataforma grande
+				// x do personagem // y do personagem // tamanho do x do obj // tamanho do y// largura/10 pq personagem tem 10 sprites// altura persomagem// quantidade de blocos
 				if (colisao(personagem->x, personagem->y, tileSize * 1 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 3 - 105, 0, 0)) {
 					personagem->y = tileSize * 5 - personagem->altura;
 				}

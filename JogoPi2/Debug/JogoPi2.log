@@ -1,19 +1,19 @@
 ﻿  Main.c
-C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(179,6): warning C4142: 'velx': redefinição benigna de tipo
-C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(175): message : consulte a declaração de 'velx'
-C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(180,6): warning C4142: 'vely': redefinição benigna de tipo
-C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(176): message : consulte a declaração de 'vely'
-C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(667,55): warning C4133: '=': tipos incompatíveis - de 'ALLEGRO_BITMAP *' para 'Objeto *'
-C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(932,37): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
-C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(932,33): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
-C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(1376,51): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
-C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(1376,47): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
-C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(1380,46): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
-C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(1380,42): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
-C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(1384,46): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
-C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(1384,42): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
-C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(1388,47): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
-C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(1388,43): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
-C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(1400,44): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
-C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(1400,40): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
+C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(178,6): warning C4142: 'velx': redefinição benigna de tipo
+C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(174): message : consulte a declaração de 'velx'
+C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(179,6): warning C4142: 'vely': redefinição benigna de tipo
+C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(175): message : consulte a declaração de 'vely'
+C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(669,55): warning C4133: '=': tipos incompatíveis - de 'ALLEGRO_BITMAP *' para 'Objeto *'
+C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(934,37): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
+C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(934,33): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
+C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(1377,51): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
+C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(1377,47): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
+C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(1381,46): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
+C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(1381,42): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
+C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(1385,46): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
+C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(1385,42): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
+C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(1389,47): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
+C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(1389,43): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
+C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(1401,44): warning C4047: 'função': 'int' difere em níveis de indireção de 'void *'
+C:\Jogo PI 2\PI2-Jogo\JogoPi2\Main.c(1401,40): warning C4024: 'al_draw_bitmap': tipos diferentes para parâmetro formal e real 4
   JogoPi2.vcxproj -> C:\Jogo PI 2\PI2-Jogo\JogoPi2\Debug\JogoPi2.exe
