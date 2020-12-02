@@ -1,3 +1,5 @@
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <allegro5/allegro.h>
@@ -43,7 +45,8 @@ ALLEGRO_SAMPLE_INSTANCE* songInstance = NULL;
 ALLEGRO_SAMPLE* clique_menu = NULL;
 ALLEGRO_SAMPLE* som_espada = NULL;
 ALLEGRO_SAMPLE* pegar_item = NULL;
-
+int altura = 480;
+int largura = 640;
 //ponteiros de bitmap
 ALLEGRO_BITMAP* background = NULL;
 ALLEGRO_BITMAP* background2 = NULL;
@@ -139,15 +142,15 @@ int mapa_atual = 1;
 //plataforma pedra = 60
 int map1[9][11] = { {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				  {0, 0, 0, 7, 8, 9, 0, 0, 0, 0, 0},
 				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+				  {8, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 				  {0, 0, 0, 0, 7, 8, 8, 9, 0, 0, 0},
 				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 				  {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
 				  {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3} };
 
-int map2[9][11] = { {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+int map2[9][11] = { {60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60},
 				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 				  {0, 60, 60, 60, 60, 60, 60, 60, 60, 60, 0},
@@ -157,7 +160,7 @@ int map2[9][11] = { {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 				  {20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20},
 				  {21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21} };
 
-int map3[9][11] = { {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+int map3[9][11] = { {10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10},
 				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 				  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 				  {0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0},
@@ -608,7 +611,6 @@ void desenhar_mapa(int mapa[9][11]) {
 	}
 }
 
-
 // Main
 int main(void) {
 
@@ -860,7 +862,8 @@ int main(void) {
 	int atributoss = 0;
 	bool clique_velocidade = false, clique_vida = false, clique_ataque = false;
 	int teste = 1;
-	int introducao = 1;
+
+
 
 	yInicial1 = inimigo1_mapa2->y;
 	yInicial2 = inimigo2_mapa2->y;
@@ -871,11 +874,16 @@ int main(void) {
 	//Looping principal
 	while (jogo == 1) {
 		//printf para testar o valor das variaveis (um facilitador para fazer o jogo)
+		/*
 		printf("BOSS: %d\n\n", chefao);
 		printf("JOGAR: %d\n\n", jogar);
 		printf("Boss Ataque: %d\n\n", chefao_ataque);
 		printf("Boss espada: %d\n\n", chefao_espada);
 		printf("Mapa: %d\n\n", mapa_atual);
+		*/
+
+		printf("jogar: %d\n\n", jogar);
+		printf("\n\nmenu: %d\n", menu);
 
 		ALLEGRO_EVENT evento;
 		al_wait_for_event(fila_eventos, &evento);
@@ -920,6 +928,7 @@ int main(void) {
 					menu = 0;
 					// Inicia a função jogar
 					jogar = 1;
+
 					al_draw_bitmap(background_jogo1, 0, 0, NULL);
 					al_flip_display();
 				}
@@ -985,7 +994,7 @@ int main(void) {
 
 
 			// MAPAS //
-			if (mapa_atual == 1 && !colisao(personagem->x, personagem->y, 0, Chao, personagem->largura / 10, personagem->altura, tileSize, tileSize, 640) == 1 && !colisao(personagem->x, personagem->y, tileSize * 4 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 4 - 50, 0, 0)) {
+			if (mapa_atual == 1 && !colisao(personagem->x, personagem->y, 0, Chao, personagem->largura / 10, personagem->altura, tileSize, tileSize, 640) == 1 && !colisao(personagem->x, personagem->y, tileSize * 4 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 4 - 50, 0, 0)&&!(mapa_atual == 1 && colisao(personagem->x, personagem->y, tileSize * 0 + 30, tileSize * 4, personagem->largura / 10, personagem->altura, tileSize * 2 - 50, 0, 0))&& !colisao(personagem->x, personagem->y, tileSize * 3 + 30, tileSize * 2, personagem->largura / 10, personagem->altura, tileSize * 3 - 50, 0, 0)) {
 				caindo = 1;
 			}
 			else if (mapa_atual == 2 && !colisao(personagem->x, personagem->y, 0, Chao, personagem->largura / 10, personagem->altura, tileSize, tileSize, 640) == 1 && !colisao(personagem->x, personagem->y, tileSize * 0 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 3 - 50, 0, 0) && (!colisao(personagem->x, personagem->y, tileSize * 5 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 2 - 50, 0, 0)) && !colisao(personagem->x, personagem->y, tileSize * 9 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 2 - 50, 0, 0) && !colisao(personagem->x, personagem->y, tileSize * 1 + 30, tileSize * 3, personagem->largura / 10, personagem->altura, tileSize * 9 - 50, 0, 0)) {
@@ -1008,15 +1017,28 @@ int main(void) {
 			if (mapa_atual == 1 && colisao(personagem->x, personagem->y, tileSize * 4 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 4 - 50, 0, 0)) {
 				personagem->y = tileSize * 5 - personagem->altura;
 			}
+			if (mapa_atual == 1 && colisao(personagem->x, personagem->y, tileSize * 0 + 30, tileSize * 4, personagem->largura / 10, personagem->altura, tileSize * 2 - 50, 0, 0)) {
+				personagem->y = tileSize * 4 - personagem->altura;
+			}
+			if (mapa_atual == 1 && colisao(personagem->x, personagem->y, tileSize * 3 + 30, tileSize * 2, personagem->largura / 10, personagem->altura, tileSize * 3 - 50, 0, 0)) {
+				personagem->y = tileSize * 2 - personagem->altura;
+			}
 
 			//colisao com os 2 primeiros inimigos
 			if (inimigo1 && (personagem->x <= goblin->x + 20) && (personagem->x + 20 >= goblin->x) && (personagem->y + personagem->altura >= goblin->y) && (personagem->y <= goblin->y + goblin->altura)) {
 				jogar = 0;
+				menu = 0;
+				morreu = 1;
+				//menu = 1;
+				//inimigo1 = false;
+
 
 			}
 			if (inimigo2 && (personagem->x <= goblin2->x + 20) && (personagem->x + 20 >= goblin2->x) && (personagem->y + personagem->altura >= goblin2->y) && (personagem->y <= goblin2->y + goblin2->altura)) {
 				jogar = 0;
+				morreu = 1;
 
+				//inimigo2 = false;
 			}
 			//colisao com o drop do processador (eh desenhada uma miniatura do processador)
 			if ((personagem->x <= processador->x + processador->largura) && (personagem->x + personagem->largura / 10 >= processador->x) && (personagem->y - personagem->altura >= processador->y - processador->altura)) {
@@ -1199,11 +1221,11 @@ int main(void) {
 
 				if (inimigo3 && (personagem->x <= inimigo1_mapa2->x + 20) && (personagem->x + 20 >= inimigo1_mapa2->x) && (personagem->y + personagem->altura >= inimigo1_mapa2->y) && (personagem->y <= inimigo1_mapa2->y + inimigo1_mapa2->altura)) {
 					jogar = 0;
-
+					morreu = 1;
 				}
 				if (inimigo4 && (personagem->x <= inimigo2_mapa2->x + 20) && (personagem->x + 20 >= inimigo2_mapa2->x) && (personagem->y + personagem->altura >= inimigo2_mapa2->y) && (personagem->y <= inimigo2_mapa2->y + inimigo2_mapa2->altura)) {
 					jogar = 0;
-
+					morreu = 1;
 				}
 
 
@@ -1239,6 +1261,7 @@ int main(void) {
 
 				if (chefao && (personagem->x <= boss->x + 20) && (personagem->x + 20 >= boss->x) && (personagem->y + personagem->altura >= boss->y) && (personagem->y <= boss->y + boss->altura)) {
 					jogar = 0;
+					morreu = 1;
 				}
 				if (chefao && espada_ativa && (espada->x + 50 >= boss->x) && (espada->x <= boss->x + 20) && (espada->y >= boss->y) && (espada->y <= boss->y + boss->altura)) {
 					espada_ativa = false;
@@ -1252,6 +1275,7 @@ int main(void) {
 						chefao_espada = false;
 						item_placa_de_video = true;
 						placa_de_video->x = boss->x;
+
 					}
 					if (boss_sword->x + 100 <= 0) {
 						chefao_espada = false;
@@ -1260,6 +1284,7 @@ int main(void) {
 					if (chefao_espada && boss_sword->x <= personagem->x + personagem->largura / 10 && boss_sword->x >= personagem->x && boss_sword->y <= personagem->y + personagem->altura && boss_sword->y >= personagem->y) {
 						chefao_espada = false;
 						jogar = 0;
+						morreu = 1;
 					}
 				}
 				if (!chefao && (personagem->x <= placa_de_video->x + placa_de_video->largura) && (personagem->x + personagem->largura / 10 >= placa_de_video->x) && (personagem->y + personagem->altura >= placa_de_video->y) && (personagem->y <= placa_de_video->y + placa_de_video->altura)) {
@@ -1267,6 +1292,8 @@ int main(void) {
 					placa_de_video->y = 1000, placa_de_video->x = 1000;
 					item_placa_de_video = false;
 					item_placa_de_video_mini = true;
+					venceu = 1;
+					jogar = 0;
 				}
 
 
@@ -1368,6 +1395,41 @@ int main(void) {
 
 
 
+		}
+		else if (morreu == 1) {
+
+			al_draw_bitmap(morreu1, 0, 0, 0);
+			al_flip_display();
+
+			if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+
+				if ((evento.mouse.x >= 1 &&
+					evento.mouse.x <= 640 && evento.mouse.y <= 480 &&
+					evento.mouse.y >= 1)) {
+
+					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
+					jogo = 0;
+
+					//jogo = 0;
+				}
+			}
+
+		}
+		else if (venceu == 1) {
+			al_draw_bitmap(venceu1, 0, 0, 0);
+			al_flip_display();
+
+			if (evento.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+
+				if ((evento.mouse.x >= 1 &&
+					evento.mouse.x <= 640 && evento.mouse.y <= 480 &&
+					evento.mouse.y >= 1)) {
+
+					al_play_sample(clique_menu, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
+					jogo = 0;
+					//jogo = 0;
+				}
+			}
 		}
 		// Se clicar em creditos
 		else if (creditos == 1) {
