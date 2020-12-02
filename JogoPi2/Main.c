@@ -15,7 +15,7 @@
 #define InimigoFps 11.0
 #define Chao 420
 
-
+//struct de objeto
 struct objeto
 {
 	ALLEGRO_BITMAP* imagem;
@@ -29,65 +29,27 @@ struct objeto
 //                  
 typedef struct objeto Objeto;
 
-Objeto* personagem, * sprite_parado, * goblin, * goblin2, * espada, * processador, * processador_mini, * placa_mae, * placa_mae_mini, * sprite_atacando, * inventario;
-Objeto* placa_de_video, * placa_de_video_mini, * memoria_ram, * memoria_ram_mini, * portal, * inimigo1_mapa2, * inimigo2_mapa2, * boss, * boss_sword;
+Objeto* personagem, * sprite_parado, * goblin, * goblin2, * espada, * processador, * processador_mini, * placa_mae, * placa_mae_mini, * sprite_atacando, * inventario;//ponteiros de objeto
+Objeto* placa_de_video, * placa_de_video_mini, * memoria_ram, * memoria_ram_mini, * portal, * inimigo1_mapa2, * inimigo2_mapa2, * boss, * boss_sword;//ponteiros de objeto
 Objeto* chave;
 ALLEGRO_FONT* fonte = NULL;
-ALLEGRO_BITMAP* frame = NULL;
-ALLEGRO_BITMAP* frame2 = NULL;
-
 ALLEGRO_TIMER* timer = NULL;
 ALLEGRO_TIMER* frametimer = NULL;
 ALLEGRO_EVENT_QUEUE* fila_eventos = NULL;
 ALLEGRO_DISPLAY* janela = NULL;
+ALLEGRO_SAMPLE* musica = NULL;
+ALLEGRO_SAMPLE_INSTANCE* songInstance = NULL;
+ALLEGRO_SAMPLE* clique_menu = NULL;
+ALLEGRO_SAMPLE* som_espada = NULL;
+ALLEGRO_SAMPLE* pegar_item = NULL;
+
+//ponteiros de bitmap
 ALLEGRO_BITMAP* background = NULL;
 ALLEGRO_BITMAP* background2 = NULL;
 ALLEGRO_BITMAP* background_jogo1 = NULL;
 ALLEGRO_BITMAP* chao = NULL;
 ALLEGRO_BITMAP* chao_fim = NULL;
 ALLEGRO_BITMAP* atributos = NULL;
-
-ALLEGRO_BITMAP* plataforma1 = NULL;
-ALLEGRO_BITMAP* plataforma2 = NULL;
-ALLEGRO_BITMAP* plataforma3 = NULL;
-ALLEGRO_BITMAP* chao2 = NULL;
-ALLEGRO_BITMAP* chao2_fim = NULL;
-
-ALLEGRO_BITMAP* chao3 = NULL;
-ALLEGRO_BITMAP* chao3_fim = NULL;
-
-ALLEGRO_BITMAP* background3 = NULL;
-
-ALLEGRO_BITMAP* pilar1 = NULL;
-ALLEGRO_BITMAP* caixa = NULL;
-ALLEGRO_BITMAP* plataforma_pedra = NULL;
-
-
-ALLEGRO_BITMAP* morreu1 = NULL;
-ALLEGRO_BITMAP* venceu1 = NULL;
-
-ALLEGRO_BITMAP* infoss = NULL;
-ALLEGRO_BITMAP* creditoss = NULL;
-ALLEGRO_SAMPLE* musica = NULL;
-ALLEGRO_BITMAP* controless = NULL;
-
-
-ALLEGRO_SAMPLE_INSTANCE* songInstance = NULL;
-ALLEGRO_BITMAP* placa_mae_inv = NULL;
-ALLEGRO_BITMAP* processador_inv = NULL;
-ALLEGRO_BITMAP* inventario_processador = NULL;
-ALLEGRO_BITMAP* inventario_placa_mae = NULL;
-ALLEGRO_BITMAP* inventario_placa_de_video = NULL;
-
-ALLEGRO_BITMAP* desc_placa_mae = NULL;
-ALLEGRO_BITMAP* desc_processador = NULL;
-ALLEGRO_BITMAP* desc_placa_de_video = NULL;
-ALLEGRO_BITMAP* desc_memoria_ram = NULL;
-
-ALLEGRO_SAMPLE* clique_menu = NULL;
-ALLEGRO_SAMPLE* som_espada = NULL;
-ALLEGRO_SAMPLE* pegar_item = NULL;
-
 ALLEGRO_BITMAP* img0 = NULL;
 ALLEGRO_BITMAP* img1 = NULL;
 ALLEGRO_BITMAP* img2 = NULL;
@@ -99,9 +61,38 @@ ALLEGRO_BITMAP* img7 = NULL;
 ALLEGRO_BITMAP* img8 = NULL;
 ALLEGRO_BITMAP* img9 = NULL;
 ALLEGRO_BITMAP* img10 = NULL;
+ALLEGRO_BITMAP* plataforma1 = NULL;
+ALLEGRO_BITMAP* plataforma2 = NULL;
+ALLEGRO_BITMAP* plataforma3 = NULL;
+ALLEGRO_BITMAP* chao2 = NULL;
+ALLEGRO_BITMAP* chao2_fim = NULL;
+ALLEGRO_BITMAP* chao3 = NULL;
+ALLEGRO_BITMAP* chao3_fim = NULL;
+ALLEGRO_BITMAP* background3 = NULL;
+ALLEGRO_BITMAP* pilar1 = NULL;
+ALLEGRO_BITMAP* caixa = NULL;
+ALLEGRO_BITMAP* plataforma_pedra = NULL;
+ALLEGRO_BITMAP* morreu1 = NULL;
+ALLEGRO_BITMAP* venceu1 = NULL;
+ALLEGRO_BITMAP* infoss = NULL;
+ALLEGRO_BITMAP* creditoss = NULL;
+ALLEGRO_BITMAP* controless = NULL;
+ALLEGRO_BITMAP* frame = NULL;
+ALLEGRO_BITMAP* frame2 = NULL;
+ALLEGRO_BITMAP* placa_mae_inv = NULL;
+ALLEGRO_BITMAP* processador_inv = NULL;
+ALLEGRO_BITMAP* inventario_processador = NULL;
+ALLEGRO_BITMAP* inventario_placa_mae = NULL;
+ALLEGRO_BITMAP* inventario_placa_de_video = NULL;
+ALLEGRO_BITMAP* desc_placa_mae = NULL;
+ALLEGRO_BITMAP* desc_processador = NULL;
+ALLEGRO_BITMAP* desc_placa_de_video = NULL;
+ALLEGRO_BITMAP* desc_memoria_ram = NULL;
 
 
 
+
+//variaveis globais
 int pressionadox = 0;
 int i = 0;
 int aux = 0;
@@ -112,7 +103,6 @@ int l = 0;
 int lado;
 int lado_inimigo1;
 int lado_inimigo2;
-
 int yInicial1 = 0;
 int yInicial2 = 0;
 
@@ -138,7 +128,7 @@ int mapa_atual = 1;
 
 
 
-
+//matrizes´para um tile maps
 //pedra (chao) = 20
 //caixa = 40
 //pilar1 = 50
@@ -331,15 +321,15 @@ void movimentacao(ALLEGRO_EVENT evento) {
 		/*if (pulando) {
 			personagem->y = Chao - 49;
 		}*/
-
+		//movimentacao dos inimigos do maoa 1
 		if (inimigo1 && personagem->x - goblin->x < 0) {
 			goblin->x -= velocidade_inimigo;
 			k = 0;
 		}
-		else if (inimigo1 && personagem->x - goblin->x > 0) {
-			goblin->x += velocidade_inimigo;
-			k = 1;
-		}
+			else if (inimigo1 && personagem->x - goblin->x > 0) {
+				goblin->x += velocidade_inimigo;
+				k = 1;
+			}
 
 		if (inimigo2 && lado == 0) {
 			goblin2->x -= velocidade_inimigo;
@@ -353,25 +343,26 @@ void movimentacao(ALLEGRO_EVENT evento) {
 				lado = 0;
 			}
 		}
-
+		
 		if (espada_ativa && l == 1) {
 			espada->x += velocidade_projetil;
 		}
-		else if (espada_ativa && l == 0) {
-			espada->x -= velocidade_projetil;
-		}
-		else {
-			espada->x = personagem->x;
-		}
+			else if (espada_ativa && l == 0) {
+				espada->x -= velocidade_projetil;
+			}
+			else {
+				espada->x = personagem->x;
+				 }
+		//movimentação dos inimigos mapa 2
 		if (mapa_atual == 2) {
 			if (inimigo3 && personagem->x - inimigo1_mapa2->x < 0) {
 				inimigo1_mapa2->x -= velocidade_inimigo;
 				lado_inimigo1 = 0;
 			}
-			else if (inimigo3 && personagem->x - inimigo1_mapa2->x > 0) {
-				inimigo1_mapa2->x += velocidade_inimigo;
-				lado_inimigo1 = 1;
-			}
+				else if (inimigo3 && personagem->x - inimigo1_mapa2->x > 0) {
+					inimigo1_mapa2->x += velocidade_inimigo;
+					lado_inimigo1 = 1;
+				}
 
 			if (inimigo4 && lado_inimigo2 == 0) {
 				inimigo2_mapa2->x -= velocidade_inimigo;
@@ -386,8 +377,9 @@ void movimentacao(ALLEGRO_EVENT evento) {
 				}
 			}
 		}
+		//Fase do boss (ataque e vida)
 		if (mapa_atual == 3) {
-			if (chefao && boss->vida < 20 && boss->vida > 0) {
+			if (chefao && boss->vida <= 20 && boss->vida > 0) {
 				chefao_ataque = true;
 			}
 			if (chefao_ataque && !chefao_espada) {
@@ -399,11 +391,12 @@ void movimentacao(ALLEGRO_EVENT evento) {
 			}
 			else {
 				boss_sword->x = boss->x - boss->largura;
+				
 			}
 		}
 	}
 
-
+	//controle de sprites
 	if (evento.timer.source == frametimer) {
 
 		if (ativo) {
@@ -458,7 +451,7 @@ void movimentacao(ALLEGRO_EVENT evento) {
 
 
 }
-
+//funcao desenha void para desenhar sprites e imagens que aparecem no decorrer do jogo
 void desenha(ALLEGRO_EVENT evento) {
 
 
@@ -561,10 +554,12 @@ void desenha(ALLEGRO_EVENT evento) {
 	if (item_chave) {
 		al_draw_bitmap(chave->imagem, chave->x, chave->y, 0);
 	}
+	/*colocar a intro aqui?*/
 
 
 }
 
+//funcao void que desenha de acordo com a matriz de tilemap as sprites que correspondem a cada mapa
 void desenhar_mapa(int mapa[9][11]) {
 
 	int cont_i, cont_j;
@@ -616,7 +611,7 @@ int main(void) {
 	al_clear_to_color(al_map_rgb(255, 255, 255));
 	al_flip_display();
 
-	// Carrega imagem
+	// Carrega as imagens usadas durante o jogo
 	background = al_load_bitmap("imagens/menu2.jpg");
 	atributos = al_load_bitmap("imagens/atributos.png");
 	background_jogo1 = al_load_bitmap("imagens/background.jpg");
@@ -675,6 +670,7 @@ int main(void) {
 	desc_placa_mae = al_load_bitmap("imagens/desc_placa_mae.png");
 	desc_memoria_ram = al_load_bitmap("imagens/desc_memoria_ram.png");
 	desc_placa_de_video = al_load_bitmap("imagens/desc_placa_de_video.png");
+	
 
 	songInstance = al_create_sample_instance(musica);
 	al_set_sample_instance_playmode(songInstance, ALLEGRO_PLAYMODE_LOOP);
@@ -685,8 +681,7 @@ int main(void) {
 	al_init_acodec_addon();
 	al_reserve_samples(10);//Reservando canais de audio no mixer principal
 
-
-
+	//cria os objetos usando a struct objeto
 	personagem = (Objeto*)malloc(sizeof(Objeto));
 	personagem->imagem = al_load_bitmap("Sprites/MC_Sprite_walk.png");
 	personagem->largura = 500;
@@ -868,7 +863,7 @@ int main(void) {
 
 	//Looping principal
 	while (jogo == 1) {
-
+		//printf para testar o valor das variaveis (um facilitador para fazer o jogo)
 		printf("BOSS: %d\n\n", chefao);
 		printf("JOGAR: %d\n\n", jogar);
 		printf("Boss Ataque: %d\n\n", chefao_ataque);
@@ -883,7 +878,7 @@ int main(void) {
 		// Funcao do menu do jogo
 		// Ja começa com 1 pois ela irá controlar os demais whiles, as outras opções
 
-
+		//abre o menu
 		if (menu == 1) {
 
 			al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -978,7 +973,7 @@ int main(void) {
 			}
 
 		}
-
+		//inicia o jogo
 		else if (jogar == 1) {
 
 
@@ -997,15 +992,17 @@ int main(void) {
 				caindo = 0;
 				pulando = 0;
 			}
-
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+			//colisao do personagem com o chao
 			if (colisao(personagem->x, personagem->y, 0, Chao, personagem->largura / 10, personagem->altura, tileSize, tileSize, 640) == 1) {
 				personagem->y = Chao - personagem->altura;
 			}
+			//colisao no mapa 1 
 			if (mapa_atual == 1 && colisao(personagem->x, personagem->y, tileSize * 4 + 30, tileSize * 5, personagem->largura / 10, personagem->altura, tileSize * 4 - 50, 0, 0)) {
 				personagem->y = tileSize * 5 - personagem->altura;
 			}
 
-			//se o GOBLIN encostar no PLAYER ou vice-versa
+			//colisao com os 2 primeiros inimigos
 			if (inimigo1 && (personagem->x <= goblin->x + 20) && (personagem->x + 20 >= goblin->x) && (personagem->y + personagem->altura >= goblin->y) && (personagem->y <= goblin->y + goblin->altura)) {
 				jogar = 0;
 
@@ -1014,7 +1011,7 @@ int main(void) {
 				jogar = 0;
 
 			}
-
+			//colisao com o drop do processador (eh desenhada uma miniatura do processador)
 			if ((personagem->x <= processador->x + processador->largura) && (personagem->x + personagem->largura / 10 >= processador->x) && (personagem->y - personagem->altura >= processador->y - processador->altura)) {
 				al_play_sample(pegar_item, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
 				processador->y = 1000, processador->x = 1000;
@@ -1022,7 +1019,7 @@ int main(void) {
 				item_processador_mini = true;
 
 			}
-
+			//colisao da espada com o inimigo
 			if (inimigo1 && espada_ativa && (espada->x + 50 >= goblin->x) && (espada->x <= goblin->x + 20) && (espada->y >= goblin->y) && (espada->y <= goblin->y + goblin->altura)) {
 				espada_ativa = false;
 				espada->x = personagem->x;
@@ -1045,7 +1042,7 @@ int main(void) {
 					processador->x = goblin->x;
 				}
 			}
-
+			//colisao da espada com o inimigo 2
 			if (inimigo2 && espada_ativa && (espada->x + 50 >= goblin2->x) && (espada->x <= goblin2->x + 20) && (espada->y >= goblin2->y) && (espada->y <= goblin2->y + goblin2->altura)) {
 				espada_ativa = false;
 				espada->x = personagem->x;
@@ -1069,7 +1066,7 @@ int main(void) {
 					placa_mae->y = goblin2->y;
 				}
 			}
-
+			//?
 			if ((espada->x >= 620) || (espada->x <= 0)) {
 				espada_ativa = false;
 				espada->x = personagem->x;
