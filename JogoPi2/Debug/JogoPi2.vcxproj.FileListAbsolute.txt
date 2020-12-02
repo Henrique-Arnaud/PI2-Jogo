@@ -1,6 +1,6 @@
-C:\Jogo PI 2\PI2-Jogo\JogoPi2\Debug\JogoPi2.exe
-C:\Jogo PI 2\PI2-Jogo\JogoPi2\Debug\JogoPi2.pdb
 C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Debug\JogoPi2.exe
 C:\Users\HENRIQUE\Desktop\PI2\JogoPi2\Debug\JogoPi2.pdb
 C:\repositorio\PI2-Jogo\JogoPi2\Debug\JogoPi2.exe
 C:\repositorio\PI2-Jogo\JogoPi2\Debug\JogoPi2.pdb
+C:\Jogo PI 2\PI2-Jogo\JogoPi2\Debug\JogoPi2.exe
+C:\Jogo PI 2\PI2-Jogo\JogoPi2\Debug\JogoPi2.pdb
